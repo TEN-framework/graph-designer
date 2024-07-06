@@ -6,43 +6,47 @@ import styles from "./extension.module.scss"
  
 export type ExtensionNodeProps = {
     name: string;
-    cmd_inputs: { id: string; type: string }[];
-    cmd_outputs: { id: string; type: string }[];
+    inputs: { id: string; type: string }[];
+    outputs: { id: string; type: string }[];
 };
+
+const HEADER_HEIGHT = 30, HANDLE_HEIGHT = 20;
 
 export default memo(({ data: {
     name,
-    cmd_inputs = [],
-    cmd_outputs = [],
+    inputs = [],
+    outputs = [],
 }}: {
     data: ExtensionNodeProps;
 }) => {
   return (
-    <div className={styles['extension-node']} style={{height:20 + 20 * Math.max(cmd_inputs.length, cmd_outputs.length)}}>
+    <div className={styles['extension-node']} style={{height:HEADER_HEIGHT + HANDLE_HEIGHT * Math.max(inputs.length, outputs.length)}}>
       <div className={styles['contents']}>
         <div className={styles['extension-name']}>
           <strong>{name}</strong>
         </div>
         <div className={styles['extension-inputs']}>
           {/* <Handle type="target" position={Position.Left} /> */}
-            {cmd_inputs.map((input:{ id: string; type: string }, index) => (
+            {inputs.map((input:{ id: string; type: string }, index) => (
               <Handle 
+                key={`${name}/${input.id}`}
                 type="target"
                 position={Position.Left}
-                id={`${name}_${input.id}`}
-                style={{ top: 20 + 20*index, background: '#555' }}
+                id={`${name}/${input.id}`}
+                style={{ top: HEADER_HEIGHT + HANDLE_HEIGHT*index, background: '#555' }}
               >
                 <div className={styles['extension-handle-label']}>{input.id}</div>
               </Handle>
             ))}
         </div>
         <div className={styles['extension-outputs']}>
-          {cmd_outputs.map((output:{ id: string; type: string }, index) => (
+          {outputs.map((output:{ id: string; type: string }, index) => (
             <Handle 
+              key={`${name}/${output.id}`}
               type="source"
               position={Position.Right}
-              id={`${name}_${output.id}`}
-              style={{ top: 20 + 20*index, background: '#555' }}
+              id={`${name}/${output.id}`}
+              style={{ top: HEADER_HEIGHT + HANDLE_HEIGHT*index, background: '#555' }}
             >
               <div className={styles['extension-handle-label']}>{output.id}</div>
             </Handle>

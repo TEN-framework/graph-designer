@@ -19,14 +19,13 @@
     .extension-name {
         top: 0;
         height: 20px;
+        padding: 5px;
     }
     .extension-inputs {
         position: absolute;
         top: 0;
         width: 100%;
         .extension-handle-label {
-            pointer-events: none;
-            position: absolute;
             top: -2px;
             padding: 0 10px;
         }
@@ -36,13 +35,16 @@
         top: 0;
         width: 100%;
         .extension-handle-label {
-            pointer-events: none;
             // translate: -200px;
-            position: absolute;
             text-align: right;
             translate: -100%;
             padding: 0 5px 0px 0px;
             top: -2px;
         }
+    }
+
+    .extension-handle-label {
+        pointer-events: none;
+        position: absolute;
     }
 }

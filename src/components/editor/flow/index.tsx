@@ -8,39 +8,69 @@ import ExtensionNode from "./nodes/extension";
 
 const initialNodes: Node[] = [
   {
-    id: '1',
-    type: 'default',
-    data: { label: 'Node 1' },
-    position: { x: 250, y: 5 },
+    id: 'agora_rtc',
+    type: 'extension',
+    data: { 
+      name: 'agora_rtc',
+      inputs:[{id:"text_data", type: "string"},{id:"flush", type: "string"},{id:"pcm", type: "audio_pcm"}],
+      outputs:[{id:"text_data", type: "string"}],
+    },
+    position: { x: 0, y: 5 },
   },
   {
-    id: '2',
+    id: 'openai_chatgpt',
     type: 'extension',
     data: { 
       name: 'openai_chatgpt',
-      cmd_inputs:[{id:"text_in", type: "string"},{id:"text_in2", type: "string"}],
-      cmd_outputs:[{id:"text_out", type: "string"},{id:"text_out2", type: "string"}]
+      inputs:[{id:"flush", type: "string"},{id:"text_data", type: "string"}],
+      outputs:[{id:"flush", type: "string"},{id:"text_data", type: "string"}]
     },
-    position: { x: 100, y: 100 },
+    position: { x: 600, y: 5 },
   },
   {
-    id: '3',
-    type: 'default',
-    data: { label: 'Node 3' },
-    position: { x: 400, y: 100 },
+    id: 'azure_tts',
+    type: 'extension',
+    data: { 
+      name: 'azure_tts',
+      inputs:[{id:"flush", type: "string"},{id:"text_data", type: "string"}],
+      outputs:[{id:"flush", type: "string"},{id:"pcm", type: "audio_pcm"}]
+    },
+    position: { x: 900, y: -200 },
   },
   {
-    id: '4',
-    type: 'default',
-    data: { label: 'Node 4' },
-    position: { x: 400, y: 200 },
+    id: 'interrupt_detector',
+    type: 'extension',
+    data: { 
+      name: 'interrupt_detector',
+      inputs:[{id:"text_data", type: "string"}],
+      outputs:[{id:"flush", type: "string"},{id:"text_data", type: "string"}]
+    },
+    position: { x: 300, y: 5 },
+    // className: styles.customNode,
+  },
+  {
+    id: 'chat_transcriber',
+    type: 'extension',
+    data: { 
+      name: 'chat_transcriber',
+      inputs:[{id:"text_data", type: "string"}],
+      outputs:[{id:"text_data", type: "string"}]
+    },
+    position: { x: 900, y: 200 },
     // className: styles.customNode,
   },
 ];
 
 const initialEdges: Edge[] = [
-  { id: 'e1-2', source: '1', target: '2' },
-  { id: 'e1-3', source: '1', target: '3' },
+  { id: '1', source: 'agora_rtc', sourceHandle: "agora_rtc/text_data", target: 'interrupt_detector', targetHandle: 'interrupt_detector/text_data' },
+  { id: '2', source: 'interrupt_detector', sourceHandle: "interrupt_detector/flush", target: 'openai_chatgpt', targetHandle: 'openai_chatgpt/flush' },
+  { id: '3', source: 'interrupt_detector', sourceHandle: "interrupt_detector/text_data", target: 'openai_chatgpt', targetHandle: 'openai_chatgpt/text_data' },
+  { id: '4', source: 'openai_chatgpt', sourceHandle: "openai_chatgpt/flush", target: 'azure_tts', targetHandle: 'azure_tts/flush' },
+  { id: '5', source: 'openai_chatgpt', sourceHandle: "openai_chatgpt/text_data", target: 'azure_tts', targetHandle: 'azure_tts/text_data' },
+  { id: '6', source: 'openai_chatgpt', sourceHandle: "openai_chatgpt/text_data", target: 'chat_transcriber', targetHandle: 'chat_transcriber/text_data' },
+  { id: '7', source: 'azure_tts', sourceHandle: "azure_tts/flush", target: 'agora_rtc', targetHandle: 'agora_rtc/flush' },
+  { id: '8', source: 'azure_tts', sourceHandle: "azure_tts/pcm", target: 'agora_rtc', targetHandle: 'agora_rtc/pcm' },
+  { id: '9', source: 'chat_transcriber', sourceHandle: "chat_transcriber/text_data", target: 'agora_rtc', targetHandle: 'agora_rtc/text_data' },
 ];
 
 // const defaultEdgeOptions = {
@@ -51,7 +81,8 @@ const initialEdges: Edge[] = [
 
 const defaultEdgeOptions = {
   // style: { strokeWidth: 3, stroke: 'black' },
-  // type: 'floating',
+  type: 'smoothstep',
+  // type: 'bezier',
   markerEnd: {
     type: MarkerType.ArrowClosed,
     // color: 'red',
