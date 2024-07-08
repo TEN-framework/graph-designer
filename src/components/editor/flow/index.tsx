@@ -10,40 +10,40 @@ const initialNodes: Node[] = [
   {
     id: 'agora_rtc',
     type: 'extension',
-    data: { 
+    data: {
       name: 'agora_rtc',
-      inputs:[{id:"text_data", type: "string"},{id:"flush", type: "string"},{id:"pcm", type: "audio_pcm"}],
-      outputs:[{id:"text_data", type: "string"}],
+      inputs: [{ id: "text_data", type: "string" }, { id: "flush", type: "string" }, { id: "pcm", type: "audio_pcm" }],
+      outputs: [{ id: "text_data", type: "string" }],
     },
     position: { x: 0, y: 5 },
   },
   {
     id: 'openai_chatgpt',
     type: 'extension',
-    data: { 
+    data: {
       name: 'openai_chatgpt',
-      inputs:[{id:"flush", type: "string"},{id:"text_data", type: "string"}],
-      outputs:[{id:"flush", type: "string"},{id:"text_data", type: "string"}]
+      inputs: [{ id: "flush", type: "string" }, { id: "text_data", type: "string" }],
+      outputs: [{ id: "flush", type: "string" }, { id: "text_data", type: "string" }]
     },
     position: { x: 600, y: 5 },
   },
   {
     id: 'azure_tts',
     type: 'extension',
-    data: { 
+    data: {
       name: 'azure_tts',
-      inputs:[{id:"flush", type: "string"},{id:"text_data", type: "string"}],
-      outputs:[{id:"flush", type: "string"},{id:"pcm", type: "audio_pcm"}]
+      inputs: [{ id: "flush", type: "string" }, { id: "text_data", type: "string" }],
+      outputs: [{ id: "flush", type: "string" }, { id: "pcm", type: "audio_pcm" }]
     },
     position: { x: 900, y: -200 },
   },
   {
     id: 'interrupt_detector',
     type: 'extension',
-    data: { 
+    data: {
       name: 'interrupt_detector',
-      inputs:[{id:"text_data", type: "string"}],
-      outputs:[{id:"flush", type: "string"},{id:"text_data", type: "string"}]
+      inputs: [{ id: "text_data", type: "string" }],
+      outputs: [{ id: "flush", type: "string" }, { id: "text_data", type: "string" }]
     },
     position: { x: 300, y: 5 },
     // className: styles.customNode,
@@ -51,10 +51,10 @@ const initialNodes: Node[] = [
   {
     id: 'chat_transcriber',
     type: 'extension',
-    data: { 
+    data: {
       name: 'chat_transcriber',
-      inputs:[{id:"text_data", type: "string"}],
-      outputs:[{id:"text_data", type: "string"}]
+      inputs: [{ id: "text_data", type: "string" }],
+      outputs: [{ id: "text_data", type: "string" }]
     },
     position: { x: 900, y: 200 },
     // className: styles.customNode,
@@ -90,6 +90,7 @@ const defaultEdgeOptions = {
 };
 
 const Flow = () => {
+  const { screenToFlowPosition } = useReactFlow();
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
@@ -100,16 +101,46 @@ const Flow = () => {
     [setEdges]
   );
 
+  const onDrop = useCallback(
+    (event) => {
+      event.preventDefault();
+
+      const type = event.dataTransfer.getData('application/reactflow');
+
+      // check if the dropped element is valid
+      if (typeof type === 'undefined' || !type) {
+        return;
+      }
+
+      // project was renamed to screenToFlowPosition
+      // and you don't need to subtract the reactFlowBounds.left/top anymore
+      // details: https://reactflow.dev/whats-new/2023-11-10
+      const position = screenToFlowPosition({
+        x: event.clientX,
+        y: event.clientY,
+      });
+      const newNode = {
+        id: getId(),
+        type,
+        position,
+        data: { label: `${type} node` },
+      };
+
+      setNodes((nds) => nds.concat(newNode));
+    },
+    [screenToFlowPosition],
+  );
 
   return <ReactFlow
     nodes={nodes}
     edges={edges}
     onEdgesChange={onEdgesChange}
     onNodesChange={onNodesChange}
+    onDrop={onDrop}
     onConnect={onConnect}
     defaultEdgeOptions={defaultEdgeOptions}
     nodeTypes={nodeTypes}
-    // connectionLineType={ConnectionLineType.SmoothStep}
+  // connectionLineType={ConnectionLineType.SmoothStep}
   >
     <Controls />
     <Background></Background>
