@@ -1,8 +1,8 @@
-import { useCallback, useMemo } from "react"
+import { useCallback, useMemo, DragEventHandler } from "react"
 import ReactFlow,
 {
   Connection, ConnectionLineType, ReactFlowProvider, EdgeChange, useEdges, MarkerType,
-  useNodes, useNodesState, useEdgesState, Node, Edge, addEdge, Controls, Background,
+  useNodes, useNodesState, useReactFlow, useEdgesState, Node, Edge, addEdge, Controls, Background,
 } from 'reactflow'
 import ExtensionNode from "./nodes/extension";
 
@@ -89,6 +89,9 @@ const defaultEdgeOptions = {
   },
 };
 
+let id = 0;
+const getId = () => `${id++}`;
+
 const Flow = () => {
   const { screenToFlowPosition } = useReactFlow();
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
@@ -102,28 +105,30 @@ const Flow = () => {
   );
 
   const onDrop = useCallback(
-    (event) => {
+    (event: any) => {
       event.preventDefault();
 
-      const type = event.dataTransfer.getData('application/reactflow');
+      const type = event.dataTransfer.getData('type');
+      const name = event.dataTransfer.getData('name');
+      const id = `${name}_${getId()}`
+      const finName = id
 
       // check if the dropped element is valid
       if (typeof type === 'undefined' || !type) {
         return;
       }
 
-      // project was renamed to screenToFlowPosition
-      // and you don't need to subtract the reactFlowBounds.left/top anymore
-      // details: https://reactflow.dev/whats-new/2023-11-10
       const position = screenToFlowPosition({
         x: event.clientX,
         y: event.clientY,
       });
       const newNode = {
-        id: getId(),
+        id,
         type,
         position,
-        data: { label: `${type} node` },
+        data: {
+          name
+        },
       };
 
       setNodes((nds) => nds.concat(newNode));
@@ -131,12 +136,18 @@ const Flow = () => {
     [screenToFlowPosition],
   );
 
+  const onDragOver = useCallback((event: any) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+  }, []);
+
   return <ReactFlow
     nodes={nodes}
     edges={edges}
     onEdgesChange={onEdgesChange}
     onNodesChange={onNodesChange}
     onDrop={onDrop}
+    onDragOver={onDragOver}
     onConnect={onConnect}
     defaultEdgeOptions={defaultEdgeOptions}
     nodeTypes={nodeTypes}
