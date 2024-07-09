@@ -1,7 +1,6 @@
 import { formatTime } from "./utils"
 import { LogLevel } from "../types"
 
-
 export interface LoggerConfig {
   level?: LogLevel
   prefix?: string

@@ -1,66 +1,97 @@
 import { useCallback, useMemo, MouseEvent, TouchEvent } from "react"
-import ReactFlow,
-{
-  Connection, ConnectionLineType, ReactFlowProvider, EdgeChange, useEdges, MarkerType,
-  useNodes, useNodesState, useReactFlow, useEdgesState, Node, Edge, addEdge,
-  Controls, Background, OnConnectStartParams,
-} from 'reactflow'
-import ExtensionNode from "./nodes/extension";
+import ReactFlow, {
+  Connection,
+  ConnectionLineType,
+  ReactFlowProvider,
+  EdgeChange,
+  useEdges,
+  MarkerType,
+  useNodes,
+  useNodesState,
+  useReactFlow,
+  useEdgesState,
+  Node,
+  Edge,
+  addEdge,
+  Controls,
+  Background,
+  OnConnectStartParams,
+} from "reactflow"
+import ExtensionNode from "./nodes/extension"
 
 const initialNodes: Node[] = [
   {
-    id: 'agora_rtc',
-    type: 'extension',
+    id: "agora_rtc",
+    type: "extension",
     data: {
-      name: 'agora_rtc',
-      inputs: [{ id: "text_data", type: "string" }, { id: "flush", type: "string" }, { id: "pcm", type: "audio_pcm" }],
+      name: "agora_rtc",
+      inputs: [
+        { id: "text_data", type: "string" },
+        { id: "flush", type: "string" },
+        { id: "pcm", type: "audio_pcm" },
+      ],
       outputs: [{ id: "text_data", type: "string" }],
     },
     position: { x: 0, y: 5 },
   },
   {
-    id: 'openai_chatgpt',
-    type: 'extension',
+    id: "openai_chatgpt",
+    type: "extension",
     data: {
-      name: 'openai_chatgpt',
-      inputs: [{ id: "flush", type: "string" }, { id: "text_data", type: "string" }],
-      outputs: [{ id: "flush", type: "string" }, { id: "text_data", type: "string" }]
+      name: "openai_chatgpt",
+      inputs: [
+        { id: "flush", type: "string" },
+        { id: "text_data", type: "string" },
+      ],
+      outputs: [
+        { id: "flush", type: "string" },
+        { id: "text_data", type: "string" },
+      ],
     },
     position: { x: 600, y: 5 },
   },
   {
-    id: 'azure_tts',
-    type: 'extension',
+    id: "azure_tts",
+    type: "extension",
     data: {
-      name: 'azure_tts',
-      inputs: [{ id: "flush", type: "string" }, { id: "text_data", type: "string" }],
-      outputs: [{ id: "flush", type: "string" }, { id: "pcm", type: "audio_pcm" }]
+      name: "azure_tts",
+      inputs: [
+        { id: "flush", type: "string" },
+        { id: "text_data", type: "string" },
+      ],
+      outputs: [
+        { id: "flush", type: "string" },
+        { id: "pcm", type: "audio_pcm" },
+      ],
     },
     position: { x: 900, y: -200 },
   },
   {
-    id: 'interrupt_detector',
-    type: 'extension',
+    id: "interrupt_detector",
+    type: "extension",
     data: {
-      name: 'interrupt_detector',
+      name: "interrupt_detector",
       inputs: [{ id: "text_data", type: "string" }],
-      outputs: [{ id: "flush", type: "string" }, { id: "text_data", type: "string" }]
+      outputs: [
+        { id: "flush", type: "string" },
+        { id: "text_data", type: "string" },
+      ],
     },
     position: { x: 300, y: 5 },
     // className: styles.customNode,
   },
   {
-    id: 'chat_transcriber',
-    type: 'extension',
+    id: "chat_transcriber",
+    type: "extension",
     data: {
-      name: 'chat_transcriber',
+      name: "chat_transcriber",
       inputs: [{ id: "text_data", type: "string" }],
-      outputs: [{ id: "text_data", type: "string" }]
+      outputs: [{ id: "text_data", type: "string" }],
     },
     position: { x: 900, y: 200 },
     // className: styles.customNode,
   },
-];
+]
 
 const initialEdges: Edge[] = [
   // { id: '1', source: 'agora_rtc', sourceHandle: "agora_rtc/text_data", target: 'interrupt_detector', targetHandle: 'interrupt_detector/text_data' },
@@ -72,110 +103,110 @@ const initialEdges: Edge[] = [
   // { id: '7', source: 'azure_tts', sourceHandle: "azure_tts/flush", target: 'agora_rtc', targetHandle: 'agora_rtc/flush' },
   // { id: '8', source: 'azure_tts', sourceHandle: "azure_tts/pcm", target: 'agora_rtc', targetHandle: 'agora_rtc/pcm' },
   // { id: '9', source: 'chat_transcriber', sourceHandle: "chat_transcriber/text_data", target: 'agora_rtc', targetHandle: 'agora_rtc/text_data' },
-];
+]
 
 // const defaultEdgeOptions = {
 //   // animated: true,
 //   // type: 'smoothstep',
 // };
 
-
 const defaultEdgeOptions = {
   // style: { strokeWidth: 3, stroke: 'black' },
-  type: 'smoothstep',
+  type: "smoothstep",
   // type: 'bezier',
   markerEnd: {
     type: MarkerType.ArrowClosed,
     // color: 'red',
   },
-};
+}
 
-let id = 0;
-const getId = () => `${id++}`;
+let id = 0
+const getId = () => `${id++}`
 
 const Flow = () => {
-  const { screenToFlowPosition } = useReactFlow();
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-  const nodeTypes = useMemo(() => ({ extension: ExtensionNode }), []);
-
-
-
+  const { screenToFlowPosition } = useReactFlow()
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
+  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
+  const nodeTypes = useMemo(() => ({ extension: ExtensionNode }), [])
 
   // ----------------- Drag and Drop -----------------
   const onDrop = useCallback(
     (event: any) => {
-      event.preventDefault();
+      event.preventDefault()
 
-      const type = event.dataTransfer.getData('type');
-      const name = event.dataTransfer.getData('name');
+      const type = event.dataTransfer.getData("type")
+      const name = event.dataTransfer.getData("name")
       const id = `${name}_${getId()}`
       const finName = id
 
       // check if the dropped element is valid
-      if (typeof type === 'undefined' || !type) {
-        return;
+      if (typeof type === "undefined" || !type) {
+        return
       }
 
       const position = screenToFlowPosition({
         x: event.clientX,
         y: event.clientY,
-      });
+      })
       const newNode = {
         id,
         type,
         position,
         data: {
-          name: finName
+          name: finName,
         },
-      };
+      }
 
-      setNodes((nds) => nds.concat(newNode));
+      setNodes((nds) => nds.concat(newNode))
     },
     [screenToFlowPosition],
-  );
+  )
 
   const onDragOver = useCallback((event: any) => {
-    event.preventDefault();
-    event.dataTransfer.dropEffect = 'move';
-  }, []);
-
+    event.preventDefault()
+    event.dataTransfer.dropEffect = "move"
+  }, [])
 
   // ------------------ Connect ------------------
-  const onConnectStart = (event: MouseEvent | TouchEvent, params: OnConnectStartParams) => {
+  const onConnectStart = (
+    event: MouseEvent | TouchEvent,
+    params: OnConnectStartParams,
+  ) => {
     // TODO: highlight the node if can connect
     console.log("onConnectStart", event, params)
-  };
+  }
 
   const onConnect = useCallback(
     (params: Connection | Edge) => {
       // TODO: judge if can connect
       // if not, return false
-      const { source, target, sourceHandle, targetHandle } = params;
+      const { source, target, sourceHandle, targetHandle } = params
 
       setEdges((eds) => {
         return addEdge(params, eds)
       })
     },
-    [setEdges]
-  );
+    [setEdges],
+  )
 
-  return <ReactFlow
-    nodes={nodes}
-    edges={edges}
-    onEdgesChange={onEdgesChange}
-    onNodesChange={onNodesChange}
-    onDrop={onDrop}
-    onDragOver={onDragOver}
-    onConnectStart={onConnectStart}
-    onConnect={onConnect}
-    defaultEdgeOptions={defaultEdgeOptions}
-    nodeTypes={nodeTypes}
-  // connectionLineType={ConnectionLineType.SmoothStep}
-  >
-    <Controls />
-    <Background></Background>
-  </ReactFlow>
+  return (
+    <ReactFlow
+      nodes={nodes}
+      edges={edges}
+      onEdgesChange={onEdgesChange}
+      onNodesChange={onNodesChange}
+      onDrop={onDrop}
+      onDragOver={onDragOver}
+      onConnectStart={onConnectStart}
+      onConnect={onConnect}
+      defaultEdgeOptions={defaultEdgeOptions}
+      nodeTypes={nodeTypes}
+      // connectionLineType={ConnectionLineType.SmoothStep}
+    >
+      <Controls />
+      <Background></Background>
+    </ReactFlow>
+  )
 }
 
-export default Flow;
+export default Flow

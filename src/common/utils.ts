@@ -13,4 +13,3 @@ export const formatTime = (date?: Date) => {
 
   return `${_pad(hours)}:${_pad(minutes)}:${_pad(seconds)}:${_pad(milliseconds)}`
 }
-

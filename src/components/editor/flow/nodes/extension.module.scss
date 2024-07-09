@@ -1,50 +1,54 @@
 .extension-node {
-    font-size: 10px;
-    background: linear-gradient(-22deg, #38ff1e 25%, #fff455 50%, #41d012);
-    border-radius: 10px;
-    color: #fff;
-    box-shadow: 0 0 10px #000;
-    width: 200px;
-    
-    .contents {
-        background: radial-gradient(ellipse 85% 50px at center calc(100% + 20px), #60861b, #0f1610);
-        width: calc(100% - 4px);
-        border-radius: 8px;
-        top: 2px;
-        left: 2px;
-        position: relative;
-        height: calc(100% - 4px);
-    }
-    
-    .extension-name {
-        top: 0;
-        height: 20px;
-        padding: 5px;
-    }
-    .extension-inputs {
-        position: absolute;
-        top: 0;
-        width: 100%;
-        .extension-handle-label {
-            top: -2px;
-            padding: 0 10px;
-        }
-    }
-    .extension-outputs {
-        position: absolute;
-        top: 0;
-        width: 100%;
-        .extension-handle-label {
-            // translate: -200px;
-            text-align: right;
-            translate: -100%;
-            padding: 0 5px 0px 0px;
-            top: -2px;
-        }
-    }
+  font-size: 10px;
+  background: linear-gradient(-22deg, #38ff1e 25%, #fff455 50%, #41d012);
+  border-radius: 10px;
+  color: #fff;
+  box-shadow: 0 0 10px #000;
+  width: 200px;
 
+  .contents {
+    background: radial-gradient(
+      ellipse 85% 50px at center calc(100% + 20px),
+      #60861b,
+      #0f1610
+    );
+    width: calc(100% - 4px);
+    border-radius: 8px;
+    top: 2px;
+    left: 2px;
+    position: relative;
+    height: calc(100% - 4px);
+  }
+
+  .extension-name {
+    top: 0;
+    height: 20px;
+    padding: 5px;
+  }
+  .extension-inputs {
+    position: absolute;
+    top: 0;
+    width: 100%;
     .extension-handle-label {
-        pointer-events: none;
-        position: absolute;
+      top: -2px;
+      padding: 0 10px;
     }
+  }
+  .extension-outputs {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    .extension-handle-label {
+      // translate: -200px;
+      text-align: right;
+      translate: -100%;
+      padding: 0 5px 0px 0px;
+      top: -2px;
+    }
+  }
+
+  .extension-handle-label {
+    pointer-events: none;
+    position: absolute;
+  }
 }
