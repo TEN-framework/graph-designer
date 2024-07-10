@@ -1,8 +1,23 @@
 "use client"
 
+import { useEffect, useState } from "react"
+import { apiGetInstalledExtension, apiAllGetGraph } from "@/common"
 import styles from "./index.module.scss"
 
-const Sidebar = () => {
+
+
+const Sidebar = ({ data }: any) => {
+  const [extensionArr, setExtensionArr] = useState<IExtension[]>([])
+
+  useEffect(() => {
+    init()
+  }, [])
+
+  const init = async () => {
+    const data = await apiGetInstalledExtension()
+    setExtensionArr(data)
+  }
+
   const onDragStart = (event: any, name: string) => {
     console.log("drag started", event)
     event.dataTransfer.setData("type", "extension")
@@ -12,41 +27,13 @@ const Sidebar = () => {
 
   return (
     <div className={styles.sidebar}>
-      <div
-        className={styles.item}
-        draggable
-        onDragStart={(e) => onDragStart(e, "agora_rtc")}
-      >
-        agora_rtc
-      </div>
-      <div
-        className={styles.item}
-        draggable
-        onDragStart={(e) => onDragStart(e, "openai_chatgpt")}
-      >
-        openai_chatgpt
-      </div>
-      <div
-        className={styles.item}
-        draggable
-        onDragStart={(e) => onDragStart(e, "azure_tts")}
-      >
-        azure_tts
-      </div>
-      <div
-        className={styles.item}
-        draggable
-        onDragStart={(e) => onDragStart(e, "interrupt_detector")}
-      >
-        interrupt_detector
-      </div>
-      <div
-        className={styles.item}
-        draggable
-        onDragStart={(e) => onDragStart(e, "chat_transcriber")}
-      >
-        chat_transcriber
-      </div>
+      {extensionArr.map((item) => {
+        return <div
+          className={styles.item}
+          key={item.name}
+          draggable
+          onDragStart={(e) => onDragStart(e, item.name)}>{item.name}</div>
+      })}
     </div>
   )
 }

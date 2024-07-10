@@ -8,6 +8,7 @@ import Sidebar from "@/components/sidebar"
 import styles from "./index.module.scss"
 
 export default function Home() {
+
   return (
     <ConfigProvider
       theme={{

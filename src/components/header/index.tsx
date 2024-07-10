@@ -1,26 +1,45 @@
 "use client"
 
 import { Button, Select } from "antd"
-import styles from "./index.module.scss"
-import { useState } from "react"
+import { useEffect, useMemo, useState } from "react"
+import { apiGetVersion, apiAllGetGraph, useAppSelector, useAppDispatch } from "@/common"
+import { setCurGraphName } from "@/store/reducers/global"
+import { IGraph } from "@/types"
 
-const options = [
-  {
-    value: "graph1",
-    label: "Graph1",
-  },
-  {
-    value: "graph2",
-    label: "Graph2",
-  },
-  {
-    value: "graph3",
-    label: "Graph3",
-  },
-]
+import styles from "./index.module.scss"
+
+
+
 
 const Header = () => {
-  const [graph, setGraph] = useState(options[0].value)
+  const dispatch = useAppDispatch()
+  const curGraphName = useAppSelector((state) => state.global.curGraphName)
+  const [version, setVersion] = useState("")
+  const [graphArr, setGraphArr] = useState<IGraph[]>([])
+
+  useEffect(() => {
+    init()
+  }, [])
+
+
+  const options = useMemo(() => {
+    return graphArr.map((item) => {
+      return {
+        value: item.name,
+        label: "Graph" + item.name,
+      }
+    })
+  }, [graphArr])
+
+  const init = async () => {
+    const data = await apiGetVersion()
+    setVersion(data.version)
+    const graphs = await apiAllGetGraph()
+    setGraphArr(graphs)
+    if (graphs.length) {
+      dispatch(setCurGraphName(graphs[0].name))
+    }
+  }
 
   const onClickSave = async () => {
     // TODO: Implement save logic
@@ -29,12 +48,13 @@ const Header = () => {
 
   return (
     <div className={styles.header}>
+      <span className={styles.version}>version:{version}</span>
       <span className={styles.content}>
         <Select
           className={styles.graph}
-          value={graph}
+          value={curGraphName}
           options={options}
-          onChange={(value) => setGraph(value)}
+          onChange={(value) => dispatch(setCurGraphName(value))}
         ></Select>
       </span>
       <Button className={styles.save} type="primary" onClick={onClickSave}>

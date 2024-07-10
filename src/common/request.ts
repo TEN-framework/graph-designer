@@ -8,25 +8,25 @@ export const apiGetVersion = async () => {
   }).then((res) => res.json())
 }
 
-export const apiGetExtensionAddons = async () => {
+export const apiGetInstalledExtension = async () => {
   return fetch(`${API_URL}/addons/extensions`, {
     method: "GET",
   }).then((res) => res.json())
 }
 
-export const apiGetGraph = async () => {
+export const apiAllGetGraph = async () => {
   return fetch(`${API_URL}/graphs`, {
     method: "GET",
   }).then((res) => res.json())
 }
 
-export const apiGetGraphExtensions = async (graphName: string) => {
+export const apiGetGraphExtension = async (graphName: string) => {
   return fetch(`${API_URL}/graphs/${graphName}/extensions`, {
     method: "GET",
   }).then((res) => res.json())
 }
 
-export const apiGetGraphConnections = async (graphName: string) => {
+export const apiGetGraphConnection = async (graphName: string) => {
   return fetch(`${API_URL}/graphs/${graphName}/connections`, {
     method: "GET",
   }).then((res) => res.json())

@@ -1,7 +1,8 @@
+import { StoreProvider } from "@/store";
+import type { Metadata } from "next"
+
 import "@/css/reset.css"
 import "@/css/global.css"
-
-import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,7 +16,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <StoreProvider>
+          {children}
+        </StoreProvider>
+      </body>
     </html>
   )
 }
