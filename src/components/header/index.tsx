@@ -26,7 +26,7 @@ const Header = () => {
     return graphArr.map((item) => {
       return {
         value: item.name,
-        label: "Graph" + item.name,
+        label: item.name,
       }
     })
   }, [graphArr])

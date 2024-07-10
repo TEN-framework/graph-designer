@@ -13,6 +13,7 @@ export type ExtensionNodeProps = {
 const HEADER_HEIGHT = 30,
   HANDLE_HEIGHT = 20
 
+// eslint-disable-next-line react/display-name
 export default memo(
   ({
     data: { name, inputs = [], outputs = [] },

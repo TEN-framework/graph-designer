@@ -148,8 +148,8 @@ const Flow = () => {
     const connections = await apiGetGraphConnection(curGraphName)
     console.log("connections", connections)
 
-    const messages = await apiGetCompatibleMessage()
-    console.log("messages", messages)
+    // const messages = await apiGetCompatibleMessage()
+    // console.log("messages", messages)
   }
 
   // ----------------- Drag and Drop -----------------
