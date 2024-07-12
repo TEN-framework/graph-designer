@@ -1,3 +1,4 @@
+import { IExtension } from "@/types"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
 export interface InitialState {
@@ -6,7 +7,7 @@ export interface InitialState {
 
 const getInitialState = (): InitialState => {
   return {
-    curGraphName: ""
+    curGraphName: "",
   }
 }
 
@@ -23,7 +24,7 @@ export const globalSlice = createSlice({
   },
 })
 
-export const { reset, setCurGraphName } =
+export const { reset, setCurGraphName,  } =
   globalSlice.actions
 
 export default globalSlice.reducer

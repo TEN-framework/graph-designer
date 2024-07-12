@@ -1,13 +1,13 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { apiGetInstalledExtension, apiAllGetGraph } from "@/common"
+import { apiGetInstalledExtension } from "@/common"
+import { IExtension } from "@/types"
 import styles from "./index.module.scss"
 
 
-
-const Sidebar = ({ data }: any) => {
-  const [extensionArr, setExtensionArr] = useState<IExtension[]>([])
+const Sidebar = () => {
+  const [installedExtensions, setInstalledExtensions] = useState<IExtension[]>([])
 
   useEffect(() => {
     init()
@@ -15,11 +15,11 @@ const Sidebar = ({ data }: any) => {
 
   const init = async () => {
     const data = await apiGetInstalledExtension()
-    setExtensionArr(data)
+    setInstalledExtensions(data)
   }
 
   const onDragStart = (event: any, name: string) => {
-    console.log("drag started", event)
+    // console.log("drag started", event)
     event.dataTransfer.setData("type", "extension")
     event.dataTransfer.setData("name", name)
     event.dataTransfer.effectAllowed = "move"
@@ -27,7 +27,7 @@ const Sidebar = ({ data }: any) => {
 
   return (
     <div className={styles.sidebar}>
-      {extensionArr.map((item) => {
+      {installedExtensions.map((item) => {
         return <div
           className={styles.item}
           key={item.name}
