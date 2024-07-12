@@ -215,7 +215,7 @@ const Flow = () => {
     params: OnConnectStartParams,
   ) => {
     // TODO: highlight the node if can connect
-    // TODO: if connection break off, reset status  (how to judge if break off???)
+    // TODO: if connection break off, reset status  (onConnectEnd)
     const { handleId = "", nodeId, handleType } = params
     const handleName = handleId?.split("/")[1]
     const targetExtension = extensions.find((item) => item.name === nodeId)
@@ -268,8 +268,9 @@ const Flow = () => {
   )
 
 
-  const onConnectEnd = useCallback((event: any) => {
-   }, [setEdges])
+  const onConnectEnd = () => {
+    console.log("onConnectEnd")
+  }
 
 
   // ------------------ Other ------------------
@@ -329,6 +330,8 @@ const Flow = () => {
     setNodes(newNodes)
   }
 
+
+
   return (
     <>
       {contextHolder}
@@ -341,7 +344,7 @@ const Flow = () => {
         onDragOver={onDragOver}
         onConnectStart={onConnectStart}
         onConnect={onConnect}
-        // onConnectEnd={onConnectEnd}
+        onConnectEnd={onConnectEnd}
         defaultEdgeOptions={defaultEdgeOptions}
         nodeTypes={nodeTypes}
       // connectionLineType={ConnectionLineType.SmoothStep}
