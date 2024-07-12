@@ -1,91 +1,85 @@
-import { memo, useCallback } from "react"
-import { Handle, Position } from "reactflow"
+import { memo, useCallback, useMemo, FC } from "react"
+import { Handle, Position, Node, NodeProps, } from "reactflow"
+import { NodeStatus, IExtensionNode } from "@/types"
+
 import styles from "./extension.module.scss"
 
-// const handleStyle = { left: 10 };
+const HEADER_HEIGHT = 30
+const HANDLE_HEIGHT = 20
 
-export type ExtensionNodeProps = {
-  name: string
-  inputs: { id: string; type: string }[]
-  outputs: { id: string; type: string }[]
+
+const getHandlerColor = (status?: NodeStatus) => {
+  if (status == "default") {
+    return "#555"
+  } else if (status == "disabled") {
+    return "##bbbbbb"
+  } else if (status == "enabled") {
+    return "#58de7b"
+  }
+  return "#555"
 }
 
-const HEADER_HEIGHT = 30,
-  HANDLE_HEIGHT = 20
+export default function ExtensionNode({ data }: IExtensionNode) {
 
-// eslint-disable-next-line react/display-name
-export default memo(
-  ({
-    data: { name, inputs = [], outputs = [] },
-  }: {
-    data: ExtensionNodeProps
-  }) => {
-    return (
-      <div
-        className={styles["extension-node"]}
-        style={{
-          height:
-            HEADER_HEIGHT +
-            HANDLE_HEIGHT * Math.max(inputs.length, outputs.length),
-        }}
-      >
-        <div className={styles["contents"]}>
-          <div className={styles["extension-name"]}>
-            <strong>{name}</strong>
-          </div>
-          <div className={styles["extension-inputs"]}>
-            {/* <Handle type="target" position={Position.Left} /> */}
-            {inputs.map((input: { id: string; type: string }, index) => (
-              <Handle
-                key={`${name}/${input.id}`}
-                type="target"
-                position={Position.Left}
-                id={`${name}/${input.id}`}
-                style={{
-                  top: HEADER_HEIGHT + HANDLE_HEIGHT * index,
-                  background: "#555",
-                }}
-              >
-                <div className={styles["extension-handle-label"]}>
-                  {input.id}
-                </div>
-              </Handle>
-            ))}
-          </div>
-          <div className={styles["extension-outputs"]}>
-            {outputs.map((output: { id: string; type: string }, index) => (
-              <Handle
-                key={`${name}/${output.id}`}
-                type="source"
-                position={Position.Right}
-                id={`${name}/${output.id}`}
-                style={{
-                  top: HEADER_HEIGHT + HANDLE_HEIGHT * index,
-                  background: "#555",
-                }}
-              >
-                <div className={styles["extension-handle-label"]}>
-                  {output.id}
-                </div>
-              </Handle>
-            ))}
-          </div>
-          {/* <Handle
-        type="source"
-        position={Position.Right}
-        id="a"
-        style={{ top: 10, background: '#555'}}>
-            <div style={{pointerEvents: 'none'}}>hello</div>
-      </Handle>
-      <Handle
-        type="source"
-        position={Position.Right}
-        id="b"
-        style={{ bottom: 10, top: 'auto', background: '#555' }}
-        // style={handleStyle}
-      /> */}
-        </div>
+  const {
+    name,
+    inputs = [],
+    outputs = [],
+    status = "default"
+  } = data
+
+
+  return <div
+    className={`${styles["extension-node"]} ${status}`}
+    style={{
+      height:
+        HEADER_HEIGHT +
+        HANDLE_HEIGHT * Math.max(inputs.length, outputs.length),
+    }}
+  >
+    <div className={styles["contents"]}>
+      <div className={styles["extension-name"]}>
+        <strong>{name}</strong>
       </div>
-    )
-  },
-)
+      <div className={styles["extension-inputs"]}>
+        {inputs.map((input, index) => (
+          <Handle
+            key={`${name}/${input.id}`}
+            type="target"
+            position={Position.Left}
+            id={`${name}/${input.id}`}
+            style={{
+              top: HEADER_HEIGHT + HANDLE_HEIGHT * index,
+              background: getHandlerColor(input.status),
+            }}
+          >
+            <div className={styles["extension-handle-label"]}>
+              {input.id}
+            </div>
+          </Handle>
+        ))}
+      </div>
+      <div className={styles["extension-outputs"]}>
+        {outputs.map((output, index) => (
+          <Handle
+            key={`${name}/${output.id}`}
+            type="source"
+            position={Position.Right}
+            id={`${name}/${output.id}`}
+            style={{
+              top: HEADER_HEIGHT + HANDLE_HEIGHT * index,
+              background: getHandlerColor(output.status),
+            }}
+          >
+            <div className={styles["extension-handle-label"]}>
+              {output.id}
+            </div>
+          </Handle>
+        ))}
+      </div>
+    </div>
+  </div>
+
+}
+
+

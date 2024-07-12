@@ -17,7 +17,9 @@ import ReactFlow, {
   Controls,
   Background,
   OnConnectStartParams,
+  NodeTypes,
 } from "reactflow"
+import type { ComponentType } from 'react';
 import ExtensionNode from "./nodes/extension"
 import { message } from 'antd';
 import {
@@ -25,7 +27,7 @@ import {
   apiGetGraphConnection, extensionsToNodes, apiQueryCompatibleMessage,
   handleIdToType
 } from "@/common"
-import { IExtension, IQueryCompatibleData } from "@/types"
+import { IExtension, ICompatibleConnection, IExtensionNode, CustomNodeType } from "@/types"
 
 // const initialNodes: Node[] = [
 //   {
@@ -131,6 +133,9 @@ const defaultEdgeOptions = {
 
 const initialNodes: Node[] = []
 const initialEdges: Edge[] = []
+const nodeTypes: any = {
+  extension: ExtensionNode
+}
 
 const Flow = () => {
   const [messageApi, contextHolder] = message.useMessage();
@@ -139,7 +144,6 @@ const Flow = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
   const [extensions, setExtensions] = useState<IExtension[]>([])
-  const nodeTypes = useMemo(() => ({ extension: ExtensionNode }), [])
 
   useEffect(() => {
     if (curGraphName) {
@@ -147,11 +151,14 @@ const Flow = () => {
     }
   }, [curGraphName])
 
+
+
   const getData = async () => {
     const extensions = await apiGetGraphExtension(curGraphName)
     setExtensions(extensions)
     console.log("graph extensions", extensions)
     const nodes = extensionsToNodes(extensions)
+    console.log("graph nodes", nodes)
     setNodes(nodes)
 
     const connections = await apiGetGraphConnection(curGraphName)
@@ -208,30 +215,46 @@ const Flow = () => {
     params: OnConnectStartParams,
   ) => {
     // TODO: highlight the node if can connect
-    console.log("onConnectStart", event, params)
+    // TODO: if connection break off, reset status  (how to judge if break off???)
     const { handleId = "", nodeId, handleType } = params
+    const handleName = handleId?.split("/")[1]
     const targetExtension = extensions.find((item) => item.name === nodeId)
-    const options: IQueryCompatibleData= {
+    const targetNode = nodes.find((item) => item.id === nodeId)
+    console.log("onConnectStart", event, params, targetExtension, targetNode)
+
+    const options: ICompatibleConnection = {
       app: targetExtension?.app ?? "",
       graph: curGraphName,
       extension_group: targetExtension?.extension_group ?? "",
       extension: targetExtension?.name ?? "",
-      msg_type: handleIdToType(handleId!) ?? "",
-      msg_name: handleIdToType(handleId!) ?? "",
+      msg_type: "",
+      msg_name: "",
       msg_direction: ""
     }
     if (handleType == "source") {
-      options.msg_direction =  'out'
+      const outputs = targetNode?.data.outputs ?? []
+      const target = outputs.find((item: any) => item.id === handleName)
+      options.msg_direction = 'out'
+      options.msg_type = target!.type
+      options.msg_name = target!.id
     } else if (handleType == "target") {
-      options.msg_direction = "input"
+      options.msg_direction = "in"
+      const inputs = targetNode?.data.inputs ?? []
+      const target = inputs.find((item: any) => item.id === handleName)
+      options.msg_type = target!.type
+      options.msg_name = target!.id
     }
-    const data = await apiQueryCompatibleMessage(options)
+    const connections = await apiQueryCompatibleMessage(options)
+    highlightNode(connections)
 
-    console.log("onConnectStart", data)
+    console.log("onConnectStart compatible connection", connections)
   }
 
   const onConnect = useCallback(
     (params: Connection | Edge) => {
+
+      console.log("onConnect", params)
+
       // TODO: judge if can connect
       // if not, return false
       const { source, target, sourceHandle, targetHandle } = params
@@ -239,11 +262,72 @@ const Flow = () => {
       setEdges((eds) => {
         return addEdge(params, eds)
       })
+
     },
     [setEdges],
   )
 
-  // const onConnectEnd = useCallback((event: any) => { }, [setEdges])
+
+  const onConnectEnd = useCallback((event: any) => {
+   }, [setEdges])
+
+
+  // ------------------ Other ------------------
+  const highlightNode = (connections: ICompatibleConnection[]) => {
+    console.log("highlightNode", connections)
+    let newNodes: Node[] = []
+    if (connections.length) {
+      // set enabled/disabled  status
+      newNodes = nodes.map((node) => {
+        const targetConnection = connections.find((c) => c.extension == node.id)
+        let data = node.data
+        let { inputs, outputs } = data
+        if (targetConnection) {
+          const isIn = targetConnection.msg_direction == "in"
+          inputs = inputs.map((input: any) => {
+            return {
+              ...input,
+              status: input.id == targetConnection.msg_name && isIn ? "enabled" : "disabled"
+            }
+          })
+          outputs = outputs.map((output: any) => {
+            return {
+              ...output,
+              status: output.id == targetConnection.msg_name && !isIn ? "enabled" : "disabled"
+            }
+          })
+        } else {
+          inputs = inputs.map((input: any) => {
+            return {
+              ...input,
+              status: "disabled"
+            }
+          })
+          outputs = outputs.map((output: any) => {
+            return {
+              ...output,
+              status: "disabled"
+            }
+          })
+        }
+
+        return {
+          ...node,
+          data: {
+            ...data,
+            inputs,
+            outputs,
+            status: targetConnection ? "enabled" : "disabled",
+          }
+        }
+      })
+    } else {
+      // reset default status
+      // newNodes
+    }
+    console.log("highlightNode newNodes", newNodes)
+    setNodes(newNodes)
+  }
 
   return (
     <>

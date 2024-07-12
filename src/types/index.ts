@@ -1,10 +1,25 @@
+import type { Node, NodeProps } from 'reactflow';
+
+// ------------------ enum  ------------------
 export enum LogLevel {
   DEBUG = 0,
   WARN = 1,
   ERROR = 2,
 }
 
+// ------------------ type  ------------------
+export type MsgType = "cmd" | "data" | "img_frame" | "pcm_frame"
+export type NodeStatus = "default" | "disabled" | "enabled"
+export type IExtensionNode = Node<{
+  name: string
+  status?: NodeStatus
+  inputs: InOutData[]
+  outputs: InOutData[]
+}, 'extension'>;
+export type CustomNodeType = IExtensionNode
 
+
+// ------------------ interface  ------------------
 export interface IExtension {
   name: string
   addon?: string
@@ -38,14 +53,12 @@ export interface IConnection {
   extension_group: string,
 }
 
-
 export interface IGraph {
   auto_start: boolean,
   name: string
 }
 
-
-export interface IQueryCompatibleData {
+export interface ICompatibleConnection {
   app: string
   graph: string
   extension_group: string
@@ -55,10 +68,12 @@ export interface IQueryCompatibleData {
   msg_name: string
 }
 
-
 export interface InOutData {
   id: string
   type: MsgType
+  status?: NodeStatus
 }
 
-export type  MsgType = "cmd" | "data" | "img_frame" | "pcm_frame"
+
+
+

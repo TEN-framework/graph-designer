@@ -6,12 +6,18 @@
   box-shadow: 0 0 10px #000;
   width: 200px;
 
+  &:global(.disabled) {
+    background: #ff1e1e;
+  }
+
+  &:global(.enabled) {
+    background: #38ff1e;
+  }
+
   .contents {
-    background: radial-gradient(
-      ellipse 85% 50px at center calc(100% + 20px),
-      #60861b,
-      #0f1610
-    );
+    background: radial-gradient(ellipse 85% 50px at center calc(100% + 20px),
+        #60861b,
+        #0f1610);
     width: calc(100% - 4px);
     border-radius: 8px;
     top: 2px;
@@ -25,19 +31,23 @@
     height: 20px;
     padding: 5px;
   }
+
   .extension-inputs {
     position: absolute;
     top: 0;
     width: 100%;
+
     .extension-handle-label {
       top: -2px;
       padding: 0 10px;
     }
   }
+
   .extension-outputs {
     position: absolute;
     top: 0;
     width: 100%;
+
     .extension-handle-label {
       // translate: -200px;
       text-align: right;
@@ -52,3 +62,4 @@
     position: absolute;
   }
 }
+

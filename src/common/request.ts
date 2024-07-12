@@ -1,4 +1,5 @@
-import { IConnection, IExtension, IQueryCompatibleData } from "@/types"
+import { camelToSnake } from "./utils"
+import { IConnection, IExtension, ICompatibleConnection } from "@/types"
 
 
 const BASE_URL = "http://localhost:49483"
@@ -39,14 +40,20 @@ export const apiGetGraphConnection = async (graphName: string): Promise<IConnect
   return data as IConnection[]
 }
 
-export const apiQueryCompatibleMessage = async (data: IQueryCompatibleData) => {
-  return fetch(`${API_URL}/messages/compatible`, {
+export const apiQueryCompatibleMessage = async (options: ICompatibleConnection): Promise<ICompatibleConnection[]> => {
+  const res = await fetch(`${API_URL}/messages/compatible`, {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify(options),
     method: "POST",
-  }).then((res) => res.json())
+  })
+  const data = await res.json()
+  for (const item of data) {
+    item.msg_direction = camelToSnake(item.msg_direction)
+    item.msg_type = camelToSnake(item.msg_type)
+  }
+  return data as ICompatibleConnection[]
 }
 
 export const updateGraph = async (graphName: string, graph: any) => {

@@ -1,5 +1,9 @@
-import { Edge, Node, XYPosition } from "reactflow"
-import { IExtension, IConnection, IConnectionData, MsgType, InOutData } from "@/types"
+import { Edge, Node, XYPosition, Position } from "reactflow"
+import {
+  IExtension, IConnection,
+  IConnectionData, MsgType, InOutData,
+  IExtensionNode
+} from "@/types"
 
 let EDGE_ID = 0
 
@@ -24,73 +28,74 @@ export const formatTime = (date?: Date) => {
 }
 
 
-export const extensionsToNodes = (extensions: IExtension[]): Node[] => {
+export const extensionsToNodes = (extensions: IExtension[]): IExtensionNode[] => {
   return extensions.map((extension, index) => {
-    const position = { x: index * 250 + 100, y: 200 + (index % 2 == 0 ? 1 : -1) * 100 }
+    const position = { x: index * 250 + 50, y: 300 + (index % 2 == 0 ? 1 : -1) * 120 }
     return extensionToNode(extension, { position })
   })
 }
 
 export const extensionToNode = (extension: IExtension, property: {
   position: XYPosition
-}): Node => {
+}): IExtensionNode => {
   const { position } = property
   const inputs: InOutData[] = []
   const outputs: InOutData[] = []
   const { api } = extension
   if (api?.cmd_in) {
     api.cmd_in.forEach((input) => {
-      inputs.push({ id: input.name, type: "cmd" })
+      inputs.push({ id: input.name, type: "cmd", status: "default" })
     })
   }
   if (api?.cmd_out) {
     api.cmd_out.forEach((output) => {
-      outputs.push({ id: output.name, type: "cmd" })
+      outputs.push({ id: output.name, type: "cmd", status: "default" })
     })
   }
   if (api?.data_in) {
     api.data_in.forEach((input) => {
-      inputs.push({ id: input.name, type: "data" })
+      inputs.push({ id: input.name, type: "data", status: "default" })
     })
   }
   if (api?.data_out) {
     api.data_out.forEach((output) => {
-      outputs.push({ id: output.name, type: "data" })
+      outputs.push({ id: output.name, type: "data", status: "default" })
     })
   }
   if (api?.pcm_frame_in) {
     api.pcm_frame_in.forEach((input) => {
-      inputs.push({ id: input.name, type: "pcm_frame" })
+      inputs.push({ id: input.name, type: "pcm_frame", status: "default" })
     })
   }
   if (api?.pcm_frame_out) {
     api.pcm_frame_out.forEach((output) => {
-      outputs.push({ id: output.name, type: "pcm_frame" })
+      outputs.push({ id: output.name, type: "pcm_frame", status: "default" })
     })
   }
   if (api?.img_frame_in) {
     api.img_frame_in.forEach((input) => {
-      inputs.push({ id: input.name, type: "img_frame" })
+      inputs.push({ id: input.name, type: "img_frame", status: "default" })
     })
   }
   if (api?.img_frame_out) {
     api.img_frame_out.forEach((output) => {
-      outputs.push({ id: output.name, type: "img_frame" })
+      outputs.push({ id: output.name, type: "img_frame", status: "default" })
     })
   }
-  
+
   return {
     id: extension.name,
-    sourcePosition: 'right',
-    targetPosition: 'left',
+    sourcePosition: Position.Right,
+    targetPosition: Position.Left,
     position: position,
     type: "extension",
     data: {
+      status: "default",
       name: extension.name,
       inputs: inputs,
       outputs: outputs,
     },
-  } as Node
+  }
 }
 
 const _connectionDataToEdge = (extensionName: string, data: IConnectionData[]): Edge[] => {
@@ -142,4 +147,10 @@ export const handleIdToType = (id: string): MsgType => {
     throw new Error(`Invalid handle id: ${id}`)
   }
   return data[1] as MsgType
+}
+
+
+// DataTest => data_test
+export const camelToSnake = (str: string): string => {
+  return str.replace(/[A-Z]/g, match => "_" + match.toLowerCase()).slice(1)
 }
