@@ -27,10 +27,13 @@ export const formatTime = (date?: Date) => {
   return `${_pad(hours)}:${_pad(minutes)}:${_pad(seconds)}:${_pad(milliseconds)}`
 }
 
+export const round = (min: number, max: number) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min
+}
 
 export const extensionsToNodes = (extensions: IExtension[]): IExtensionNode[] => {
   return extensions.map((extension, index) => {
-    const position = { x: index * 250 + 50, y: 300 + (index % 2 == 0 ? 1 : -1) * 120 }
+    const position = { x: index * 250 + 50, y: 300 + (index % 2 == 0 ? 1 : -1) * 120 + round(-50, 50) }
     return extensionToNode(extension, { position })
   })
 }

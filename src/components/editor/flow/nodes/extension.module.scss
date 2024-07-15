@@ -6,14 +6,6 @@
   box-shadow: 0 0 10px #000;
   width: 200px;
 
-  &:global(.disabled) {
-    background: #ff1e1e;
-  }
-
-  &:global(.enabled) {
-    background: #38ff1e;
-  }
-
   .contents {
     background: radial-gradient(ellipse 85% 50px at center calc(100% + 20px),
         #60861b,

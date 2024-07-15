@@ -9,14 +9,21 @@ const HANDLE_HEIGHT = 20
 
 
 const getHandlerColor = (status?: NodeStatus) => {
-  if (status == "default") {
-    return "#555"
-  } else if (status == "disabled") {
-    return "##bbbbbb"
+  if (status == "disabled") {
+    return "#ff1e1e"
   } else if (status == "enabled") {
     return "#58de7b"
   }
+  // default
   return "#555"
+}
+
+const getNodeColor = (status?: NodeStatus) => {
+  if (status == "disabled") {
+    return "#ff1e1e"
+  } else if (status == "enabled") {
+    return "#38ff1e"
+  }
 }
 
 export default function ExtensionNode({ data }: IExtensionNode) {
@@ -30,8 +37,9 @@ export default function ExtensionNode({ data }: IExtensionNode) {
 
 
   return <div
-    className={`${styles["extension-node"]} ${status}`}
+    className={styles["extension-node"]}
     style={{
+      background: getNodeColor(status),
       height:
         HEADER_HEIGHT +
         HANDLE_HEIGHT * Math.max(inputs.length, outputs.length),

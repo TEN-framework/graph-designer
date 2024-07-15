@@ -7,6 +7,11 @@ export enum LogLevel {
   ERROR = 2,
 }
 
+export enum ConnectDirection {
+  IN2OUT = "in-out",
+  OUT2IN = "out-in",
+}
+
 // ------------------ type  ------------------
 export type MsgType = "cmd" | "data" | "img_frame" | "pcm_frame"
 export type NodeStatus = "default" | "disabled" | "enabled"

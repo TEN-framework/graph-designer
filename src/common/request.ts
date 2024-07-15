@@ -61,15 +61,19 @@ export const apiQueryCompatibleMessage = async (options: ICompatibleConnection):
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(options),
+    body: JSON.stringify(options), 
     method: "POST",
   })
   const data = await res.json()
-  for (const item of data) {
+  if(data.status != "ok") {
+    throw new Error("Failed to query compatible messages")
+  }
+  let arr = data?.data ?? []
+  for (const item of arr) {
     item.msg_direction = camelToSnake(item.msg_direction)
     item.msg_type = camelToSnake(item.msg_type)
   }
-  return data as ICompatibleConnection[]
+  return arr as ICompatibleConnection[]
 }
 
 export const updateGraph = async (graphName: string, graph: any) => {
