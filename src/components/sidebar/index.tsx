@@ -15,14 +15,14 @@ const Sidebar = () => {
 
   const init = async () => {
     const data = await apiGetInstalledExtension()
-    console.log("installed extensions: ",data)
+    console.log("installed extensions: ", data)
     setInstalledExtensions(data)
   }
 
-  const onDragStart = (event: any, name: string) => {
-    // console.log("drag started", event)
+  const onDragStart = (event: any, item: IExtension) => {
+    console.log("drag started", item)
     event.dataTransfer.setData("type", "extension")
-    event.dataTransfer.setData("name", name)
+    event.dataTransfer.setData("extension", JSON.stringify(item))
     event.dataTransfer.effectAllowed = "move"
   }
 
@@ -33,7 +33,7 @@ const Sidebar = () => {
           className={styles.item}
           key={item.name}
           draggable
-          onDragStart={(e) => onDragStart(e, item.name)}>{item.name}</div>
+          onDragStart={(e) => onDragStart(e, item)}>{item.name}</div>
       })}
     </div>
   )

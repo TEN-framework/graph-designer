@@ -15,7 +15,6 @@ import ReactFlow, {
   NodeTypes,
   EdgeTypes,
   DefaultEdgeOptions,
-
 } from "reactflow"
 import ExtensionNode from "./nodes/extension"
 import { message } from 'antd';
@@ -24,7 +23,7 @@ import {
   apiGetGraphConnection, extensionsToNodes, apiQueryCompatibleMessage,
   handleIdToType
 } from "@/common"
-import { IExtension, ICompatibleConnection, IExtensionNode, CustomNodeType } from "@/types"
+import { IExtension, ICompatibleConnection, ConnectDirection, InOutData } from "@/types"
 
 
 const defaultEdgeOptions: DefaultEdgeOptions = {
@@ -37,7 +36,6 @@ const defaultEdgeOptions: DefaultEdgeOptions = {
     // color: 'red',
   },
 }
-
 const initialNodes: Node[] = []
 const initialEdges: Edge[] = []
 const nodeTypes: any = {
@@ -50,6 +48,8 @@ const edgeTypes: any = {
   //   borderRadius: 100
   // },
 }
+
+let connectDirection = ConnectDirection.Positive
 
 const Flow = () => {
   const [messageApi, contextHolder] = message.useMessage();
@@ -88,20 +88,15 @@ const Flow = () => {
     (event: any) => {
       event.preventDefault()
       const type = event.dataTransfer.getData("type")
-      const name = event.dataTransfer.getData("name")
+      const extension: IExtension = JSON.parse(event.dataTransfer.getData("extension"))
 
       // check if the dropped element is valid
       if (typeof type === "undefined" || !type) {
         return
       }
-
-      if (nodes.find((item) => item.id === name)) {
-        return messageApi.error(`Extension ${name} already exists editor`)
-      }
-
-      const targetExtension = extensions.find((item) => item.name === name)
-      if (!targetExtension) {
-        return messageApi.error(`Extension ${name} not found`)
+      
+      if (nodes.find((item) => extension.name === item.id)) {
+        return messageApi.error(`Extension ${extension.name} already exists editor`)
       }
 
       const position = screenToFlowPosition({
@@ -109,7 +104,7 @@ const Flow = () => {
         y: event.clientY,
       })
 
-      const newNode = extensionToNode(targetExtension, {
+      const newNode = extensionToNode(extension, {
         position
       })
 
@@ -128,7 +123,6 @@ const Flow = () => {
     event: MouseEvent | TouchEvent,
     params: OnConnectStartParams,
   ) => {
-
     const { handleId = "", nodeId, handleType } = params
     const handleName = handleId?.split("/")[1]
     const targetExtension = extensions.find((item) => item.name === nodeId)
@@ -152,12 +146,14 @@ const Flow = () => {
       options.msg_direction = 'out'
       options.msg_type = target!.type
       options.msg_name = target!.id
+      connectDirection = ConnectDirection.Positive
     } else if (handleType == "target") {
       options.msg_direction = "in"
       const inputs = targetNode?.data.inputs ?? []
       const target = inputs.find((item: any) => item.id === handleName)
       options.msg_type = target!.type
       options.msg_name = target!.id
+      connectDirection = ConnectDirection.Negative
     }
     const connections = await apiQueryCompatibleMessage(options)
     highlightNodes(connections)
@@ -174,9 +170,15 @@ const Flow = () => {
     if (targetNodeName && targetHandleName) {
       const targetNode = nodes.find((item) => item.id === targetNodeName)
       if (targetNode?.data.status == "enabled") {
-        let canConnect = false
-        // let 
-        if (canConnect) {
+        let targetHandler
+        if (connectDirection == ConnectDirection.Positive) {
+          const arr: InOutData[] = targetNode?.data.inputs ?? []
+          targetHandler = arr.find(item => item.id == targetHandleName && item.status == "enabled")
+        } else {
+          const arr: InOutData[] = targetNode?.data.outputs ?? []
+          targetHandler = arr.find(item => item.id == targetHandleName && item.status == "enabled")
+        }
+        if (targetHandler) {
           setEdges((eds) => {
             return addEdge(params, eds)
           })
@@ -184,7 +186,6 @@ const Flow = () => {
       }
     }
   }
-
 
 
   const onConnectEnd = () => {
@@ -258,8 +259,6 @@ const Flow = () => {
     })
     setNodes(newNodes)
   }
-
-
 
   return (
     <>

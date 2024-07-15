@@ -1,15 +1,19 @@
 import { camelToSnake } from "./utils"
 import { IConnection, IExtension, ICompatibleConnection } from "@/types"
 
-
 const BASE_URL = "http://localhost:49483"
 const PREFIX = "/api/dev-server/v1"
 const API_URL = `${BASE_URL}${PREFIX}`
 
 export const apiGetVersion = async () => {
-  return fetch(`${API_URL}/version`, {
+  const res = await fetch(`${API_URL}/version`, {
     method: "GET",
-  }).then((res) => res.json())
+  })
+  const data = await res.json()
+  if (data.status != "ok") {
+    throw new Error("Failed to get version")
+  }
+  return data?.data ?? {}
 }
 
 export const apiGetInstalledExtension = async () => {
@@ -61,11 +65,11 @@ export const apiQueryCompatibleMessage = async (options: ICompatibleConnection):
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(options), 
+    body: JSON.stringify(options),
     method: "POST",
   })
   const data = await res.json()
-  if(data.status != "ok") {
+  if (data.status != "ok") {
     throw new Error("Failed to query compatible messages")
   }
   let arr = data?.data ?? []
@@ -76,12 +80,17 @@ export const apiQueryCompatibleMessage = async (options: ICompatibleConnection):
   return arr as ICompatibleConnection[]
 }
 
-export const updateGraph = async (graphName: string, graph: any) => {
-  return fetch(`${API_URL}/graphs/${graphName}`, {
+export const apiUpdateGraph = async (graphName: string, graph: any) => {
+  const res = await fetch(`${API_URL}/graphs/${graphName}`, {
     method: "POST",
     headers: {
-      // "Content-Type": "application/json",
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(graph),
-  }).then((res) => res.json())
+  })
+  const data = await res.json()
+  if (data.status != "ok") {
+    throw new Error("Failed to update graph")
+  }
+  return data
 }

@@ -33,7 +33,7 @@ export const round = (min: number, max: number) => {
 
 export const extensionsToNodes = (extensions: IExtension[]): IExtensionNode[] => {
   return extensions.map((extension, index) => {
-    const position = { x: index * 250 + 50, y: 300 + (index % 2 == 0 ? 1 : -1) * 120 + round(-50, 50) }
+    const position = { x: index * 250 + 50, y: 220 + (index % 2 == 0 ? 1 : -1) * 100 + round(-100, 100) }
     return extensionToNode(extension, { position })
   })
 }

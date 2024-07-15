@@ -1,17 +1,15 @@
 "use client"
 
-import { Button, Select } from "antd"
+import { Button, Select, message } from "antd"
 import { useEffect, useMemo, useState } from "react"
-import { apiGetVersion, apiAllGetGraph, useAppSelector, useAppDispatch } from "@/common"
+import { apiGetVersion, apiAllGetGraph, useAppSelector, useAppDispatch, apiUpdateGraph } from "@/common"
 import { setCurGraphName } from "@/store/reducers/global"
 import { IGraph } from "@/types"
 
 import styles from "./index.module.scss"
 
-
-
-
 const Header = () => {
+  const [messageApi, contextHolder] = message.useMessage();
   const dispatch = useAppDispatch()
   const curGraphName = useAppSelector((state) => state.global.curGraphName)
   const [version, setVersion] = useState("")
@@ -42,25 +40,35 @@ const Header = () => {
   }
 
   const onClickSave = async () => {
-    // TODO: Implement save logic
-    console.log("Save clicked")
+    try {
+      // TODO: save graph
+      await apiUpdateGraph(curGraphName, {})
+      messageApi.success("Save success")
+    } catch (e) {
+      messageApi.error("Failed to save")
+    }
+
   }
 
   return (
-    <div className={styles.header}>
-      <span className={styles.version}>version:{version}</span>
-      <span className={styles.content}>
-        <Select
-          className={styles.graph}
-          value={curGraphName}
-          options={options}
-          onChange={(value) => dispatch(setCurGraphName(value))}
-        ></Select>
-      </span>
-      <Button className={styles.save} type="primary" onClick={onClickSave}>
-        Save
-      </Button>
-    </div>
+    <>
+      {contextHolder}
+      <div className={styles.header}>
+        <span className={styles.version}>version:{version}</span>
+        <span className={styles.content}>
+          <Select
+            className={styles.graph}
+            value={curGraphName}
+            options={options}
+            onChange={(value) => dispatch(setCurGraphName(value))}
+          ></Select>
+        </span>
+        <Button className={styles.save} type="primary" onClick={onClickSave}>
+          Save
+        </Button>
+      </div>
+    </>
+
   )
 }
 

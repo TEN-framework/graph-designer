@@ -8,8 +8,8 @@ export enum LogLevel {
 }
 
 export enum ConnectDirection {
-  IN2OUT = "in-out",
-  OUT2IN = "out-in",
+  Positive = "positive",   // out hander => in handler
+  Negative = "negative", // in handler => out handler
 }
 
 // ------------------ type  ------------------

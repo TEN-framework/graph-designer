@@ -1,6 +1,7 @@
 "use client"
 
 import { ConfigProvider, theme } from "antd"
+import { ReactFlowProvider } from "reactflow"
 import Header from "@/components/header"
 import Editor from "@/components/editor"
 import Sidebar from "@/components/sidebar"
@@ -15,13 +16,15 @@ export default function Home() {
         algorithm: theme.darkAlgorithm,
       }}
     >
-      <main className={styles.main}>
-        <Header></Header>
-        <div className={styles.body}>
-          <Sidebar></Sidebar>
-          <Editor></Editor>
-        </div>
-      </main>
+      <ReactFlowProvider>
+        <main className={styles.main}>
+          <Header></Header>
+          <div className={styles.body}>
+            <Sidebar></Sidebar>
+            <Editor></Editor>
+          </div>
+        </main>
+      </ReactFlowProvider>
     </ConfigProvider>
   )
 }
