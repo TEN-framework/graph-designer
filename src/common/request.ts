@@ -13,15 +13,25 @@ export const apiGetVersion = async () => {
 }
 
 export const apiGetInstalledExtension = async () => {
-  return fetch(`${API_URL}/addons/extensions`, {
+  const res = await fetch(`${API_URL}/addons/extensions`, {
     method: "GET",
-  }).then((res) => res.json())
+  })
+  const data = await res.json()
+  if (data.status != "ok") {
+    throw new Error("Failed to get installed extensions")
+  }
+  return data?.data ?? []
 }
 
 export const apiAllGetGraph = async () => {
-  return fetch(`${API_URL}/graphs`, {
+  const res = await fetch(`${API_URL}/graphs`, {
     method: "GET",
-  }).then((res) => res.json())
+  })
+  const data = await res.json()
+  if (data.status != "ok") {
+    throw new Error("Failed to get all graphs")
+  }
+  return data?.data ?? []
 }
 
 export const apiGetGraphExtension = async (graphName: string): Promise<IExtension[]> => {
@@ -29,7 +39,10 @@ export const apiGetGraphExtension = async (graphName: string): Promise<IExtensio
     method: "GET",
   })
   const data = await res.json()
-  return data as IExtension[]
+  if (data.status != "ok") {
+    throw new Error("Failed to get graph extensions")
+  }
+  return (data?.data ?? []) as IExtension[]
 }
 
 export const apiGetGraphConnection = async (graphName: string): Promise<IConnection[]> => {
@@ -37,7 +50,10 @@ export const apiGetGraphConnection = async (graphName: string): Promise<IConnect
     method: "GET",
   })
   const data = await res.json()
-  return data as IConnection[]
+  if (data.status != "ok") {
+    throw new Error("Failed to get graph connections")
+  }
+  return (data?.data ?? []) as IConnection[]
 }
 
 export const apiQueryCompatibleMessage = async (options: ICompatibleConnection): Promise<ICompatibleConnection[]> => {

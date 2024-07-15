@@ -15,6 +15,7 @@ const Sidebar = () => {
 
   const init = async () => {
     const data = await apiGetInstalledExtension()
+    console.log("installed extensions: ",data)
     setInstalledExtensions(data)
   }
 
