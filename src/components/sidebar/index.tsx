@@ -1,13 +1,15 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { apiGetInstalledExtension } from "@/common"
+import { apiGetInstalledExtension, useAppDispatch, useAppSelector } from "@/common"
+import { setInstalledExtensions } from "@/store/reducers/global"
 import { IExtension } from "@/types"
 import styles from "./index.module.scss"
 
 
 const Sidebar = () => {
-  const [installedExtensions, setInstalledExtensions] = useState<IExtension[]>([])
+  const dispatch = useAppDispatch()
+  const installedExtensions = useAppSelector((state) => state.global.installedExtensions)
 
   useEffect(() => {
     init()
@@ -16,7 +18,7 @@ const Sidebar = () => {
   const init = async () => {
     const data = await apiGetInstalledExtension()
     console.log("installed extensions: ", data)
-    setInstalledExtensions(data)
+    dispatch(setInstalledExtensions(data))
   }
 
   const onDragStart = (event: any, item: IExtension) => {

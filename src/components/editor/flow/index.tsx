@@ -54,10 +54,10 @@ let connectDirection = ConnectDirection.Positive
 const Flow = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const curGraphName = useAppSelector((state) => state.global.curGraphName)
+  const installedExtensions = useAppSelector((state) => state.global.installedExtensions)
   const { screenToFlowPosition } = useReactFlow()
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
-  const [extensions, setExtensions] = useState<IExtension[]>([])
 
   useEffect(() => {
     if (curGraphName) {
@@ -69,7 +69,6 @@ const Flow = () => {
 
   const getData = async () => {
     const extensions = await apiGetGraphExtension(curGraphName)
-    setExtensions(extensions)
     console.log("graph extensions", extensions)
     const nodes = extensionsToNodes(extensions)
     console.log("graph nodes", nodes)
@@ -110,7 +109,7 @@ const Flow = () => {
 
       setNodes((nds) => nds.concat(newNode))
     },
-    [screenToFlowPosition, extensions, nodes],
+    [screenToFlowPosition, nodes],
   )
 
   const onDragOver = useCallback((event: any) => {
@@ -125,7 +124,7 @@ const Flow = () => {
   ) => {
     const { handleId = "", nodeId, handleType } = params
     const handleName = handleId?.split("/")[1]
-    const targetExtension = extensions.find((item) => item.name === nodeId)
+    const targetExtension = installedExtensions.find((item) => item.name === nodeId)
     const targetNode = nodes.find((item) => item.id === nodeId)
     console.log("onConnectStart", params)
     console.log("onConnectStart targetExtension", targetExtension)

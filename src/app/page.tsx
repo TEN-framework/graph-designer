@@ -12,9 +12,9 @@ export default function Home() {
 
   return (
     <ConfigProvider
-      theme={{
-        algorithm: theme.darkAlgorithm,
-      }}
+      // theme={{
+      //   // algorithm: theme.darkAlgorithm,
+      // }}
     >
       <ReactFlowProvider>
         <main className={styles.main}>

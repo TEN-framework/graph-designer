@@ -1,57 +1,110 @@
-.extension-node {
-  font-size: 10px;
-  background: linear-gradient(-22deg, #38ff1e 25%, #fff455 50%, #41d012);
-  border-radius: 10px;
-  color: #fff;
-  box-shadow: 0 0 10px #000;
-  width: 200px;
+.extensionNode {
+  border-radius: 8px;
+  width: 300px;
+  border: 1px solid #E5E7EB;
+  box-sizing: border-box;
+  background-color: #fff;
 
-  .contents {
-    background: radial-gradient(ellipse 85% 50px at center calc(100% + 20px),
-        #60861b,
-        #0f1610);
-    width: calc(100% - 4px);
-    border-radius: 8px;
-    top: 2px;
-    left: 2px;
+
+  .extensionName {
+    padding: .5rem;
+    border-bottom: 1px solid #E5E7EB;
+    background-color: rgb(248, 250, 252);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+
+    .text {
+      max-width: 300px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: rgb(15, 23, 42);
+      line-height: 24px;
+      height: 24px;
+      font-weight: 500;
+    }
+  }
+
+  .extensionGroup {
+    padding: .5rem;
+    border-bottom: 1px solid rgb(229, 231, 235);
+
+    .title {
+      color: rgb(15, 23, 42);
+      line-height: 20px;
+      height: 20px;
+      margin-bottom: 4px;
+      font-size: 12px;
+    }
+  }
+
+
+  .extensionHandleWrapper {
+    margin-top: 2px;
+    margin-bottom: 2px;
     position: relative;
-    height: calc(100% - 4px);
-  }
+    background-color: #fff;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
 
-  .extension-name {
-    top: 0;
-    height: 20px;
-    padding: 5px;
-  }
+    .extensionHandleItem {
+      position: absolute;
+      left: 0;
+      right: 0;
+      display: flex;
+      align-items: center;
+      border-radius: .5rem;
 
-  .extension-inputs {
-    position: absolute;
-    top: 0;
-    width: 100%;
 
-    .extension-handle-label {
-      top: -2px;
-      padding: 0 10px;
+      :global(.react-flow__handle) {
+        width: 10px;
+        height: 10px;
+        border-color: #31a3cc;
+        border-radius: 50%;
+        border-width: 2px;
+        background-color: #fff;
+        box-sizing: border-box;
+      }
+
+      .text {
+        color: rgb(15, 23, 42);
+      }
+    }
+
+
+
+    .leftItem {
+      .text {
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+
+      :global(.react-flow__handle-left) {
+        position: absolute;
+        left: -5px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+    }
+
+    .rightItem {
+      .text {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      :global(.react-flow__handle-right) {
+        position: absolute;
+        right: -5px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
     }
   }
 
-  .extension-outputs {
-    position: absolute;
-    top: 0;
-    width: 100%;
-
-    .extension-handle-label {
-      // translate: -200px;
-      text-align: right;
-      translate: -100%;
-      padding: 0 5px 0px 0px;
-      top: -2px;
-    }
-  }
-
-  .extension-handle-label {
-    pointer-events: none;
-    position: absolute;
-  }
 }
-

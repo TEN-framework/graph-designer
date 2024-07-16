@@ -1,5 +1,5 @@
 import { camelToSnake } from "./utils"
-import { IConnection, IExtension, ICompatibleConnection } from "@/types"
+import { IConnection, IExtension, ICompatibleConnection, IGraphData } from "@/types"
 
 const BASE_URL = "http://localhost:49483"
 const PREFIX = "/api/dev-server/v1"
@@ -24,7 +24,18 @@ export const apiGetInstalledExtension = async () => {
   if (data.status != "ok") {
     throw new Error("Failed to get installed extensions")
   }
-  return data?.data ?? []
+  let arr = data?.data ?? []
+
+  return arr.map((item: IExtension) => {
+    return {
+      ...item,
+      addon: item.name,
+      app: "localhost",
+      extension_group: "default",
+      property: null,
+    }
+  })
+
 }
 
 export const apiAllGetGraph = async () => {
@@ -80,13 +91,13 @@ export const apiQueryCompatibleMessage = async (options: ICompatibleConnection):
   return arr as ICompatibleConnection[]
 }
 
-export const apiUpdateGraph = async (graphName: string, graph: any) => {
-  const res = await fetch(`${API_URL}/graphs/${graphName}`, {
+export const apiUpdateGraph = async (graphName: string, graphData: IGraphData) => {
+  const res = await fetch(`${API_URL}/graphs/${graphName}/update`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(graph),
+    body: JSON.stringify(graphData),
   })
   const data = await res.json()
   if (data.status != "ok") {

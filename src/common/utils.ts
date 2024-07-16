@@ -27,10 +27,22 @@ export const formatTime = (date?: Date) => {
   return `${_pad(hours)}:${_pad(minutes)}:${_pad(seconds)}:${_pad(milliseconds)}`
 }
 
+
 export const round = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
+// DataTest => data_test
+export const camelToSnake = (str: string): string => {
+  return str.replace(/[A-Z]/g, match => "_" + match.toLowerCase()).slice(1)
+}
+
+export const sleep = async (ms: number) => {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
+
+// ----------------------- graph ---------------------
 export const extensionsToNodes = (extensions: IExtension[]): IExtensionNode[] => {
   return extensions.map((extension, index) => {
     const position = { x: index * 250 + 50, y: 220 + (index % 2 == 0 ? 1 : -1) * 100 + round(-100, 100) }
@@ -142,8 +154,6 @@ export const connectionsToEdges = (connections: IConnection[]): Edge[] => {
   return edges
 }
 
-
-
 export const handleIdToType = (id: string): MsgType => {
   const data = id.split("/")
   if (!data[1]) {
@@ -153,7 +163,63 @@ export const handleIdToType = (id: string): MsgType => {
 }
 
 
-// DataTest => data_test
-export const camelToSnake = (str: string): string => {
-  return str.replace(/[A-Z]/g, match => "_" + match.toLowerCase()).slice(1)
+export const nodesToExtensions = (nodes: Node[], installedExtensions: IExtension[]): IExtension[] => {
+  return nodes.map((node) => {
+    const { id } = node
+    const extension = installedExtensions.find(i => i.name == id)
+    if (!extension) {
+      throw new Error(`Invalid extension: ${id}`)
+    }
+    return extension
+  })
+}
+
+export const edgesToConnections = (edges: Edge[]): IConnection[] => {
+  let connections: IConnection[] = []
+  const app = "localhost"
+  const extension_group = "default"
+  for (let edge of edges) {
+    const { source, sourceHandle, target, targetHandle } = edge
+    const sourceHandleName = sourceHandle?.split("/")[1]
+    if (!sourceHandleName) {
+      throw new Error(`Invalid source handle: ${sourceHandle}`)
+    }
+    const curConnection = connections.find(i => i.extension == source)
+    if (curConnection) {
+      curConnection.data = curConnection?.data ? curConnection.data : []
+      const curData = curConnection.data.find(item => item.name == sourceHandleName)
+      if (curData) {
+        curData.dest.push({
+          app: "localhost",
+          extension_group,
+          extension: target,
+        })
+      } else {
+        curConnection.data.push({
+          name: sourceHandleName,
+          dest: [{
+            app: "localhost",
+            extension_group,
+            extension: target,
+          }]
+        })
+      }
+    } else {
+      connections.push({
+        app,
+        extension: source,
+        extension_group,
+        data: [{
+          name: sourceHandleName,
+          dest: [{
+            app: "localhost",
+            extension_group,
+            extension: target,
+          }]
+        }]
+      })
+    }
+  }
+
+  return connections
 }

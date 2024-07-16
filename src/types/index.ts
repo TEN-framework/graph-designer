@@ -54,6 +54,7 @@ export interface IConnection {
   data?: IConnectionData[]
   cmd?: IConnectionData[]
   pcm_frame?: IConnectionData[]
+  img_frame?: IConnectionData[]
   extension: string
   extension_group: string,
 }
@@ -61,6 +62,12 @@ export interface IConnection {
 export interface IGraph {
   auto_start: boolean,
   name: string
+}
+
+export interface IGraphData {
+  auto_start: boolean,
+  extensions: IExtension[]
+  connections: IConnection[]
 }
 
 export interface ICompatibleConnection {
