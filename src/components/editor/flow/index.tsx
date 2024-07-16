@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useEffect, useState, ComponentType } from "react"
+import { useCallback, useMemo, useEffect, useState, ComponentType, useRef } from "react"
 import type { MouseEvent, TouchEvent } from 'react';
 import ReactFlow, {
   Connection,
@@ -14,6 +14,7 @@ import ReactFlow, {
   MarkerType,
   NodeTypes,
   EdgeTypes,
+  useNodesInitialized,
   DefaultEdgeOptions,
 } from "reactflow"
 import ExtensionNode from "./nodes/extension"
@@ -58,12 +59,29 @@ const Flow = () => {
   const { screenToFlowPosition } = useReactFlow()
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
+  const initRef = useRef(false)
+  // const nodesInitialized = useNodesInitialized();
+
+
+  // useEffect(() => {
+  //   debugger
+  // }, [nodesInitialized])
 
   useEffect(() => {
     if (curGraphName) {
       getData()
     }
   }, [curGraphName])
+
+
+  // useEffect(() => {
+  //   if (initRef.current) {
+  //     console.log("autoSave", nodes, edges)
+  //   }
+
+  // }, [nodes.length, edges.length])
+
+
 
 
 
@@ -80,6 +98,7 @@ const Flow = () => {
     const edges = connectionsToEdges(connections)
     console.log("edges", edges)
     setEdges(edges)
+
   }
 
   // ----------------- Drag and Drop -----------------
@@ -93,7 +112,7 @@ const Flow = () => {
       if (typeof type === "undefined" || !type) {
         return
       }
-      
+
       if (nodes.find((item) => extension.name === item.id)) {
         return messageApi.error(`Extension ${extension.name} already exists editor`)
       }
@@ -265,6 +284,9 @@ const Flow = () => {
       <ReactFlow
         nodes={nodes}
         edges={edges}
+        nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
+        defaultEdgeOptions={defaultEdgeOptions}
         onEdgesChange={onEdgesChange}
         onNodesChange={onNodesChange}
         onDrop={onDrop}
@@ -272,9 +294,6 @@ const Flow = () => {
         onConnectStart={onConnectStart}
         onConnect={onConnect}
         onConnectEnd={onConnectEnd}
-        defaultEdgeOptions={defaultEdgeOptions}
-        nodeTypes={nodeTypes}
-        edgeTypes={edgeTypes}
       >
         <Controls />
         <Background></Background>

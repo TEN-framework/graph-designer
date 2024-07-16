@@ -2,7 +2,11 @@
 
 import { useNodes, useEdges } from "reactflow"
 import { Button, Select, message } from "antd"
-import { useEffect, useMemo, useState } from "react"
+import { use, useEffect, useMemo, useState } from "react"
+import {
+  LoadingOutlined,
+  CheckOutlined, CloseOutlined
+} from '@ant-design/icons';
 import {
   apiGetVersion, apiAllGetGraph, useAppSelector,
   useAppDispatch, apiUpdateGraph, sleep,
@@ -13,7 +17,11 @@ import { IGraph, IGraphData } from "@/types"
 
 import styles from "./index.module.scss"
 
+
+
+
 const Header = () => {
+  const saveStatus = useAppSelector((state) => state.global.saveStatus)
   const [messageApi, contextHolder] = message.useMessage();
   const dispatch = useAppDispatch()
   const nodes = useNodes();
@@ -23,8 +31,6 @@ const Header = () => {
   const [version, setVersion] = useState("")
   const [graphArr, setGraphArr] = useState<IGraph[]>([])
   const [loading, setLoading] = useState(false)
-
-
 
   useEffect(() => {
     init()
@@ -72,6 +78,27 @@ const Header = () => {
     }
   }
 
+  const SaveIcon = useMemo(() => {
+    if (saveStatus == "saving") {
+      return <LoadingOutlined className={styles.saveIcon}></LoadingOutlined>
+    } else if (saveStatus == "success") {
+      return <CheckOutlined className={styles.saveIcon}></CheckOutlined>
+    } else if (saveStatus == "failed") {
+      return <CloseOutlined className={styles.saveIcon}></CloseOutlined>
+    }
+  }, [saveStatus])
+
+  const SaveText = useMemo(() => {
+    if (saveStatus == "saving") {
+      return "Saving..."
+    } else if (saveStatus == "success") {
+      return "Saved"
+    } else if (saveStatus == "failed") {
+      return "Save Failed"
+    }
+    return null
+  }, [saveStatus])
+
   return (
     <>
       {contextHolder}
@@ -84,8 +111,12 @@ const Header = () => {
             options={options}
             onChange={(value) => dispatch(setCurGraphName(value))}
           ></Select>
+          <span className={styles.saveContent}>
+            {SaveIcon}
+            {SaveText}
+          </span>
         </span>
-        <Button className={styles.save} type="primary" loading={loading} onClick={onClickSave}>
+        <Button className={styles.saveBtn} type="primary" loading={loading} onClick={onClickSave}>
           Save
         </Button>
       </div>

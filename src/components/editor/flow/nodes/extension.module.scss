@@ -1,6 +1,6 @@
 .extensionNode {
   border-radius: 8px;
-  width: 300px;
+  width: 220px;
   border: 1px solid #E5E7EB;
   box-sizing: border-box;
   background-color: #fff;
@@ -14,7 +14,7 @@
     border-top-right-radius: 8px;
 
     .text {
-      max-width: 300px;
+      display: block;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;

@@ -4,8 +4,7 @@
   height: 48px;
   padding: 12px;
   display: flex;
-  border-bottom: 1px solid #ddd;
-  background: #733d68;
+  background: #78a8c4;
   box-sizing: border-box;
   justify-content: flex-start;
   align-items: center;
@@ -17,12 +16,20 @@
   .content {
     margin-left: 12px;
     flex: 1 1 auto;
+
     .graph {
       width: 150px;
     }
+
+    .saveContent {
+      .saveIcon {
+        margin-left: 5px;
+        margin-right: 5px;
+      }
+    }
   }
 
-  .save {
+  .saveBtn {
     flex: 0 0 140px;
   }
 }
