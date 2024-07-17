@@ -1,33 +1,39 @@
 "use client"
 
-import { useNodes, useEdges } from "reactflow"
+import { useNodes, useEdges } from "@xyflow/react"
 import { Button, Select, message } from "antd"
 import { use, useEffect, useMemo, useState } from "react"
 import {
   LoadingOutlined,
-  CheckOutlined, CloseOutlined
-} from '@ant-design/icons';
+  CheckOutlined,
+  CloseOutlined,
+} from "@ant-design/icons"
 import {
-  apiGetVersion, apiAllGetGraph, useAppSelector,
-  useAppDispatch, apiUpdateGraph, sleep,
-  edgesToConnections, nodesToExtensions
+  apiGetVersion,
+  apiAllGetGraph,
+  useAppSelector,
+  useAppDispatch,
+  apiUpdateGraph,
+  sleep,
+  edgesToConnections,
+  nodesToExtensions,
 } from "@/common"
-import { setCurGraphName } from "@/store/reducers/global"
-import { IGraph, IGraphData } from "@/types"
+import { setAutoStart, setCurGraphName } from "@/store/reducers/global"
+import { IGraph, IGraphData, IExtensionNode } from "@/types"
 
 import styles from "./index.module.scss"
 
-
-
-
 const Header = () => {
-  const saveStatus = useAppSelector((state) => state.global.saveStatus)
-  const [messageApi, contextHolder] = message.useMessage();
+  const [messageApi, contextHolder] = message.useMessage()
   const dispatch = useAppDispatch()
-  const nodes = useNodes();
-  const edges = useEdges();
+  const nodes = useNodes()
+  const edges = useEdges()
   const curGraphName = useAppSelector((state) => state.global.curGraphName)
-  const installedExtensions = useAppSelector((state) => state.global.installedExtensions)
+  const autoStart = useAppSelector((state) => state.global.autoStart)
+  const installedExtensions = useAppSelector(
+    (state) => state.global.installedExtensions,
+  )
+  const saveStatus = useAppSelector((state) => state.global.saveStatus)
   const [version, setVersion] = useState("")
   const [graphArr, setGraphArr] = useState<IGraph[]>([])
   const [loading, setLoading] = useState(false)
@@ -52,23 +58,33 @@ const Header = () => {
     setGraphArr(graphs)
     if (graphs.length) {
       dispatch(setCurGraphName(graphs[0].name))
+      dispatch(setAutoStart(!!graphs[0].auto_start))
     }
+  }
+
+  const onGraphChange = (curGraphName: string) => {
+    const curGraph = graphArr.find((item) => item.name == curGraphName)
+    dispatch(setCurGraphName(curGraphName))
+    dispatch(setAutoStart(!!curGraph?.auto_start))
   }
 
   const onClickSave = async () => {
     try {
       setLoading(true)
-      const curGraph = graphArr.find(item => item.name == curGraphName)
-      const extensions = nodesToExtensions(nodes, installedExtensions)
+
+      const extensions = nodesToExtensions(
+        nodes as IExtensionNode[],
+        installedExtensions,
+      )
       const connections = edgesToConnections(edges)
 
       console.log("onClickSave extensions", extensions)
       console.log("onClickSave connections", connections)
 
       await apiUpdateGraph(curGraphName, {
-        auto_start: !!curGraph?.auto_start,
+        auto_start: autoStart,
         extensions: extensions,
-        connections: connections
+        connections: connections,
       })
       messageApi.success("Save success")
     } catch (e: any) {
@@ -109,19 +125,23 @@ const Header = () => {
             className={styles.graph}
             value={curGraphName}
             options={options}
-            onChange={(value) => dispatch(setCurGraphName(value))}
+            onChange={onGraphChange}
           ></Select>
           <span className={styles.saveContent}>
             {SaveIcon}
             {SaveText}
           </span>
         </span>
-        <Button className={styles.saveBtn} type="primary" loading={loading} onClick={onClickSave}>
+        <Button
+          className={styles.saveBtn}
+          type="primary"
+          loading={loading}
+          onClick={onClickSave}
+        >
           Save
         </Button>
       </div>
     </>
-
   )
 }
 

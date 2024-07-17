@@ -2,7 +2,7 @@
 
 import Flow from "@/components/editor/flow"
 
-import "reactflow/dist/style.css"
+import "@xyflow/react/dist/style.css"
 import styles from "./index.module.scss"
 
 const Editor = () => {

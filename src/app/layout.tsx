@@ -1,4 +1,4 @@
-import { StoreProvider } from "@/store";
+import { StoreProvider } from "@/store"
 import type { Metadata } from "next"
 
 import "@/css/reset.css"
@@ -17,9 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <StoreProvider>
-          {children}
-        </StoreProvider>
+        <StoreProvider>{children}</StoreProvider>
       </body>
     </html>
   )

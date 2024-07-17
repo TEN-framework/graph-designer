@@ -1,5 +1,11 @@
+import { message } from "antd"
 import { camelToSnake } from "./utils"
-import { IConnection, IExtension, ICompatibleConnection, IGraphData } from "@/types"
+import {
+  IConnection,
+  IExtension,
+  ICompatibleConnection,
+  IGraphData,
+} from "@/types"
 
 const BASE_URL = "http://localhost:49483"
 const PREFIX = "/api/dev-server/v1"
@@ -35,7 +41,6 @@ export const apiGetInstalledExtension = async () => {
       property: null,
     }
   })
-
 }
 
 export const apiAllGetGraph = async () => {
@@ -49,7 +54,9 @@ export const apiAllGetGraph = async () => {
   return data?.data ?? []
 }
 
-export const apiGetGraphExtension = async (graphName: string): Promise<IExtension[]> => {
+export const apiGetGraphExtension = async (
+  graphName: string,
+): Promise<IExtension[]> => {
   const res = await fetch(`${API_URL}/graphs/${graphName}/extensions`, {
     method: "GET",
   })
@@ -60,7 +67,9 @@ export const apiGetGraphExtension = async (graphName: string): Promise<IExtensio
   return (data?.data ?? []) as IExtension[]
 }
 
-export const apiGetGraphConnection = async (graphName: string): Promise<IConnection[]> => {
+export const apiGetGraphConnection = async (
+  graphName: string,
+): Promise<IConnection[]> => {
   const res = await fetch(`${API_URL}/graphs/${graphName}/connections`, {
     method: "GET",
   })
@@ -71,7 +80,9 @@ export const apiGetGraphConnection = async (graphName: string): Promise<IConnect
   return (data?.data ?? []) as IConnection[]
 }
 
-export const apiQueryCompatibleMessage = async (options: ICompatibleConnection): Promise<ICompatibleConnection[]> => {
+export const apiQueryCompatibleMessage = async (
+  options: ICompatibleConnection,
+): Promise<ICompatibleConnection[]> => {
   const res = await fetch(`${API_URL}/messages/compatible`, {
     headers: {
       "Content-Type": "application/json",
@@ -81,7 +92,7 @@ export const apiQueryCompatibleMessage = async (options: ICompatibleConnection):
   })
   const data = await res.json()
   if (data.status != "ok") {
-    throw new Error("Failed to query compatible messages")
+    throw new Error(data.message)
   }
   let arr = data?.data ?? []
   for (const item of arr) {
@@ -91,7 +102,10 @@ export const apiQueryCompatibleMessage = async (options: ICompatibleConnection):
   return arr as ICompatibleConnection[]
 }
 
-export const apiUpdateGraph = async (graphName: string, graphData: IGraphData) => {
+export const apiUpdateGraph = async (
+  graphName: string,
+  graphData: IGraphData,
+) => {
   const res = await fetch(`${API_URL}/graphs/${graphName}/update`, {
     method: "POST",
     headers: {

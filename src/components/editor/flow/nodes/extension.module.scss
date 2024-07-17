@@ -1,14 +1,13 @@
 .extensionNode {
   border-radius: 8px;
   width: 220px;
-  border: 1px solid #E5E7EB;
+  border: 1px solid #e5e7eb;
   box-sizing: border-box;
   background-color: #fff;
 
-
   .extensionName {
-    padding: .5rem;
-    border-bottom: 1px solid #E5E7EB;
+    padding: 0.5rem;
+    border-bottom: 1px solid #e5e7eb;
     background-color: rgb(248, 250, 252);
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
@@ -26,7 +25,7 @@
   }
 
   .extensionGroup {
-    padding: .5rem;
+    padding: 0.5rem;
     border-bottom: 1px solid rgb(229, 231, 235);
 
     .title {
@@ -37,7 +36,6 @@
       font-size: 12px;
     }
   }
-
 
   .extensionHandleWrapper {
     margin-top: 2px;
@@ -53,8 +51,7 @@
       right: 0;
       display: flex;
       align-items: center;
-      border-radius: .5rem;
-
+      border-radius: 0.5rem;
 
       :global(.react-flow__handle) {
         width: 10px;
@@ -71,8 +68,6 @@
       }
     }
 
-
-
     .leftItem {
       .text {
         position: absolute;
@@ -80,7 +75,6 @@
         top: 50%;
         transform: translateY(-50%);
       }
-
 
       :global(.react-flow__handle-left) {
         position: absolute;
@@ -106,5 +100,4 @@
       }
     }
   }
-
 }

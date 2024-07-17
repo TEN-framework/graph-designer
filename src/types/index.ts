@@ -1,4 +1,4 @@
-import type { Node, NodeProps } from 'reactflow';
+import type { Node, BuiltInNode } from "@xyflow/react"
 
 // ------------------ enum  ------------------
 export enum LogLevel {
@@ -8,7 +8,7 @@ export enum LogLevel {
 }
 
 export enum ConnectDirection {
-  Positive = "positive",   // out hander => in handler
+  Positive = "positive", // out hander => in handler
   Negative = "negative", // in handler => out handler
 }
 
@@ -16,14 +16,17 @@ export enum ConnectDirection {
 export type MsgType = "cmd" | "data" | "img_frame" | "pcm_frame"
 export type NodeStatus = "default" | "disabled" | "enabled"
 export type SaveStatus = "idle" | "saving" | "success" | "failed"
-export type IExtensionNode = Node<{
-  name: string
-  status?: NodeStatus
-  inputs: InOutData[]
-  outputs: InOutData[]
-}, 'extension'>;
-export type CustomNodeType = IExtensionNode
-
+export type IExtensionNode = Node<
+  {
+    name: string
+    status?: NodeStatus
+    extensionGroup?: string
+    inputs: InOutData[]
+    outputs: InOutData[]
+  },
+  "extension"
+>
+export type CustomNodeType = BuiltInNode | IExtensionNode
 
 // ------------------ interface  ------------------
 export interface IExtension {
@@ -38,7 +41,7 @@ export interface IExtension {
     pcm_frame_out?: any[]
     img_frame_in?: any[]
     img_frame_out?: any[]
-    [propName: string]: any;
+    [propName: string]: any
   }
   app?: string
   extension_group?: string
@@ -51,22 +54,22 @@ export interface IConnectionData {
 }
 
 export interface IConnection {
-  app: string,
+  app: string
   data?: IConnectionData[]
   cmd?: IConnectionData[]
   pcm_frame?: IConnectionData[]
   img_frame?: IConnectionData[]
   extension: string
-  extension_group: string,
+  extension_group: string
 }
 
 export interface IGraph {
-  auto_start: boolean,
+  auto_start: boolean
   name: string
 }
 
 export interface IGraphData {
-  auto_start: boolean,
+  auto_start: boolean
   extensions: IExtension[]
   connections: IConnection[]
 }
@@ -86,7 +89,3 @@ export interface InOutData {
   type: MsgType
   status?: NodeStatus
 }
-
-
-
-

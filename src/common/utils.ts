@@ -1,8 +1,11 @@
-import { Edge, Node, XYPosition, Position } from "reactflow"
+import { Edge, Node, XYPosition, Position } from "@xyflow/react"
 import {
-  IExtension, IConnection,
-  IConnectionData, MsgType, InOutData,
-  IExtensionNode
+  IExtension,
+  IConnection,
+  IConnectionData,
+  MsgType,
+  InOutData,
+  IExtensionNode,
 } from "@/types"
 
 let EDGE_ID = 0
@@ -27,32 +30,38 @@ export const formatTime = (date?: Date) => {
   return `${_pad(hours)}:${_pad(minutes)}:${_pad(seconds)}:${_pad(milliseconds)}`
 }
 
-
 export const round = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
 // DataTest => data_test
 export const camelToSnake = (str: string): string => {
-  return str.replace(/[A-Z]/g, match => "_" + match.toLowerCase()).slice(1)
+  return str.replace(/[A-Z]/g, (match) => "_" + match.toLowerCase()).slice(1)
 }
 
 export const sleep = async (ms: number) => {
-  return new Promise(resolve => setTimeout(resolve, ms))
+  return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
-
 // ----------------------- graph ---------------------
-export const extensionsToNodes = (extensions: IExtension[]): IExtensionNode[] => {
+export const extensionsToNodes = (
+  extensions: IExtension[],
+): IExtensionNode[] => {
   return extensions.map((extension, index) => {
-    const position = { x: index * 250 + 50, y: 220 + (index % 2 == 0 ? 1 : -1) * 100 + round(-100, 100) }
+    const position = {
+      x: index * 250 + 50,
+      y: 220 + (index % 2 == 0 ? 1 : -1) * 100 + round(-100, 100),
+    }
     return extensionToNode(extension, { position })
   })
 }
 
-export const extensionToNode = (extension: IExtension, property: {
-  position: XYPosition
-}): IExtensionNode => {
+export const extensionToNode = (
+  extension: IExtension,
+  property: {
+    position: XYPosition
+  },
+): IExtensionNode => {
   const { position } = property
   const inputs: InOutData[] = []
   const outputs: InOutData[] = []
@@ -109,15 +118,19 @@ export const extensionToNode = (extension: IExtension, property: {
       name: extension.name,
       inputs: inputs,
       outputs: outputs,
+      extensionGroup: extension.extension_group,
     },
   }
 }
 
-const _connectionDataToEdge = (extensionName: string, data: IConnectionData[]): Edge[] => {
+const _connectionDataToEdge = (
+  extensionName: string,
+  data: IConnectionData[],
+): Edge[] => {
   let edges: Edge[] = []
-  data.forEach(i => {
+  data.forEach((i) => {
     const { dest = [], name } = i
-    dest.forEach(d => {
+    dest.forEach((d) => {
       let edg = {
         id: getEdgeId(),
         source: extensionName,
@@ -162,15 +175,21 @@ export const handleIdToType = (id: string): MsgType => {
   return data[1] as MsgType
 }
 
-
-export const nodesToExtensions = (nodes: Node[], installedExtensions: IExtension[]): IExtension[] => {
+export const nodesToExtensions = (
+  nodes: IExtensionNode[],
+  installedExtensions: IExtension[],
+): IExtension[] => {
   return nodes.map((node) => {
-    const { id } = node
-    const extension = installedExtensions.find(i => i.name == id)
+    const { id, data } = node
+    const { extensionGroup = "default" } = data
+    const extension = installedExtensions.find((i) => i.name == id)
     if (!extension) {
       throw new Error(`Invalid extension: ${id}`)
     }
-    return extension
+    return {
+      ...extension,
+      extension_group: extensionGroup,
+    }
   })
 }
 
@@ -184,10 +203,12 @@ export const edgesToConnections = (edges: Edge[]): IConnection[] => {
     if (!sourceHandleName) {
       throw new Error(`Invalid source handle: ${sourceHandle}`)
     }
-    const curConnection = connections.find(i => i.extension == source)
+    const curConnection = connections.find((i) => i.extension == source)
     if (curConnection) {
       curConnection.data = curConnection?.data ? curConnection.data : []
-      const curData = curConnection.data.find(item => item.name == sourceHandleName)
+      const curData = curConnection.data.find(
+        (item) => item.name == sourceHandleName,
+      )
       if (curData) {
         curData.dest.push({
           app: "localhost",
@@ -197,11 +218,13 @@ export const edgesToConnections = (edges: Edge[]): IConnection[] => {
       } else {
         curConnection.data.push({
           name: sourceHandleName,
-          dest: [{
-            app: "localhost",
-            extension_group,
-            extension: target,
-          }]
+          dest: [
+            {
+              app: "localhost",
+              extension_group,
+              extension: target,
+            },
+          ],
         })
       }
     } else {
@@ -209,14 +232,18 @@ export const edgesToConnections = (edges: Edge[]): IConnection[] => {
         app,
         extension: source,
         extension_group,
-        data: [{
-          name: sourceHandleName,
-          dest: [{
-            app: "localhost",
-            extension_group,
-            extension: target,
-          }]
-        }]
+        data: [
+          {
+            name: sourceHandleName,
+            dest: [
+              {
+                app: "localhost",
+                extension_group,
+                extension: target,
+              },
+            ],
+          },
+        ],
       })
     }
   }

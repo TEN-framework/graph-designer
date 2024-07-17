@@ -1,6 +1,6 @@
-import { Node, Edge } from "reactflow"
+import { Node, Edge } from "@xyflow/react"
 
-export const  mockInitialNodes: Node[] = [
+export const mockInitialNodes: Node[] = [
   {
     id: "agora_rtc",
     type: "extension",
@@ -75,13 +75,67 @@ export const  mockInitialNodes: Node[] = [
 ]
 
 export const mockInitialEdges: Edge[] = [
-  { id: '1', source: 'agora_rtc', sourceHandle: "agora_rtc/text_data", target: 'interrupt_detector', targetHandle: 'interrupt_detector/text_data' },
-  { id: '2', source: 'interrupt_detector', sourceHandle: "interrupt_detector/flush", target: 'openai_chatgpt', targetHandle: 'openai_chatgpt/flush' },
-  { id: '3', source: 'interrupt_detector', sourceHandle: "interrupt_detector/text_data", target: 'openai_chatgpt', targetHandle: 'openai_chatgpt/text_data' },
-  { id: '4', source: 'openai_chatgpt', sourceHandle: "openai_chatgpt/flush", target: 'azure_tts', targetHandle: 'azure_tts/flush' },
-  { id: '5', source: 'openai_chatgpt', sourceHandle: "openai_chatgpt/text_data", target: 'azure_tts', targetHandle: 'azure_tts/text_data' },
-  { id: '6', source: 'openai_chatgpt', sourceHandle: "openai_chatgpt/text_data", target: 'chat_transcriber', targetHandle: 'chat_transcriber/text_data' },
-  { id: '7', source: 'azure_tts', sourceHandle: "azure_tts/flush", target: 'agora_rtc', targetHandle: 'agora_rtc/flush' },
-  { id: '8', source: 'azure_tts', sourceHandle: "azure_tts/pcm", target: 'agora_rtc', targetHandle: 'agora_rtc/pcm' },
-  { id: '9', source: 'chat_transcriber', sourceHandle: "chat_transcriber/text_data", target: 'agora_rtc', targetHandle: 'agora_rtc/text_data' },
+  {
+    id: "1",
+    source: "agora_rtc",
+    sourceHandle: "agora_rtc/text_data",
+    target: "interrupt_detector",
+    targetHandle: "interrupt_detector/text_data",
+  },
+  {
+    id: "2",
+    source: "interrupt_detector",
+    sourceHandle: "interrupt_detector/flush",
+    target: "openai_chatgpt",
+    targetHandle: "openai_chatgpt/flush",
+  },
+  {
+    id: "3",
+    source: "interrupt_detector",
+    sourceHandle: "interrupt_detector/text_data",
+    target: "openai_chatgpt",
+    targetHandle: "openai_chatgpt/text_data",
+  },
+  {
+    id: "4",
+    source: "openai_chatgpt",
+    sourceHandle: "openai_chatgpt/flush",
+    target: "azure_tts",
+    targetHandle: "azure_tts/flush",
+  },
+  {
+    id: "5",
+    source: "openai_chatgpt",
+    sourceHandle: "openai_chatgpt/text_data",
+    target: "azure_tts",
+    targetHandle: "azure_tts/text_data",
+  },
+  {
+    id: "6",
+    source: "openai_chatgpt",
+    sourceHandle: "openai_chatgpt/text_data",
+    target: "chat_transcriber",
+    targetHandle: "chat_transcriber/text_data",
+  },
+  {
+    id: "7",
+    source: "azure_tts",
+    sourceHandle: "azure_tts/flush",
+    target: "agora_rtc",
+    targetHandle: "agora_rtc/flush",
+  },
+  {
+    id: "8",
+    source: "azure_tts",
+    sourceHandle: "azure_tts/pcm",
+    target: "agora_rtc",
+    targetHandle: "agora_rtc/pcm",
+  },
+  {
+    id: "9",
+    source: "chat_transcriber",
+    sourceHandle: "chat_transcriber/text_data",
+    target: "agora_rtc",
+    targetHandle: "agora_rtc/text_data",
+  },
 ]

@@ -1,7 +1,7 @@
 "use client"
 
 import { ConfigProvider, theme } from "antd"
-import { ReactFlowProvider } from "reactflow"
+import { ReactFlowProvider } from "@xyflow/react"
 import Header from "@/components/header"
 import Editor from "@/components/editor"
 import Sidebar from "@/components/sidebar"
@@ -9,12 +9,11 @@ import Sidebar from "@/components/sidebar"
 import styles from "./index.module.scss"
 
 export default function Home() {
-
   return (
     <ConfigProvider
-      // theme={{
-      //   // algorithm: theme.darkAlgorithm,
-      // }}
+    // theme={{
+    //   // algorithm: theme.darkAlgorithm,
+    // }}
     >
       <ReactFlowProvider>
         <main className={styles.main}>
