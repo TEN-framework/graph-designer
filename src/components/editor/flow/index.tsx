@@ -180,54 +180,50 @@ const Flow = () => {
 
   const highlightNodes = (connections: ICompatibleConnection[]) => {
     console.log("highlightNodes", connections)
-    if (connections.length) {
-      // set enabled/disabled  status
-      let newNodes: IExtensionNode[] = nodes.map((node) => {
-        const targetConnection = connections.find((c) => c.extension == node.id)
-        let data = node.data
-        let { inputs, outputs } = data
-        const isIn = targetConnection?.msg_direction == "in"
-        const isOut = targetConnection?.msg_direction == "out"
-        inputs = inputs.map((input: any) => {
-          return {
-            ...input,
-            status:
-              targetConnection && input.id == targetConnection.msg_name && isIn
-                ? "enabled"
-                : "disabled",
-          }
-        })
-        outputs = outputs.map((output: any) => {
-          return {
-            ...output,
-            status:
-              targetConnection &&
-                output.id == targetConnection.msg_name &&
-                isOut
-                ? "enabled"
-                : "disabled",
-          }
-        })
+    // set enabled/disabled  status
+    let newNodes: IExtensionNode[] = nodes.map((node) => {
+      const targetConnection = connections.find((c) => c.extension == node.id)
+      let data = node.data
+      let { inputs, outputs } = data
+      const isIn = targetConnection?.msg_direction == "in"
+      const isOut = targetConnection?.msg_direction == "out"
+      inputs = inputs.map((input: any) => {
         return {
-          ...node,
-          data: {
-            ...data,
-            inputs,
-            outputs,
-            status: targetConnection ? "enabled" : "disabled",
-          },
+          ...input,
+          status:
+            targetConnection && input.id == targetConnection.msg_name && isIn
+              ? "enabled"
+              : "disabled",
         }
       })
-      console.log("highlightNodes newNodes", newNodes)
-      setNodes(newNodes)
-    } else {
-      // reset default status
-      resetNodeStatus()
-    }
+      outputs = outputs.map((output: any) => {
+        return {
+          ...output,
+          status:
+            targetConnection &&
+              output.id == targetConnection.msg_name &&
+              isOut
+              ? "enabled"
+              : "disabled",
+        }
+      })
+      return {
+        ...node,
+        data: {
+          ...data,
+          inputs,
+          outputs,
+          status: targetConnection ? "enabled" : "disabled",
+        },
+      }
+    })
+    console.log("highlightNodes newNodes", newNodes)
+    setNodes(newNodes)
   }
 
+  // reset node/handle default status
   const resetNodeStatus = () => {
-    const newNodes: IExtensionNode[] = nodes.map((node) => {
+    setNodes(nodes.map((node) => {
       return {
         ...node,
         data: {
@@ -247,8 +243,31 @@ const Flow = () => {
           }),
         },
       }
-    })
-    setNodes(newNodes)
+    }))
+  }
+
+  const disableAllNodes = () => {
+    setNodes(nodes.map((node) => {
+      return {
+        ...node,
+        data: {
+          ...node.data,
+          status: "disabled",
+          inputs: node.data.inputs.map((input: any) => {
+            return {
+              ...input,
+              status: "disabled",
+            }
+          }),
+          outputs: node.data.outputs.map((output: any) => {
+            return {
+              ...output,
+              status: "disabled",
+            }
+          }),
+        },
+      }
+    }))
   }
 
 
@@ -298,21 +317,17 @@ const Flow = () => {
   ) => {
     const { handleId = "", nodeId, handleType } = params
     const handleName = handleId?.split("/")[1]
-    const targetExtension = installedExtensions.find(
-      (item) => item.name === nodeId,
-    )
     const targetNode = nodes.find(
       (item) => item.id === nodeId,
     ) as IExtensionNode
     console.log("onConnectStart", params)
-    console.log("onConnectStart targetExtension", targetExtension)
     console.log("onConnectStart targetNode", targetNode)
 
     const options: ICompatibleConnection = {
-      app: targetExtension?.app ?? "",
+      app: "localhost",
       graph: curGraphName,
-      extension_group: targetExtension?.extension_group ?? "",
-      extension: targetExtension?.name ?? "",
+      extension_group: targetNode?.data?.extensionGroup ?? "",
+      extension: targetNode?.id ?? "",
       msg_type: "",
       msg_name: "",
       msg_direction: "",
@@ -334,8 +349,12 @@ const Flow = () => {
     }
     try {
       const connections = await apiQueryCompatibleMessage(options)
-      highlightNodes(connections)
-      console.log("onConnectStart compatible connection", connections)
+      if (connections.length) {
+        highlightNodes(connections)
+        console.log("onConnectStart compatible connection", connections)
+      } else {
+        disableAllNodes()
+      }
     } catch (e: any) {
       messageApi.error(e.message)
     }
@@ -393,6 +412,10 @@ const Flow = () => {
         onConnect={onConnect}
         onConnectEnd={onConnectEnd}
         fitView
+        fitViewOptions={{
+          padding: 0.2,
+          maxZoom: 1,
+        }}
       >
         <Controls />
         <Background></Background>
