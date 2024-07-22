@@ -13,10 +13,7 @@ import {
   apiAllGetGraph,
   useAppSelector,
   useAppDispatch,
-  apiUpdateGraph,
-  sleep,
-  edgesToConnections,
-  nodesToExtensions,
+  apiSaveGraph
 } from "@/common"
 import { setAutoStart, setCurGraphName } from "@/store/reducers/global"
 import { IGraph, IGraphData, IExtensionNode } from "@/types"
@@ -71,21 +68,7 @@ const Header = () => {
   const onClickSave = async () => {
     try {
       setLoading(true)
-
-      const extensions = nodesToExtensions(
-        nodes as IExtensionNode[],
-        installedExtensions,
-      )
-      const connections = edgesToConnections(edges)
-
-      console.log("onClickSave extensions", extensions)
-      console.log("onClickSave connections", connections)
-
-      await apiUpdateGraph(curGraphName, {
-        auto_start: autoStart,
-        extensions: extensions,
-        connections: connections,
-      })
+      await apiSaveGraph()
       messageApi.success("Save success")
     } catch (e: any) {
       messageApi.error("Failed to save ", e.message)

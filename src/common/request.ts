@@ -95,10 +95,6 @@ export const apiQueryCompatibleMessage = async (
     throw new Error(data.message)
   }
   let arr = data?.data ?? []
-  for (const item of arr) {
-    item.msg_direction = camelToSnake(item.msg_direction)
-    item.msg_type = camelToSnake(item.msg_type)
-  }
   return arr as ICompatibleConnection[]
 }
 
@@ -106,8 +102,8 @@ export const apiUpdateGraph = async (
   graphName: string,
   graphData: IGraphData,
 ) => {
-  const res = await fetch(`${API_URL}/graphs/${graphName}/update`, {
-    method: "POST",
+  const res = await fetch(`${API_URL}/graphs/${graphName}`, {
+    method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
@@ -116,6 +112,21 @@ export const apiUpdateGraph = async (
   const data = await res.json()
   if (data.status != "ok") {
     throw new Error("Failed to update graph")
+  }
+  return data
+}
+
+
+export const apiSaveGraph = async () => {
+  const res = await fetch(`${API_URL}/manifest`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    }
+  })
+  const data = await res.json()
+  if (data.status != "ok") {
+    throw new Error("Failed to save graph")
   }
   return data
 }

@@ -49,8 +49,8 @@ export const extensionsToNodes = (
 ): IExtensionNode[] => {
   return extensions.map((extension, index) => {
     const position = {
-      x: index * 250 + 50,
-      y: 220 + (index % 2 == 0 ? 1 : -1) * 100 + round(-100, 100),
+      x: index * 250,
+      y: (index % 2 == 0 ? 1 : -1) * 100 + round(-130, 130),
     }
     return extensionToNode(extension, { position })
   })
