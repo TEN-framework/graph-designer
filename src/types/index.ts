@@ -31,7 +31,7 @@ export type CustomNodeType = BuiltInNode | IExtensionNode
 // ------------------ interface  ------------------
 export interface IExtension {
   name: string
-  addon?: string
+  addon: string
   api?: {
     cmd_in?: any[]
     cmd_out?: any[]

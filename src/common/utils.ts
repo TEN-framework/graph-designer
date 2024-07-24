@@ -108,7 +108,9 @@ export const extensionToNode = (
   }
 
   return {
-    id: extension.name,
+    // TIP: extension.name just a property
+    // id should use extension.addon (like: class name)
+    id: extension.addon,
     sourcePosition: Position.Right,
     targetPosition: Position.Left,
     position: position,
