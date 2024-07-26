@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react"
+import { useRef, useState, useEffect, LegacyRef, useMemo } from "react"
 import { Handle, Position, Node, NodeProps } from "@xyflow/react"
 import { eventManger } from "@/manager"
 import { NodeStatus, IExtensionNode } from "@/types"
@@ -7,6 +7,8 @@ import { Input } from "antd"
 import styles from "./extension.module.scss"
 
 const HANDLE_HEIGHT = 40
+const DEFAULT_NODE_WIDTH = 220
+const DEFAULT_HANDLE_GAP = 40
 
 const getHandlerColor = (status?: NodeStatus) => {
   if (status == "disabled") {
@@ -39,10 +41,29 @@ export default function ExtensionNode(props: NodeProps<IExtensionNode>) {
   } = data
   const maxLen = Math.max(inputs.length, outputs.length)
   const [extensionGroup, setExtensionGroup] = useState(propExtensionGroup)
- 
-  // TODO: max (left, right) handle width
-  // const refLeftList = useRef([]);
+  const leftHandleListRef = useRef<Array<HTMLElement>>([]);
+  const rightHandleListRef = useRef<Array<HTMLElement>>([]);
 
+  const nodeWidth = useMemo(() => {
+    let width = DEFAULT_NODE_WIDTH
+
+    for (let i = 0; i < maxLen; i++) {
+      const leftHandle = leftHandleListRef.current[i]
+      const rightHandle = rightHandleListRef.current[i]
+
+      if (leftHandle && rightHandle) {
+        const leftRealWidth = leftHandle.getElementsByTagName("span")[0]?.offsetWidth
+        const rightRealWidth = rightHandle.getElementsByTagName("span")[0]?.offsetWidth
+        const totalWidth = leftRealWidth + rightRealWidth
+        if (totalWidth > width) {
+          width = totalWidth
+        }
+      }
+    }
+
+    return width >= DEFAULT_NODE_WIDTH ? width + DEFAULT_HANDLE_GAP : DEFAULT_NODE_WIDTH
+
+  }, [leftHandleListRef.current.length, rightHandleListRef.current.length, maxLen])
 
   const onInputBlur = () => {
     eventManger.emit("extentionGroupChanged", name, extensionGroup)
@@ -53,6 +74,7 @@ export default function ExtensionNode(props: NodeProps<IExtensionNode>) {
       className={styles.extensionNode}
       style={{
         borderColor: getNodeColor(status),
+        width: nodeWidth
       }}
     >
       <div className={styles.extensionName}>
@@ -81,6 +103,9 @@ export default function ExtensionNode(props: NodeProps<IExtensionNode>) {
                 top: index * HANDLE_HEIGHT + "px",
                 height: HANDLE_HEIGHT + "px",
               }}
+              ref={(el) => {
+                leftHandleListRef.current[index] = el!
+              }}
             >
               <Handle
                 type="target"
@@ -102,6 +127,9 @@ export default function ExtensionNode(props: NodeProps<IExtensionNode>) {
                 top: index * HANDLE_HEIGHT + "px",
                 height: HANDLE_HEIGHT + "px",
               }}
+              ref={(el) => {
+                rightHandleListRef.current[index] = el!
+              }}
             >
               <Handle
                 className={styles.handle}
@@ -112,7 +140,8 @@ export default function ExtensionNode(props: NodeProps<IExtensionNode>) {
                   borderColor: getHandlerColor(output.status),
                 }}
               ></Handle>
-              <span className={styles.text}>{output.name}</span>
+              <span
+                className={styles.text}>{output.name}</span>
             </div>
           ))}
         </div>
