@@ -1,4 +1,4 @@
-import { Edge, Node, XYPosition, Position } from "@xyflow/react"
+import { Edge, Node, XYPosition, Position, Connection } from "@xyflow/react"
 import {
   IExtension,
   IConnection,
@@ -6,6 +6,8 @@ import {
   MsgType,
   InOutData,
   IExtensionNode,
+  ICompatibleConnection,
+  ConnectDirection,
 } from "@/types"
 import { DEFAULT_APP, DEFAULT_EXTENTION_GROUP } from "./constant"
 import { logger } from "./logger"
@@ -15,11 +17,12 @@ import { logger } from "./logger"
 // }
 let nodeMap = new Map<string, { [extensionName: string]: string }>()
 
+// TODO: just for test purpose
 // @ts-ignore
 window.nodeMap = nodeMap
 
-let EDGE_ID = 0
-let NODE_ID = 0
+let EDGE_ID = 1
+let NODE_ID = 1
 
 const genEdgeId = () => {
   return `${EDGE_ID++}`
@@ -201,18 +204,18 @@ const _connectionDataToEdge = (
         return
       }
       let hasInputHandle = targetNode.data.inputs.some((input) => input.name == name)
-      if (!hasInputHandle){
+      if (!hasInputHandle) {
         logger.warn(`Invalid input handle: ${name} in target node: ${targetNode.data.name}`)
         return
       }
 
-        let edg = {
-          id: genEdgeId(),
-          source: sourceNodeId,
-          sourceHandle: sourceHandleId,
-          target: targetNodeId,
-          targetHandle: targetHandleId,
-        } as Edge
+      let edg = {
+        id: genEdgeId(),
+        source: sourceNodeId,
+        sourceHandle: sourceHandleId,
+        target: targetNodeId,
+        targetHandle: targetHandleId,
+      } as Edge
 
       edges.push(edg)
     })
@@ -325,4 +328,95 @@ export const edgesToConnections = (edges: Edge[]): IConnection[] => {
   }
 
   return connections
+}
+
+
+export const setNodesStatusDisabled = (nodes: IExtensionNode[]): IExtensionNode[] => {
+  return nodes.map((node) => {
+    return {
+      ...node,
+      data: {
+        ...node.data,
+        status: "disabled",
+        inputs: node.data.inputs.map((input: any) => {
+          return {
+            ...input,
+            status: "disabled",
+          }
+        }),
+        outputs: node.data.outputs.map((output: any) => {
+          return {
+            ...output,
+            status: "disabled",
+          }
+        }),
+      },
+    }
+  })
+}
+
+
+export const highlightNodesWithConnections = (nodes: IExtensionNode[], connections: ICompatibleConnection[]): IExtensionNode[] => {
+  return nodes.map((node) => {
+    const nodeName = node.data.name
+    const extensionGroup = node.data.extensionGroup
+    const targetConnection = connections.find((c) => c.extension == nodeName && c.extension_group == extensionGroup)
+    let data = node.data
+    let { inputs, outputs } = data
+    const isIn = targetConnection?.msg_direction == "in"
+    const isOut = targetConnection?.msg_direction == "out"
+    inputs = inputs.map((input) => {
+      return {
+        ...input,
+        status:
+          targetConnection && input.name == targetConnection.msg_name && isIn
+            ? "enabled"
+            : "disabled",
+      }
+    })
+    outputs = outputs.map((output) => {
+      return {
+        ...output,
+        status:
+          targetConnection &&
+            output.name == targetConnection.msg_name &&
+            isOut
+            ? "enabled"
+            : "disabled",
+      }
+    })
+    return {
+      ...node,
+      data: {
+        ...data,
+        inputs,
+        outputs,
+        status: targetConnection ? "enabled" : "disabled",
+      },
+    }
+  })
+
+}
+
+
+export const checkConnectableEdge = (params: Connection | Edge, connectDirection: ConnectDirection, nodes: IExtensionNode[]): boolean => {
+  const { source, target, sourceHandle, targetHandle } = params
+  const targetNodeId = target
+  const targetHandleName = targetHandle
+  if (targetNodeId && targetHandleName) {
+    const targetNode = nodes.find((item) => item.id === targetNodeId)
+    if (targetNode?.data.status == "enabled") {
+      let inputs = targetNode?.data.inputs ?? []
+      let outputs = targetNode?.data.outputs ?? []
+      const arr: InOutData[] = connectDirection == ConnectDirection.Positive ? inputs : outputs
+      let targetHandler = arr.find(
+        (item) => item.name == targetHandleName && item.status == "enabled"
+      )
+      if (targetHandler) {
+        return true
+      }
+    }
+  }
+
+  return false
 }

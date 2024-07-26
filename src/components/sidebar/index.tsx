@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import {
   apiGetInstalledExtension,
+  logger,
   useAppDispatch,
   useAppSelector,
 } from "@/common"
@@ -22,12 +23,12 @@ const Sidebar = () => {
 
   const init = async () => {
     const data = await apiGetInstalledExtension()
-    console.log("installed extensions: ", data)
+    logger.debug("installed extensions: ", data)
     dispatch(setInstalledExtensions(data))
   }
 
   const onDragStart = (event: any, item: IExtension) => {
-    console.log("drag started", item)
+    logger.debug("drag started", item)
     event.dataTransfer.setData("type", "extension")
     event.dataTransfer.setData("extension", JSON.stringify(item))
     event.dataTransfer.effectAllowed = "move"
