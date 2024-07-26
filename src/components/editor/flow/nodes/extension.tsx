@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo, FC, useState, useEffect } from "react"
+import { useRef, useState, useEffect } from "react"
 import { Handle, Position, Node, NodeProps } from "@xyflow/react"
 import { eventManger } from "@/manager"
 import { NodeStatus, IExtensionNode } from "@/types"
@@ -39,6 +39,10 @@ export default function ExtensionNode(props: NodeProps<IExtensionNode>) {
   } = data
   const maxLen = Math.max(inputs.length, outputs.length)
   const [extensionGroup, setExtensionGroup] = useState(propExtensionGroup)
+ 
+  // TODO: max (left, right) handle width
+  // const refLeftList = useRef([]);
+
 
   const onInputBlur = () => {
     eventManger.emit("extentionGroupChanged", name, extensionGroup)
@@ -71,7 +75,7 @@ export default function ExtensionNode(props: NodeProps<IExtensionNode>) {
         >
           {inputs.map((input, index) => (
             <div
-              key={`${name}/${input.id}`}
+              key={index}
               className={`${styles.extensionHandleItem} ${styles.leftItem}`}
               style={{
                 top: index * HANDLE_HEIGHT + "px",
@@ -82,17 +86,17 @@ export default function ExtensionNode(props: NodeProps<IExtensionNode>) {
                 type="target"
                 className={styles.handle}
                 position={Position.Left}
-                id={`${name}/${input.id}`}
+                id={input.name}
                 style={{
                   borderColor: getHandlerColor(input.status),
                 }}
               ></Handle>
-              <span className={styles.text}>{input.id}</span>
+              <span className={styles.text}>{input.name}</span>
             </div>
           ))}
           {outputs.map((output, index) => (
             <div
-              key={`${name}/${output.id}`}
+              key={index}
               className={`${styles.extensionHandleItem} ${styles.rightItem}`}
               style={{
                 top: index * HANDLE_HEIGHT + "px",
@@ -103,12 +107,12 @@ export default function ExtensionNode(props: NodeProps<IExtensionNode>) {
                 className={styles.handle}
                 type="source"
                 position={Position.Right}
-                id={`${name}/${output.id}`}
+                id={output.name}
                 style={{
                   borderColor: getHandlerColor(output.status),
                 }}
               ></Handle>
-              <span className={styles.text}>{output.id}</span>
+              <span className={styles.text}>{output.name}</span>
             </div>
           ))}
         </div>

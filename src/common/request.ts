@@ -6,10 +6,8 @@ import {
   ICompatibleConnection,
   IGraphData,
 } from "@/types"
+import { DEFAULT_EXTENTION_GROUP, API_URL } from "./constant"
 
-const BASE_URL = "http://localhost:49483"
-const PREFIX = "/api/dev-server/v1"
-const API_URL = `${BASE_URL}${PREFIX}`
 
 export const apiGetVersion = async () => {
   const res = await fetch(`${API_URL}/version`, {
@@ -37,7 +35,7 @@ export const apiGetInstalledExtension = async () => {
       ...item,
       addon: item.name,
       app: "localhost",
-      extension_group: "default",
+      extension_group: DEFAULT_EXTENTION_GROUP,
       property: null,
     }
   })

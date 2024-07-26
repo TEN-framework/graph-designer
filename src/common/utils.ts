@@ -7,11 +7,26 @@ import {
   InOutData,
   IExtensionNode,
 } from "@/types"
+import { DEFAULT_APP, DEFAULT_EXTENTION_GROUP } from "./constant"
+import { logger } from "./logger"
+
+// extensionGroup =>  {
+//  [extensionName]: nodeId
+// }
+let nodeMap = new Map<string, { [extensionName: string]: string }>()
+
+// @ts-ignore
+window.nodeMap = nodeMap
 
 let EDGE_ID = 0
+let NODE_ID = 0
 
-const getEdgeId = () => {
+const genEdgeId = () => {
   return `${EDGE_ID++}`
+}
+
+const genNodeId = () => {
+  return `${NODE_ID++}`
 }
 
 function _pad(num: number) {
@@ -34,6 +49,8 @@ export const round = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
+
+
 // DataTest => data_test
 export const camelToSnake = (str: string): string => {
   return str.replace(/[A-Z]/g, (match) => "_" + match.toLowerCase()).slice(1)
@@ -44,6 +61,30 @@ export const sleep = async (ms: number) => {
 }
 
 // ----------------------- graph ---------------------
+export const getNodeId = (extensionGroup: string, extensionname: string) => {
+  let data = nodeMap.get(extensionGroup)
+  if (data) {
+    return data[extensionname]
+  }
+  throw new Error(`Invalid extension: ${extensionname}, not found in nodeMap`)
+}
+
+export const delNodeId = (extensionGroup: string, extensionname: string) => {
+  let data = nodeMap.get(extensionGroup)
+  if (data) {
+    delete data[extensionname]
+  }
+}
+
+export const saveNodeId = (extensionGroup: string, extensionname: string, nodeId: string) => {
+  let data = nodeMap.get(extensionGroup)
+  if (!data) {
+    data = {}
+    nodeMap.set(extensionGroup, data)
+  }
+  data[extensionname] = nodeId
+}
+
 export const extensionsToNodes = (
   extensions: IExtension[],
 ): IExtensionNode[] => {
@@ -65,81 +106,114 @@ export const extensionToNode = (
   const { position } = property
   const inputs: InOutData[] = []
   const outputs: InOutData[] = []
-  const { api } = extension
+  const { api, extension_group, name, addon } = extension
   if (api?.cmd_in) {
     api.cmd_in.forEach((input) => {
-      inputs.push({ id: input.name, type: "cmd", status: "default" })
+      inputs.push({ name: input.name, type: "cmd", status: "default" })
     })
   }
   if (api?.cmd_out) {
     api.cmd_out.forEach((output) => {
-      outputs.push({ id: output.name, type: "cmd", status: "default" })
+      outputs.push({ name: output.name, type: "cmd", status: "default" })
     })
   }
   if (api?.data_in) {
     api.data_in.forEach((input) => {
-      inputs.push({ id: input.name, type: "data", status: "default" })
+      inputs.push({ name: input.name, type: "data", status: "default" })
     })
   }
   if (api?.data_out) {
     api.data_out.forEach((output) => {
-      outputs.push({ id: output.name, type: "data", status: "default" })
+      outputs.push({ name: output.name, type: "data", status: "default" })
     })
   }
   if (api?.pcm_frame_in) {
     api.pcm_frame_in.forEach((input) => {
-      inputs.push({ id: input.name, type: "pcm_frame", status: "default" })
+      inputs.push({ name: input.name, type: "pcm_frame", status: "default" })
     })
   }
   if (api?.pcm_frame_out) {
     api.pcm_frame_out.forEach((output) => {
-      outputs.push({ id: output.name, type: "pcm_frame", status: "default" })
+      outputs.push({ name: output.name, type: "pcm_frame", status: "default" })
     })
   }
   if (api?.img_frame_in) {
     api.img_frame_in.forEach((input) => {
-      inputs.push({ id: input.name, type: "img_frame", status: "default" })
+      inputs.push({ name: input.name, type: "img_frame", status: "default" })
     })
   }
   if (api?.img_frame_out) {
     api.img_frame_out.forEach((output) => {
-      outputs.push({ id: output.name, type: "img_frame", status: "default" })
+      outputs.push({ name: output.name, type: "img_frame", status: "default" })
     })
   }
 
+  const id = genNodeId()
+  saveNodeId(extension_group, name, id)
+
   return {
-    // TIP: extension.name just a property
-    // id should use extension.addon (like: class name)
-    id: extension.addon,
+    id: id,
     sourcePosition: Position.Right,
     targetPosition: Position.Left,
     position: position,
     type: "extension",
     data: {
       status: "default",
-      name: extension.name,
+      addon: addon,
+      name: name,
       inputs: inputs,
       outputs: outputs,
-      extensionGroup: extension.extension_group,
+      extensionGroup: extension_group,
     },
   }
 }
 
+
+
 const _connectionDataToEdge = (
-  extensionName: string,
+  sourceNodeId: string,
   data: IConnectionData[],
+  nodes: IExtensionNode[],
 ): Edge[] => {
   let edges: Edge[] = []
+
   data.forEach((i) => {
     const { dest = [], name } = i
     dest.forEach((d) => {
-      let edg = {
-        id: getEdgeId(),
-        source: extensionName,
-        sourceHandle: `${extensionName}/${name}`,
-        target: d.extension,
-        targetHandle: `${d.extension}/${name}`,
-      } as Edge
+      const sourceHandleId = `${name}`
+      const targetNodeId = getNodeId(d.extension_group, d.extension)
+      const targetHandleId = `${name}`
+
+      const sourceNode = nodes.find((i) => i.id == sourceNodeId)
+      if (!sourceNode) {
+        logger.warn(`Invalid source node: ${sourceNodeId}`)
+        return
+      }
+      let hasOutputHandle = sourceNode.data.outputs.some((output) => output.name == name)
+      if (!hasOutputHandle) {
+        logger.warn(`Invalid output handle: ${name} in source node: ${sourceNode.data.name}`)
+        return
+      }
+
+      const targetNode = nodes.find((i) => i.id == targetNodeId)
+      if (!targetNode) {
+        logger.warn(`Invalid target node: ${targetNodeId}`)
+        return
+      }
+      let hasInputHandle = targetNode.data.inputs.some((input) => input.name == name)
+      if (!hasInputHandle){
+        logger.warn(`Invalid input handle: ${name} in target node: ${targetNode.data.name}`)
+        return
+      }
+
+        let edg = {
+          id: genEdgeId(),
+          source: sourceNodeId,
+          sourceHandle: sourceHandleId,
+          target: targetNodeId,
+          targetHandle: targetHandleId,
+        } as Edge
+
       edges.push(edg)
     })
   })
@@ -147,20 +221,21 @@ const _connectionDataToEdge = (
   return edges
 }
 
-export const connectionsToEdges = (connections: IConnection[]): Edge[] => {
+export const connectionsToEdges = (connections: IConnection[], nodes: IExtensionNode[]): Edge[] => {
   const edges: Edge[] = []
   connections.forEach((connection) => {
-    const { cmd = [], data = [], pcm_frame = [], extension } = connection
+    const { cmd = [], data = [], pcm_frame = [], extension, extension_group } = connection
+    const sourceNodeId = getNodeId(extension_group, extension)
     if (cmd.length) {
-      const cmdEdges = _connectionDataToEdge(extension, cmd)
+      const cmdEdges = _connectionDataToEdge(sourceNodeId, cmd, nodes)
       edges.push(...cmdEdges)
     }
     if (data.length) {
-      const dataEdges = _connectionDataToEdge(extension, data)
+      const dataEdges = _connectionDataToEdge(sourceNodeId, data, nodes)
       edges.push(...dataEdges)
     }
     if (pcm_frame.length) {
-      const pcmFrameEdges = _connectionDataToEdge(extension, pcm_frame)
+      const pcmFrameEdges = _connectionDataToEdge(sourceNodeId, pcm_frame, nodes)
       edges.push(...pcmFrameEdges)
     }
     return edges
@@ -169,24 +244,25 @@ export const connectionsToEdges = (connections: IConnection[]): Edge[] => {
   return edges
 }
 
-export const handleIdToType = (id: string): MsgType => {
-  const data = id.split("/")
-  if (!data[1]) {
-    throw new Error(`Invalid handle id: ${id}`)
-  }
-  return data[1] as MsgType
-}
+// export const handleIdToType = (id: string): MsgType => {
+//   const data = id.split("/")
+//   if (!data[1]) {
+//     throw new Error(`Invalid handle id: ${id}`)
+//   }
+//   return data[1] as MsgType
+// }
 
 export const nodesToExtensions = (
   nodes: IExtensionNode[],
   installedExtensions: IExtension[],
 ): IExtension[] => {
   return nodes.map((node) => {
-    const { id, data } = node
-    const { extensionGroup = "default" } = data
-    const extension = installedExtensions.find((i) => i.name == id)
+    const { data } = node
+    const { extensionGroup = "default", name, addon } = data
+    // const 
+    const extension = installedExtensions.find((i) => i.addon == addon)
     if (!extension) {
-      throw new Error(`Invalid extension: ${id}`)
+      throw new Error(`Invalid extension: ${name}, not found in installed extensions`)
     }
     return {
       ...extension,
@@ -197,8 +273,6 @@ export const nodesToExtensions = (
 
 export const edgesToConnections = (edges: Edge[]): IConnection[] => {
   let connections: IConnection[] = []
-  const app = "localhost"
-  const extension_group = "default"
   for (let edge of edges) {
     const { source, sourceHandle, target, targetHandle } = edge
     const sourceHandleName = sourceHandle?.split("/")[1]
@@ -213,8 +287,8 @@ export const edgesToConnections = (edges: Edge[]): IConnection[] => {
       )
       if (curData) {
         curData.dest.push({
-          app: "localhost",
-          extension_group,
+          app: DEFAULT_APP,
+          extension_group: DEFAULT_EXTENTION_GROUP,
           extension: target,
         })
       } else {
@@ -222,8 +296,8 @@ export const edgesToConnections = (edges: Edge[]): IConnection[] => {
           name: sourceHandleName,
           dest: [
             {
-              app: "localhost",
-              extension_group,
+              app: DEFAULT_APP,
+              extension_group: DEFAULT_EXTENTION_GROUP,
               extension: target,
             },
           ],
@@ -231,16 +305,16 @@ export const edgesToConnections = (edges: Edge[]): IConnection[] => {
       }
     } else {
       connections.push({
-        app,
+        app: DEFAULT_APP,
         extension: source,
-        extension_group,
+        extension_group: DEFAULT_EXTENTION_GROUP,
         data: [
           {
             name: sourceHandleName,
             dest: [
               {
-                app: "localhost",
-                extension_group,
+                app: DEFAULT_APP,
+                extension_group: DEFAULT_EXTENTION_GROUP,
                 extension: target,
               },
             ],

@@ -34,7 +34,6 @@ import {
   apiGetGraphConnection,
   extensionsToNodes,
   apiQueryCompatibleMessage,
-  handleIdToType,
   edgesToConnections,
   sleep,
   nodesToExtensions,
@@ -109,7 +108,7 @@ const Flow = () => {
 
   useEffect(() => {
     if (hasInit) {
-      saveFlow(nodes, edges)
+      // saveFlow(nodes, edges)
     }
   }, [nodes.length, edges.length])
 
@@ -123,7 +122,7 @@ const Flow = () => {
     const connections = await apiGetGraphConnection(curGraphName)
     console.log("graph connections", connections)
 
-    const edges = connectionsToEdges(connections)
+    const edges = connectionsToEdges(connections, nodes)
     console.log("graph edges", edges)
     setEdges(edges)
 
@@ -327,7 +326,7 @@ const Flow = () => {
       app: "localhost",
       graph: curGraphName,
       extension_group: targetNode?.data?.extensionGroup ?? "",
-      extension: targetNode?.id ?? "",
+      extension: targetNode?.data.name ?? "",
       msg_type: "",
       msg_name: "",
       msg_direction: "",

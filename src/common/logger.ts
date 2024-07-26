@@ -30,14 +30,9 @@ class Logger {
       this._log(`${this._genPrefix()}[DEBUG]: `, ...args)
   }
 
-  // info(...args: any[]) {
-  //   this.level <= LogLevel.INFO &&
-  //     this._log(`${this._genPrefix()}[INFO]: `, ...args)
-  // }
-
   warn(...args: any[]) {
     this.level <= LogLevel.WARN &&
-      this._log(`${this._genPrefix()}[WARN]: `, ...args)
+      this._warn(`${this._genPrefix()}[WARN]: `, ...args)
   }
 
   error(...args: any[]) {
@@ -81,6 +76,11 @@ class Logger {
     console.log(`%c${arg}`, "color:yellow", ...other)
   }
 
+  private _warn(...args: any[]) {
+    const [arg, ...other] = args
+    console.warn(`%c${arg}`, "color:yellow", ...other)
+  }
+
   private _err(...args: any[]) {
     let res = ""
     for (const item of args) {
@@ -95,7 +95,7 @@ class Logger {
 }
 
 export const logger = new Logger({
-  level: LogLevel.ERROR,
+  level: LogLevel.DEBUG,
   prefix: "editor",
 })
 

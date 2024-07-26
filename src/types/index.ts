@@ -19,6 +19,7 @@ export type SaveStatus = "idle" | "saving" | "success" | "failed"
 export type IExtensionNode = Node<
   {
     name: string
+    addon: string
     status?: NodeStatus
     extensionGroup?: string
     inputs: InOutData[]
@@ -44,7 +45,7 @@ export interface IExtension {
     [propName: string]: any
   }
   app?: string
-  extension_group?: string
+  extension_group: string
   property?: any
 }
 
@@ -85,7 +86,7 @@ export interface ICompatibleConnection {
 }
 
 export interface InOutData {
-  id: string
+  name: string
   type: MsgType
   status?: NodeStatus
 }

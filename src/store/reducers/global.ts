@@ -11,7 +11,7 @@ export interface InitialState {
 const getInitialState = (): InitialState => {
   return {
     curGraphName: "",
-    saveStatus: "saving",
+    saveStatus: "idle",
     autoStart: false,
     installedExtensions: [],
   }
