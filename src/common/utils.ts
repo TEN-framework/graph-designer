@@ -53,8 +53,8 @@ export const extensionsToNodes = (
 ): ExtensionNode[] => {
   return extensions.map((extension, index) => {
     const position = {
-      x: index * 250,
-      y: (index % 2 == 0 ? 1 : -1) * 100 + round(-130, 130),
+      x: index * 300,
+      y: round(-200, 200),
     }
     return extensionToNode(extension, { position })
   })
