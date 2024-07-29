@@ -43,7 +43,8 @@ import {
   DEFAULT_APP,
   setNodesStatusDisabled,
   highlightNodesWithConnections,
-  getConnectableEdge
+  getConnectableEdge,
+  getLayoutedElements
 } from "@/common"
 import { eventManger } from "@/manager"
 import {
@@ -85,6 +86,12 @@ const edgeTypes: EdgeTypes = {
 let connectDirection = ConnectDirection.Positive
 let hasInit = false
 
+const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
+  initialNodes,
+  initialEdges,
+  "LR"
+);
+
 const Flow = () => {
   const dispatch = useAppDispatch()
   const [messageApi, contextHolder] = message.useMessage()
@@ -94,8 +101,8 @@ const Flow = () => {
     (state) => state.global.installedExtensions,
   )
   const { screenToFlowPosition } = useReactFlow()
-  const [nodes, setNodes, onNodesChange] = useNodesState<ExtensionNode>(initialNodes)
-  const [edges, setEdges, onEdgesChange] = useEdgesState<CustomEdge>(initialEdges)
+  const [nodes, setNodes, onNodesChange] = useNodesState<ExtensionNode>(layoutedNodes)
+  const [edges, setEdges, onEdgesChange] = useEdgesState<CustomEdge>(layoutedEdges)
 
   useEffect(() => {
     eventManger.on("extentionGroupChanged", handleExtentionGroupChanged)
@@ -122,14 +129,15 @@ const Flow = () => {
     logger.debug("graph extensions", extensions)
     const nodes = extensionsToNodes(extensions)
     logger.debug("graph nodes", nodes)
-    setNodes(nodes)
-
     const connections = await apiGetGraphConnection(curGraphName)
     logger.debug("graph connections", connections)
-
     const edges = connectionsToEdges(connections, nodes)
     logger.debug("graph edges", edges)
-    setEdges(edges)
+
+    const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(nodes, edges, "LR")
+
+    setNodes(layoutedNodes)
+    setEdges(layoutedEdges)
 
     hasInit = true
   }
@@ -316,7 +324,6 @@ const Flow = () => {
   const onConnectEnd = () => {
     logger.debug("onConnectEnd")
     resetNodeStatus()
-
   }
 
   return (

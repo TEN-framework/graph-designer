@@ -1,7 +1,6 @@
 "use client"
 
-import Flow from "@/components/editor/flow"
-
+import Flow from "./flow"
 import "@xyflow/react/dist/style.css"
 import styles from "./index.module.scss"
 

@@ -13,6 +13,7 @@ export enum ConnectDirection {
 }
 
 // ------------------ type  ------------------
+export type LayoutDirection = "TB" | "LR"
 export type DataType = "cmd" | "data" | "img_frame" | "pcm_frame"
 export type NodeStatus = "default" | "disabled" | "enabled"
 export type SaveStatus = "idle" | "saving" | "success" | "failed"

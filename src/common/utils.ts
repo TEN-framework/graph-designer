@@ -9,11 +9,15 @@ import {
   ICompatibleConnection,
   ConnectDirection,
   CustomEdge,
+  LayoutDirection
 } from "@/types"
-import { DEFAULT_APP, DEFAULT_EXTENTION_GROUP } from "./constant"
+import { DEFAULT_APP, DEFAULT_EXTENTION_GROUP, DEFAULT_HANDLE_HEIGHT, DEFAULT_NODE_WIDTH } from "./constant"
 import { logger } from "./logger"
 import { editorData } from "./data"
+import dagre from "@dagrejs/dagre"
 
+const dagreGraph = new dagre.graphlib.Graph();
+dagreGraph.setDefaultEdgeLabel(() => ({}));
 
 function _pad(num: number) {
   return num.toString().padStart(2, "0")
@@ -35,8 +39,6 @@ export const round = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
-
-
 // DataTest => data_test
 export const camelToSnake = (str: string): string => {
   return str.replace(/[A-Z]/g, (match) => "_" + match.toLowerCase()).slice(1)
@@ -46,16 +48,57 @@ export const sleep = async (ms: number) => {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
+
 // ----------------------- graph ---------------------
+
+// https://github.com/dagrejs/dagre/wiki#using-dagre
+export const getLayoutedElements = (nodes: ExtensionNode[], edges: CustomEdge[], direction: LayoutDirection = 'TB'): {
+  nodes: ExtensionNode[],
+  edges: CustomEdge[]
+} => {
+
+  const nodeWidth = DEFAULT_NODE_WIDTH;
+  const nodeHeight = 100;
+  const isHorizontal = direction === 'LR';
+  dagreGraph.setGraph({ rankdir: direction, nodesep: 200, edgesep: 50, ranksep: 120 });
+
+  nodes.forEach((node) => {
+    let { data } = node
+    const { inputs = [], outputs = [] } = data
+    const finalHeight = Math.max(inputs.length, outputs.length) * DEFAULT_HANDLE_HEIGHT + nodeHeight
+    dagreGraph.setNode(node.id, { width: DEFAULT_NODE_WIDTH, height: finalHeight });
+  });
+
+  edges.forEach((edge) => {
+    dagreGraph.setEdge(edge.source, edge.target);
+  });
+
+  dagre.layout(dagreGraph);
+
+  const newNodes = nodes.map((node) => {
+    const nodeWithPosition = dagreGraph.node(node.id);
+    const newNode: ExtensionNode = {
+      ...node,
+      targetPosition: isHorizontal ? Position.Left : Position.Top,
+      sourcePosition: isHorizontal ? Position.Right : Position.Bottom,
+      position: {
+        x: nodeWithPosition.x - nodeWidth / 2,
+        y: nodeWithPosition.y - nodeHeight / 2,
+      },
+    };
+
+    return newNode;
+  });
+
+  return { nodes: newNodes, edges };
+};
+
 
 export const extensionsToNodes = (
   extensions: IExtension[],
 ): ExtensionNode[] => {
   return extensions.map((extension, index) => {
-    const position = {
-      x: index * 300,
-      y: round(-200, 200),
-    }
+    const position = { x: 0, y: 0 }
     return extensionToNode(extension, { position })
   })
 }
@@ -368,7 +411,6 @@ export const highlightNodesWithConnections = (nodes: ExtensionNode[], connection
   })
 
 }
-
 
 export const getConnectableEdge = (params: Connection, connectDirection: ConnectDirection, nodes: ExtensionNode[]): CustomEdge | null => {
   const { source, target, sourceHandle, targetHandle } = params

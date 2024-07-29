@@ -6,3 +6,5 @@ const PREFIX = "/api/dev-server/v1"
 export const DEFAULT_APP = "localhost"
 export const DEFAULT_EXTENTION_GROUP = "default"
 export const API_URL = `${BASE_URL}:${PORT}${PREFIX}`
+export const DEFAULT_HANDLE_HEIGHT = 40
+export const DEFAULT_NODE_WIDTH = 220

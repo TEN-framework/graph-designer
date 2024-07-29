@@ -3,11 +3,10 @@ import { Handle, Position, Node, NodeProps } from "@xyflow/react"
 import { eventManger } from "@/manager"
 import { NodeStatus, ExtensionNode } from "@/types"
 import { Input } from "antd"
+import { DEFAULT_HANDLE_HEIGHT, DEFAULT_NODE_WIDTH } from "@/common"
 
 import styles from "./extension.module.scss"
 
-const HANDLE_HEIGHT = 40
-const DEFAULT_NODE_WIDTH = 220
 const DEFAULT_HANDLE_GAP = 40
 
 const getHandlerColor = (status?: NodeStatus) => {
@@ -61,7 +60,7 @@ export default function ExtensionNodeComponent(props: NodeProps<ExtensionNode>) 
       }
     }
 
-    return width >= DEFAULT_NODE_WIDTH ? width + DEFAULT_HANDLE_GAP : DEFAULT_NODE_WIDTH
+    return width > DEFAULT_NODE_WIDTH ? width + DEFAULT_HANDLE_GAP : DEFAULT_NODE_WIDTH
 
   }, [leftHandleListRef.current.length, rightHandleListRef.current.length, maxLen])
 
@@ -92,7 +91,7 @@ export default function ExtensionNodeComponent(props: NodeProps<ExtensionNode>) 
         <div
           className={styles.extensionHandleWrapper}
           style={{
-            height: HANDLE_HEIGHT * maxLen + "px",
+            height: DEFAULT_HANDLE_HEIGHT * maxLen,
           }}
         >
           {inputs.map((input, index) => (
@@ -100,8 +99,8 @@ export default function ExtensionNodeComponent(props: NodeProps<ExtensionNode>) 
               key={index}
               className={`${styles.extensionHandleItem} ${styles.leftItem}`}
               style={{
-                top: index * HANDLE_HEIGHT + "px",
-                height: HANDLE_HEIGHT + "px",
+                top: index * DEFAULT_HANDLE_HEIGHT,
+                height: DEFAULT_HANDLE_HEIGHT,
               }}
               ref={(el) => {
                 leftHandleListRef.current[index] = el!
@@ -124,8 +123,8 @@ export default function ExtensionNodeComponent(props: NodeProps<ExtensionNode>) 
               key={index}
               className={`${styles.extensionHandleItem} ${styles.rightItem}`}
               style={{
-                top: index * HANDLE_HEIGHT + "px",
-                height: HANDLE_HEIGHT + "px",
+                top: index * DEFAULT_HANDLE_HEIGHT,
+                height: DEFAULT_HANDLE_HEIGHT,
               }}
               ref={(el) => {
                 rightHandleListRef.current[index] = el!
