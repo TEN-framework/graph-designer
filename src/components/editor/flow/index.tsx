@@ -44,7 +44,7 @@ import {
   setNodesStatusDisabled,
   highlightNodesWithConnections,
   getConnectableEdge,
-  getLayoutedElements
+  getLayoutedElements,
 } from "@/common"
 import { eventManger } from "@/manager"
 import {
@@ -54,7 +54,7 @@ import {
   InOutData,
   ExtensionNode,
   CustomNodeType,
-  CustomEdge
+  CustomEdge,
 } from "@/types"
 import { setSaveStatus } from "@/store/reducers/global"
 
@@ -89,8 +89,8 @@ let hasInit = false
 const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
   initialNodes,
   initialEdges,
-  "LR"
-);
+  "LR",
+)
 
 const Flow = () => {
   const dispatch = useAppDispatch()
@@ -101,8 +101,10 @@ const Flow = () => {
     (state) => state.global.installedExtensions,
   )
   const { screenToFlowPosition } = useReactFlow()
-  const [nodes, setNodes, onNodesChange] = useNodesState<ExtensionNode>(layoutedNodes)
-  const [edges, setEdges, onEdgesChange] = useEdgesState<CustomEdge>(layoutedEdges)
+  const [nodes, setNodes, onNodesChange] =
+    useNodesState<ExtensionNode>(layoutedNodes)
+  const [edges, setEdges, onEdgesChange] =
+    useEdgesState<CustomEdge>(layoutedEdges)
 
   useEffect(() => {
     eventManger.on("extentionGroupChanged", handleExtentionGroupChanged)
@@ -134,7 +136,11 @@ const Flow = () => {
     const edges = connectionsToEdges(connections, nodes)
     logger.debug("graph edges", edges)
 
-    const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(nodes, edges, "LR")
+    const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
+      nodes,
+      edges,
+      "LR",
+    )
 
     setNodes(layoutedNodes)
     setEdges(layoutedEdges)
@@ -166,9 +172,7 @@ const Flow = () => {
     extensionName: string,
     extensionGroup: string,
   ) => {
-    const targetNode = nodes.find(
-      (item) => item.data.name === extensionName,
-    )
+    const targetNode = nodes.find((item) => item.data.name === extensionName)
     if (!targetNode) {
       return
     }
@@ -177,10 +181,11 @@ const Flow = () => {
       const newNodes = nodes.map((node) => {
         if (node.data.name === extensionName) {
           return {
-            ...node, data: {
+            ...node,
+            data: {
               ...node.data,
-              extensionGroup: extensionGroup
-            }
+              extensionGroup: extensionGroup,
+            },
           }
         }
         return node
@@ -192,27 +197,29 @@ const Flow = () => {
 
   // reset node/handle default status
   const resetNodeStatus = () => {
-    setNodes(nodes.map((node) => {
-      return {
-        ...node,
-        data: {
-          ...node.data,
-          status: "default",
-          inputs: node.data.inputs.map((input: any) => {
-            return {
-              ...input,
-              status: "default",
-            }
-          }),
-          outputs: node.data.outputs.map((output: any) => {
-            return {
-              ...output,
-              status: "default",
-            }
-          }),
-        },
-      }
-    }))
+    setNodes(
+      nodes.map((node) => {
+        return {
+          ...node,
+          data: {
+            ...node.data,
+            status: "default",
+            inputs: node.data.inputs.map((input: any) => {
+              return {
+                ...input,
+                status: "default",
+              }
+            }),
+            outputs: node.data.outputs.map((output: any) => {
+              return {
+                ...output,
+                status: "default",
+              }
+            }),
+          },
+        }
+      }),
+    )
   }
 
   // ----------------- Drag and Drop -----------------
@@ -282,7 +289,9 @@ const Flow = () => {
       const outputs = targetNode?.data.outputs ?? []
       const target = outputs.find((item) => item.name === handleName)
       if (!target) {
-        return logger.warn(`Handle:${handleName} not found in node:${targetNodeName}`)
+        return logger.warn(
+          `Handle:${handleName} not found in node:${targetNodeName}`,
+        )
       }
       options.msg_direction = "out"
       options.msg_type = target.type
@@ -293,7 +302,9 @@ const Flow = () => {
       const inputs = targetNode?.data.inputs ?? []
       const target = inputs.find((item) => item.name === handleName)
       if (!target) {
-        return logger.warn(`Handle:${handleName} not found in node:${targetNodeName}`)
+        return logger.warn(
+          `Handle:${handleName} not found in node:${targetNodeName}`,
+        )
       }
       options.msg_type = target.type
       options.msg_name = target.name

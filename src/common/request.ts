@@ -8,7 +8,6 @@ import {
 } from "@/types"
 import { DEFAULT_EXTENTION_GROUP, API_URL } from "./constant"
 
-
 export const apiGetVersion = async () => {
   const res = await fetch(`${API_URL}/version`, {
     method: "GET",
@@ -114,13 +113,12 @@ export const apiUpdateGraph = async (
   return data
 }
 
-
 export const apiSaveGraph = async () => {
   const res = await fetch(`${API_URL}/manifest`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-    }
+    },
   })
   const data = await res.json()
   if (data.status != "ok") {

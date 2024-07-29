@@ -9,15 +9,20 @@ import {
   ICompatibleConnection,
   ConnectDirection,
   CustomEdge,
-  LayoutDirection
+  LayoutDirection,
 } from "@/types"
-import { DEFAULT_APP, DEFAULT_EXTENTION_GROUP, DEFAULT_HANDLE_HEIGHT, DEFAULT_NODE_WIDTH } from "./constant"
+import {
+  DEFAULT_APP,
+  DEFAULT_EXTENTION_GROUP,
+  DEFAULT_HANDLE_HEIGHT,
+  DEFAULT_NODE_WIDTH,
+} from "./constant"
 import { logger } from "./logger"
 import { editorData } from "./data"
 import dagre from "@dagrejs/dagre"
 
-const dagreGraph = new dagre.graphlib.Graph();
-dagreGraph.setDefaultEdgeLabel(() => ({}));
+const dagreGraph = new dagre.graphlib.Graph()
+dagreGraph.setDefaultEdgeLabel(() => ({}))
 
 function _pad(num: number) {
   return num.toString().padStart(2, "0")
@@ -48,35 +53,47 @@ export const sleep = async (ms: number) => {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
-
 // ----------------------- graph ---------------------
 
 // https://github.com/dagrejs/dagre/wiki#using-dagre
-export const getLayoutedElements = (nodes: ExtensionNode[], edges: CustomEdge[], direction: LayoutDirection = 'TB'): {
+export const getLayoutedElements = (
   nodes: ExtensionNode[],
+  edges: CustomEdge[],
+  direction: LayoutDirection = "TB",
+): {
+  nodes: ExtensionNode[]
   edges: CustomEdge[]
 } => {
-
-  const nodeWidth = DEFAULT_NODE_WIDTH;
-  const nodeHeight = 100;
-  const isHorizontal = direction === 'LR';
-  dagreGraph.setGraph({ rankdir: direction, nodesep: 200, edgesep: 50, ranksep: 120 });
+  const nodeWidth = DEFAULT_NODE_WIDTH
+  const nodeHeight = 100
+  const isHorizontal = direction === "LR"
+  dagreGraph.setGraph({
+    rankdir: direction,
+    nodesep: 200,
+    edgesep: 50,
+    ranksep: 120,
+  })
 
   nodes.forEach((node) => {
     let { data } = node
     const { inputs = [], outputs = [] } = data
-    const finalHeight = Math.max(inputs.length, outputs.length) * DEFAULT_HANDLE_HEIGHT + nodeHeight
-    dagreGraph.setNode(node.id, { width: DEFAULT_NODE_WIDTH, height: finalHeight });
-  });
+    const finalHeight =
+      Math.max(inputs.length, outputs.length) * DEFAULT_HANDLE_HEIGHT +
+      nodeHeight
+    dagreGraph.setNode(node.id, {
+      width: DEFAULT_NODE_WIDTH,
+      height: finalHeight,
+    })
+  })
 
   edges.forEach((edge) => {
-    dagreGraph.setEdge(edge.source, edge.target);
-  });
+    dagreGraph.setEdge(edge.source, edge.target)
+  })
 
-  dagre.layout(dagreGraph);
+  dagre.layout(dagreGraph)
 
   const newNodes = nodes.map((node) => {
-    const nodeWithPosition = dagreGraph.node(node.id);
+    const nodeWithPosition = dagreGraph.node(node.id)
     const newNode: ExtensionNode = {
       ...node,
       targetPosition: isHorizontal ? Position.Left : Position.Top,
@@ -85,14 +102,13 @@ export const getLayoutedElements = (nodes: ExtensionNode[], edges: CustomEdge[],
         x: nodeWithPosition.x - nodeWidth / 2,
         y: nodeWithPosition.y - nodeHeight / 2,
       },
-    };
+    }
 
-    return newNode;
-  });
+    return newNode
+  })
 
-  return { nodes: newNodes, edges };
-};
-
+  return { nodes: newNodes, edges }
+}
 
 export const extensionsToNodes = (
   extensions: IExtension[],
@@ -179,7 +195,14 @@ const connectionToEdges = (
   nodes: ExtensionNode[],
 ): CustomEdge[] => {
   let edges: CustomEdge[] = []
-  const { cmd = [], data = [], pcm_frame = [], img_frame = [], extension, extension_group } = connection
+  const {
+    cmd = [],
+    data = [],
+    pcm_frame = [],
+    img_frame = [],
+    extension,
+    extension_group,
+  } = connection
   const sourceNodeId = editorData.getNodeId(extension_group, extension)
   const dataType = getDataType(connection)
   let finalData: IConnectionData[] = []
@@ -204,9 +227,13 @@ const connectionToEdges = (
         logger.warn(`Invalid source node: ${sourceNodeId}`)
         return
       }
-      let hasOutputHandle = sourceNode.data.outputs.some((output) => output.name == name)
+      let hasOutputHandle = sourceNode.data.outputs.some(
+        (output) => output.name == name,
+      )
       if (!hasOutputHandle) {
-        logger.warn(`Invalid output handle: ${name} in source node: ${sourceNode.data.name}`)
+        logger.warn(
+          `Invalid output handle: ${name} in source node: ${sourceNode.data.name}`,
+        )
         return
       }
 
@@ -215,9 +242,13 @@ const connectionToEdges = (
         logger.warn(`Invalid target node: ${targetNodeId}`)
         return
       }
-      let hasInputHandle = targetNode.data.inputs.some((input) => input.name == name)
+      let hasInputHandle = targetNode.data.inputs.some(
+        (input) => input.name == name,
+      )
       if (!hasInputHandle) {
-        logger.warn(`Invalid input handle: ${name} in target node: ${targetNode.data.name}`)
+        logger.warn(
+          `Invalid input handle: ${name} in target node: ${targetNode.data.name}`,
+        )
         return
       }
 
@@ -228,8 +259,8 @@ const connectionToEdges = (
         target: targetNodeId,
         targetHandle: targetHandleId,
         data: {
-          dataType
-        }
+          dataType,
+        },
       }
 
       edges.push(edg)
@@ -239,7 +270,10 @@ const connectionToEdges = (
   return edges
 }
 
-export const connectionsToEdges = (connections: IConnection[], nodes: ExtensionNode[]): CustomEdge[] => {
+export const connectionsToEdges = (
+  connections: IConnection[],
+  nodes: ExtensionNode[],
+): CustomEdge[] => {
   const edges: CustomEdge[] = []
   connections.forEach((connection) => {
     const tempEdges = connectionToEdges(connection, nodes)
@@ -251,7 +285,6 @@ export const connectionsToEdges = (connections: IConnection[], nodes: ExtensionN
 
   return edges
 }
-
 
 export const getDataType = (connection: IConnection): DataType => {
   if (connection.cmd) {
@@ -273,10 +306,12 @@ export const nodesToExtensions = (
   return nodes.map((node) => {
     const { data } = node
     const { extensionGroup, name, addon } = data
-    // const 
+    // const
     const extension = installedExtensions.find((i) => i.addon == addon)
     if (!extension) {
-      throw new Error(`Invalid extension: ${name}, not found in installed extensions`)
+      throw new Error(
+        `Invalid extension: ${name}, not found in installed extensions`,
+      )
     }
     return {
       ...extension,
@@ -285,7 +320,10 @@ export const nodesToExtensions = (
   })
 }
 
-export const edgesToConnections = (edges: Edge[], nodes: ExtensionNode[]): IConnection[] => {
+export const edgesToConnections = (
+  edges: Edge[],
+  nodes: ExtensionNode[],
+): IConnection[] => {
   let connections: IConnection[] = []
   for (let edge of edges) {
     const { source, sourceHandle, target, targetHandle, data } = edge
@@ -293,16 +331,24 @@ export const edgesToConnections = (edges: Edge[], nodes: ExtensionNode[]): IConn
     const sourceNode = nodes.find((i) => i.id == source)
     const targetNode = nodes.find((i) => i.id == target)
     if (!sourceNode) {
-      throw new Error(`Invalid source node: ${source} when edges => connections`)
+      throw new Error(
+        `Invalid source node: ${source} when edges => connections`,
+      )
     }
     if (!targetNode) {
-      throw new Error(`Invalid target node: ${target} when edges => connections`)
+      throw new Error(
+        `Invalid target node: ${target} when edges => connections`,
+      )
     }
     if (!sourceHandle) {
-      throw new Error(`Invalid source handle: ${sourceHandle} in node: ${source} when edges => connections`)
+      throw new Error(
+        `Invalid source handle: ${sourceHandle} in node: ${source} when edges => connections`,
+      )
     }
     if (!targetHandle) {
-      throw new Error(`Invalid target handle: ${targetHandle} in node: ${target} when edges => connections`)
+      throw new Error(
+        `Invalid target handle: ${targetHandle} in node: ${target} when edges => connections`,
+      )
     }
     const sourceNodeName = sourceNode?.data.name
     const sourceNodeExtensionGroup = sourceNode?.data.extensionGroup
@@ -321,7 +367,11 @@ export const edgesToConnections = (edges: Edge[], nodes: ExtensionNode[]): IConn
       ],
     }
 
-    const tarConnection = connections.find((i) => i.extension == sourceNodeName && i.extension_group == sourceNodeExtensionGroup)
+    const tarConnection = connections.find(
+      (i) =>
+        i.extension == sourceNodeName &&
+        i.extension_group == sourceNodeExtensionGroup,
+    )
 
     if (tarConnection) {
       if (tarConnection[dataType]?.length) {
@@ -334,9 +384,7 @@ export const edgesToConnections = (edges: Edge[], nodes: ExtensionNode[]): IConn
         app: DEFAULT_APP,
         extension: sourceNodeName,
         extension_group: sourceNodeExtensionGroup,
-        [dataType]: [
-          connectionData
-        ],
+        [dataType]: [connectionData],
       })
     }
   }
@@ -344,8 +392,9 @@ export const edgesToConnections = (edges: Edge[], nodes: ExtensionNode[]): IConn
   return connections
 }
 
-
-export const setNodesStatusDisabled = (nodes: ExtensionNode[]): ExtensionNode[] => {
+export const setNodesStatusDisabled = (
+  nodes: ExtensionNode[],
+): ExtensionNode[] => {
   return nodes.map((node) => {
     return {
       ...node,
@@ -369,12 +418,16 @@ export const setNodesStatusDisabled = (nodes: ExtensionNode[]): ExtensionNode[] 
   })
 }
 
-
-export const highlightNodesWithConnections = (nodes: ExtensionNode[], connections: ICompatibleConnection[]): ExtensionNode[] => {
+export const highlightNodesWithConnections = (
+  nodes: ExtensionNode[],
+  connections: ICompatibleConnection[],
+): ExtensionNode[] => {
   return nodes.map((node) => {
     const nodeName = node.data.name
     const extensionGroup = node.data.extensionGroup
-    const targetConnection = connections.find((c) => c.extension == nodeName && c.extension_group == extensionGroup)
+    const targetConnection = connections.find(
+      (c) => c.extension == nodeName && c.extension_group == extensionGroup,
+    )
     let data = node.data
     let { inputs, outputs } = data
     const isIn = targetConnection?.msg_direction == "in"
@@ -392,9 +445,7 @@ export const highlightNodesWithConnections = (nodes: ExtensionNode[], connection
       return {
         ...output,
         status:
-          targetConnection &&
-            output.name == targetConnection.msg_name &&
-            isOut
+          targetConnection && output.name == targetConnection.msg_name && isOut
             ? "enabled"
             : "disabled",
       }
@@ -409,10 +460,13 @@ export const highlightNodesWithConnections = (nodes: ExtensionNode[], connection
       },
     }
   })
-
 }
 
-export const getConnectableEdge = (params: Connection, connectDirection: ConnectDirection, nodes: ExtensionNode[]): CustomEdge | null => {
+export const getConnectableEdge = (
+  params: Connection,
+  connectDirection: ConnectDirection,
+  nodes: ExtensionNode[],
+): CustomEdge | null => {
   const { source, target, sourceHandle, targetHandle } = params
   const targetNodeId = target
   const targetHandleName = targetHandle
@@ -421,9 +475,10 @@ export const getConnectableEdge = (params: Connection, connectDirection: Connect
     if (targetNode?.data.status == "enabled") {
       let inputs = targetNode?.data.inputs ?? []
       let outputs = targetNode?.data.outputs ?? []
-      const arr: InOutData[] = connectDirection == ConnectDirection.Positive ? inputs : outputs
+      const arr: InOutData[] =
+        connectDirection == ConnectDirection.Positive ? inputs : outputs
       let targetHandler = arr.find(
-        (item) => item.name == targetHandleName && item.status == "enabled"
+        (item) => item.name == targetHandleName && item.status == "enabled",
       )
       if (targetHandler) {
         return {
@@ -433,8 +488,8 @@ export const getConnectableEdge = (params: Connection, connectDirection: Connect
           target: targetNodeId,
           targetHandle: targetHandleName,
           data: {
-            dataType: targetHandler.type
-          }
+            dataType: targetHandler.type,
+          },
         }
       }
     }

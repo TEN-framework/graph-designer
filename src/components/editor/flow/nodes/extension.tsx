@@ -29,7 +29,9 @@ const getNodeColor = (status?: NodeStatus) => {
   return "#E5E7EB"
 }
 
-export default function ExtensionNodeComponent(props: NodeProps<ExtensionNode>) {
+export default function ExtensionNodeComponent(
+  props: NodeProps<ExtensionNode>,
+) {
   const { data } = props
   const {
     name,
@@ -40,8 +42,8 @@ export default function ExtensionNodeComponent(props: NodeProps<ExtensionNode>) 
   } = data
   const maxLen = Math.max(inputs.length, outputs.length)
   const [extensionGroup, setExtensionGroup] = useState(propExtensionGroup)
-  const leftHandleListRef = useRef<Array<HTMLElement>>([]);
-  const rightHandleListRef = useRef<Array<HTMLElement>>([]);
+  const leftHandleListRef = useRef<Array<HTMLElement>>([])
+  const rightHandleListRef = useRef<Array<HTMLElement>>([])
 
   const nodeWidth = useMemo(() => {
     let width = DEFAULT_NODE_WIDTH
@@ -51,8 +53,10 @@ export default function ExtensionNodeComponent(props: NodeProps<ExtensionNode>) 
       const rightHandle = rightHandleListRef.current[i]
 
       if (leftHandle && rightHandle) {
-        const leftRealWidth = leftHandle.getElementsByTagName("span")[0]?.offsetWidth
-        const rightRealWidth = rightHandle.getElementsByTagName("span")[0]?.offsetWidth
+        const leftRealWidth =
+          leftHandle.getElementsByTagName("span")[0]?.offsetWidth
+        const rightRealWidth =
+          rightHandle.getElementsByTagName("span")[0]?.offsetWidth
         const totalWidth = leftRealWidth + rightRealWidth
         if (totalWidth > width) {
           width = totalWidth
@@ -60,9 +64,14 @@ export default function ExtensionNodeComponent(props: NodeProps<ExtensionNode>) 
       }
     }
 
-    return width > DEFAULT_NODE_WIDTH ? width + DEFAULT_HANDLE_GAP : DEFAULT_NODE_WIDTH
-
-  }, [leftHandleListRef.current.length, rightHandleListRef.current.length, maxLen])
+    return width > DEFAULT_NODE_WIDTH
+      ? width + DEFAULT_HANDLE_GAP
+      : DEFAULT_NODE_WIDTH
+  }, [
+    leftHandleListRef.current.length,
+    rightHandleListRef.current.length,
+    maxLen,
+  ])
 
   const onInputBlur = () => {
     eventManger.emit("extentionGroupChanged", name, extensionGroup)
@@ -73,7 +82,7 @@ export default function ExtensionNodeComponent(props: NodeProps<ExtensionNode>) 
       className={styles.extensionNode}
       style={{
         borderColor: getNodeColor(status),
-        width: nodeWidth
+        width: nodeWidth,
       }}
     >
       <div className={styles.extensionName}>
@@ -139,8 +148,7 @@ export default function ExtensionNodeComponent(props: NodeProps<ExtensionNode>) 
                   borderColor: getHandlerColor(output.status),
                 }}
               ></Handle>
-              <span
-                className={styles.text}>{output.name}</span>
+              <span className={styles.text}>{output.name}</span>
             </div>
           ))}
         </div>

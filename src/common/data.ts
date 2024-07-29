@@ -1,5 +1,4 @@
 export class EditorData {
-
   // extensionGroup =>  {
   //  [extensionName]: nodeId
   // }
@@ -7,7 +6,7 @@ export class EditorData {
   nodeId: number = 1
   edgeId: number = 1
 
-  constructor() { }
+  constructor() {}
 
   genEdgeId() {
     return `${this.edgeId++}`
@@ -17,16 +16,19 @@ export class EditorData {
     return `${this.nodeId++}`
   }
 
-
   getNodeId(extensionGroup: string, extensionname: string) {
     let data = this.nodeMap.get(extensionGroup)
     if (data) {
       if (!data[extensionname]) {
-        throw new Error(`Invalid extension Node: ${extensionname}, not found in extensionGroup: ${extensionGroup}`)
+        throw new Error(
+          `Invalid extension Node: ${extensionname}, not found in extensionGroup: ${extensionGroup}`,
+        )
       }
       return data[extensionname]
     }
-    throw new Error(`Invalid extensionGroup: ${extensionGroup}, not found in nodeMap`)
+    throw new Error(
+      `Invalid extensionGroup: ${extensionGroup}, not found in nodeMap`,
+    )
   }
 
   delNodeId(extensionGroup: string, extensionname: string) {
@@ -44,19 +46,14 @@ export class EditorData {
     }
     data[extensionname] = nodeId
   }
-
-
 }
 
 // TODO: just for test
 export const editorData = new EditorData()
 
-
-
-
-if (process.env.NODE_ENV === 'development') {
-  if (typeof window !== 'undefined') {
+if (process.env.NODE_ENV === "development") {
+  if (typeof window !== "undefined") {
     // @ts-ignore
-    window.editorData = editorData;
+    window.editorData = editorData
   }
 }

@@ -13,7 +13,7 @@ import {
   apiAllGetGraph,
   useAppSelector,
   useAppDispatch,
-  apiSaveGraph
+  apiSaveGraph,
 } from "@/common"
 import { setAutoStart, setCurGraphName } from "@/store/reducers/global"
 import { IGraph, IGraphData, ExtensionNode } from "@/types"

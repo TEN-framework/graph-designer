@@ -30,7 +30,6 @@ export type ExtensionNode = Node<
 >
 export type CustomNodeType = BuiltInNode | ExtensionNode
 
-
 // ------------------ interface  ------------------
 export interface IExtension {
   name: string
@@ -50,7 +49,6 @@ export interface IExtension {
   extension_group: string
   property?: any
 }
-
 
 export interface CustomEdge extends Edge {
   data: {
