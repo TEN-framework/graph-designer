@@ -3,7 +3,7 @@ import {
   IExtension,
   IConnection,
   IConnectionData,
-  MsgType,
+  DataType,
   InOutData,
   IExtensionNode,
   ICompatibleConnection,
@@ -11,26 +11,8 @@ import {
 } from "@/types"
 import { DEFAULT_APP, DEFAULT_EXTENTION_GROUP } from "./constant"
 import { logger } from "./logger"
+import { editorData } from "./data"
 
-// extensionGroup =>  {
-//  [extensionName]: nodeId
-// }
-let nodeMap = new Map<string, { [extensionName: string]: string }>()
-
-// TODO: just for test purpose
-// @ts-ignore
-window.nodeMap = nodeMap
-
-let EDGE_ID = 1
-let NODE_ID = 1
-
-const genEdgeId = () => {
-  return `${EDGE_ID++}`
-}
-
-const genNodeId = () => {
-  return `${NODE_ID++}`
-}
 
 function _pad(num: number) {
   return num.toString().padStart(2, "0")
@@ -64,29 +46,6 @@ export const sleep = async (ms: number) => {
 }
 
 // ----------------------- graph ---------------------
-export const getNodeId = (extensionGroup: string, extensionname: string) => {
-  let data = nodeMap.get(extensionGroup)
-  if (data) {
-    return data[extensionname]
-  }
-  throw new Error(`Invalid extension: ${extensionname}, not found in nodeMap`)
-}
-
-export const delNodeId = (extensionGroup: string, extensionname: string) => {
-  let data = nodeMap.get(extensionGroup)
-  if (data) {
-    delete data[extensionname]
-  }
-}
-
-export const saveNodeId = (extensionGroup: string, extensionname: string, nodeId: string) => {
-  let data = nodeMap.get(extensionGroup)
-  if (!data) {
-    data = {}
-    nodeMap.set(extensionGroup, data)
-  }
-  data[extensionname] = nodeId
-}
 
 export const extensionsToNodes = (
   extensions: IExtension[],
@@ -151,8 +110,8 @@ export const extensionToNode = (
     })
   }
 
-  const id = genNodeId()
-  saveNodeId(extension_group, name, id)
+  const id = editorData.genNodeId()
+  editorData.saveNodeId(extension_group, name, id)
 
   return {
     id: id,
@@ -171,20 +130,29 @@ export const extensionToNode = (
   }
 }
 
-
-
-const _connectionDataToEdge = (
-  sourceNodeId: string,
-  data: IConnectionData[],
+const connectionToEdges = (
+  connection: IConnection,
   nodes: IExtensionNode[],
 ): Edge[] => {
   let edges: Edge[] = []
-
-  data.forEach((i) => {
+  const { cmd = [], data = [], pcm_frame = [], img_frame = [], extension, extension_group } = connection
+  const sourceNodeId = editorData.getNodeId(extension_group, extension)
+  const dataType = getDataType(connection)
+  let finalData: IConnectionData[] = []
+  if (dataType == "cmd") {
+    finalData = cmd
+  } else if (dataType == "data") {
+    finalData = data
+  } else if (dataType == "pcm_frame") {
+    finalData = pcm_frame
+  } else if (dataType == "img_frame") {
+    finalData = img_frame
+  }
+  finalData.forEach((i) => {
     const { dest = [], name } = i
     dest.forEach((d) => {
       const sourceHandleId = `${name}`
-      const targetNodeId = getNodeId(d.extension_group, d.extension)
+      const targetNodeId = editorData.getNodeId(d.extension_group, d.extension)
       const targetHandleId = `${name}`
 
       const sourceNode = nodes.find((i) => i.id == sourceNodeId)
@@ -210,12 +178,15 @@ const _connectionDataToEdge = (
       }
 
       let edg = {
-        id: genEdgeId(),
+        id: editorData.genEdgeId(),
         source: sourceNodeId,
         sourceHandle: sourceHandleId,
         target: targetNodeId,
         targetHandle: targetHandleId,
-      } as Edge
+        data: {
+          dataType
+        }
+      }
 
       edges.push(edg)
     })
@@ -227,19 +198,9 @@ const _connectionDataToEdge = (
 export const connectionsToEdges = (connections: IConnection[], nodes: IExtensionNode[]): Edge[] => {
   const edges: Edge[] = []
   connections.forEach((connection) => {
-    const { cmd = [], data = [], pcm_frame = [], extension, extension_group } = connection
-    const sourceNodeId = getNodeId(extension_group, extension)
-    if (cmd.length) {
-      const cmdEdges = _connectionDataToEdge(sourceNodeId, cmd, nodes)
-      edges.push(...cmdEdges)
-    }
-    if (data.length) {
-      const dataEdges = _connectionDataToEdge(sourceNodeId, data, nodes)
-      edges.push(...dataEdges)
-    }
-    if (pcm_frame.length) {
-      const pcmFrameEdges = _connectionDataToEdge(sourceNodeId, pcm_frame, nodes)
-      edges.push(...pcmFrameEdges)
+    const tempEdges = connectionToEdges(connection, nodes)
+    if (tempEdges.length) {
+      edges.push(...tempEdges)
     }
     return edges
   })
@@ -247,13 +208,19 @@ export const connectionsToEdges = (connections: IConnection[], nodes: IExtension
   return edges
 }
 
-// export const handleIdToType = (id: string): MsgType => {
-//   const data = id.split("/")
-//   if (!data[1]) {
-//     throw new Error(`Invalid handle id: ${id}`)
-//   }
-//   return data[1] as MsgType
-// }
+
+export const getDataType = (connection: IConnection): DataType => {
+  if (connection.cmd) {
+    return "cmd"
+  } else if (connection.data) {
+    return "data"
+  } else if (connection.pcm_frame) {
+    return "pcm_frame"
+  } else if (connection.img_frame) {
+    return "img_frame"
+  }
+  throw new Error(`Invalid connection: ${connection} in getDataType`)
+}
 
 export const nodesToExtensions = (
   nodes: IExtensionNode[],
@@ -261,7 +228,7 @@ export const nodesToExtensions = (
 ): IExtension[] => {
   return nodes.map((node) => {
     const { data } = node
-    const { extensionGroup = "default", name, addon } = data
+    const { extensionGroup, name, addon } = data
     // const 
     const extension = installedExtensions.find((i) => i.addon == addon)
     if (!extension) {
@@ -274,54 +241,57 @@ export const nodesToExtensions = (
   })
 }
 
-export const edgesToConnections = (edges: Edge[]): IConnection[] => {
+export const edgesToConnections = (edges: Edge[], nodes: IExtensionNode[]): IConnection[] => {
   let connections: IConnection[] = []
   for (let edge of edges) {
-    const { source, sourceHandle, target, targetHandle } = edge
-    const sourceHandleName = sourceHandle?.split("/")[1]
-    if (!sourceHandleName) {
-      throw new Error(`Invalid source handle: ${sourceHandle}`)
+    const { source, sourceHandle, target, targetHandle, data } = edge
+    const { dataType } = data as { dataType: DataType }
+    const sourceNode = nodes.find((i) => i.id == source)
+    const targetNode = nodes.find((i) => i.id == target)
+    if (!sourceNode) {
+      throw new Error(`Invalid source node: ${source} when edges => connections`)
     }
-    const curConnection = connections.find((i) => i.extension == source)
-    if (curConnection) {
-      curConnection.data = curConnection?.data ? curConnection.data : []
-      const curData = curConnection.data.find(
-        (item) => item.name == sourceHandleName,
-      )
-      if (curData) {
-        curData.dest.push({
+    if (!targetNode) {
+      throw new Error(`Invalid target node: ${target} when edges => connections`)
+    }
+    if (!sourceHandle) {
+      throw new Error(`Invalid source handle: ${sourceHandle} in node: ${source} when edges => connections`)
+    }
+    if (!targetHandle) {
+      throw new Error(`Invalid target handle: ${targetHandle} in node: ${target} when edges => connections`)
+    }
+    const sourceNodeName = sourceNode?.data.name
+    const sourceNodeExtensionGroup = sourceNode?.data.extensionGroup
+
+    const targetNodeName = targetNode?.data.name
+    const targetNodeExtensionGroup = targetNode?.data.extensionGroup
+
+    const connectionData: IConnectionData = {
+      name: sourceHandle,
+      dest: [
+        {
           app: DEFAULT_APP,
-          extension_group: DEFAULT_EXTENTION_GROUP,
-          extension: target,
-        })
+          extension_group: targetNodeExtensionGroup,
+          extension: targetNodeName,
+        },
+      ],
+    }
+
+    const tarConnection = connections.find((i) => i.extension == sourceNodeName && i.extension_group == sourceNodeExtensionGroup)
+
+    if (tarConnection) {
+      if (tarConnection[dataType]?.length) {
+        tarConnection[dataType].push(connectionData)
       } else {
-        curConnection.data.push({
-          name: sourceHandleName,
-          dest: [
-            {
-              app: DEFAULT_APP,
-              extension_group: DEFAULT_EXTENTION_GROUP,
-              extension: target,
-            },
-          ],
-        })
+        tarConnection[dataType] = [connectionData]
       }
     } else {
       connections.push({
         app: DEFAULT_APP,
-        extension: source,
-        extension_group: DEFAULT_EXTENTION_GROUP,
-        data: [
-          {
-            name: sourceHandleName,
-            dest: [
-              {
-                app: DEFAULT_APP,
-                extension_group: DEFAULT_EXTENTION_GROUP,
-                extension: target,
-              },
-            ],
-          },
+        extension: sourceNodeName,
+        extension_group: sourceNodeExtensionGroup,
+        [dataType]: [
+          connectionData
         ],
       })
     }

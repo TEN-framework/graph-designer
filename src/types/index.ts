@@ -13,7 +13,7 @@ export enum ConnectDirection {
 }
 
 // ------------------ type  ------------------
-export type MsgType = "cmd" | "data" | "img_frame" | "pcm_frame"
+export type DataType = "cmd" | "data" | "img_frame" | "pcm_frame"
 export type NodeStatus = "default" | "disabled" | "enabled"
 export type SaveStatus = "idle" | "saving" | "success" | "failed"
 export type IExtensionNode = Node<
@@ -21,7 +21,7 @@ export type IExtensionNode = Node<
     name: string
     addon: string
     status?: NodeStatus
-    extensionGroup?: string
+    extensionGroup: string
     inputs: InOutData[]
     outputs: InOutData[]
   },
@@ -87,6 +87,6 @@ export interface ICompatibleConnection {
 
 export interface InOutData {
   name: string
-  type: MsgType
+  type: DataType
   status?: NodeStatus
 }

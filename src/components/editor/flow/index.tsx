@@ -113,7 +113,7 @@ const Flow = () => {
 
   useEffect(() => {
     if (hasInit) {
-      // saveFlow(nodes, edges)
+      saveFlow(nodes, edges)
     }
   }, [nodes.length, edges.length])
 
@@ -139,7 +139,7 @@ const Flow = () => {
       dispatch(setSaveStatus("saving"))
       logger.debug("saveFlow", nodes, edges)
       const extensions = nodesToExtensions(nodes, installedExtensions)
-      const connections = edgesToConnections(edges)
+      const connections = edgesToConnections(edges, nodes)
       logger.debug("saveFlow extensions", extensions)
       logger.debug("saveFlow connections", connections)
       await apiUpdateGraph(curGraphName, {
@@ -159,7 +159,7 @@ const Flow = () => {
     extensionGroup: string,
   ) => {
     const targetNode = nodes.find(
-      (item) => item.id === extensionName,
+      (item) => item.data.name === extensionName,
     )
     if (!targetNode) {
       return
@@ -167,7 +167,7 @@ const Flow = () => {
     const { data } = targetNode
     if (data?.extensionGroup != extensionGroup) {
       const newNodes = nodes.map((node) => {
-        if (node.id === extensionName) {
+        if (node.data.name === extensionName) {
           return {
             ...node, data: {
               ...node.data,
@@ -181,8 +181,6 @@ const Flow = () => {
       await saveFlow(newNodes, edges)
     }
   }
-
-
 
   // reset node/handle default status
   const resetNodeStatus = () => {
@@ -208,9 +206,6 @@ const Flow = () => {
       }
     }))
   }
-
-
-
 
   // ----------------- Drag and Drop -----------------
   const onDrop = useCallback(
@@ -307,8 +302,6 @@ const Flow = () => {
       messageApi.error(e.message)
     }
   }
-
-
 
   const onConnect = (params: Connection | Edge) => {
     logger.debug("onConnect", params)
