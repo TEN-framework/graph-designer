@@ -134,8 +134,8 @@ export const extensionToNode = (
 const connectionToEdges = (
   connection: IConnection,
   nodes: ExtensionNode[],
-): Edge[] => {
-  let edges: Edge[] = []
+): CustomEdge[] => {
+  let edges: CustomEdge[] = []
   const { cmd = [], data = [], pcm_frame = [], img_frame = [], extension, extension_group } = connection
   const sourceNodeId = editorData.getNodeId(extension_group, extension)
   const dataType = getDataType(connection)
@@ -197,7 +197,7 @@ const connectionToEdges = (
 }
 
 export const connectionsToEdges = (connections: IConnection[], nodes: ExtensionNode[]): CustomEdge[] => {
-  const edges: Edge[] = []
+  const edges: CustomEdge[] = []
   connections.forEach((connection) => {
     const tempEdges = connectionToEdges(connection, nodes)
     if (tempEdges.length) {
