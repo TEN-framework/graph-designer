@@ -30,7 +30,7 @@ const getNodeColor = (status?: NodeStatus) => {
   return "#E5E7EB"
 }
 
-export default function ExtensionNode(props: NodeProps<ExtensionNode>) {
+export default function ExtensionNodeComponent(props: NodeProps<ExtensionNode>) {
   const { data } = props
   const {
     name,
