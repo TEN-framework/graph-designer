@@ -16,7 +16,7 @@ import {
   apiSaveGraph
 } from "@/common"
 import { setAutoStart, setCurGraphName } from "@/store/reducers/global"
-import { IGraph, IGraphData, IExtensionNode } from "@/types"
+import { IGraph, IGraphData, ExtensionNode } from "@/types"
 
 import styles from "./index.module.scss"
 

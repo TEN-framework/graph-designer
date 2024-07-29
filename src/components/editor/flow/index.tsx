@@ -24,7 +24,7 @@ import {
   DefaultEdgeOptions,
 } from "@xyflow/react"
 import type { NodeTypes, EdgeTypes, BuiltInNode } from "@xyflow/react"
-import ExtensionNode from "./nodes/extension"
+import ExtensionNodeComponent from "./nodes/extension"
 import { message } from "antd"
 import {
   useAppSelector,
@@ -43,7 +43,7 @@ import {
   DEFAULT_APP,
   setNodesStatusDisabled,
   highlightNodesWithConnections,
-  checkConnectableEdge
+  getConnectableEdge
 } from "@/common"
 import { eventManger } from "@/manager"
 import {
@@ -51,8 +51,9 @@ import {
   ICompatibleConnection,
   ConnectDirection,
   InOutData,
-  IExtensionNode,
+  ExtensionNode,
   CustomNodeType,
+  CustomEdge
 } from "@/types"
 import { setSaveStatus } from "@/store/reducers/global"
 
@@ -68,10 +69,10 @@ const defaultEdgeOptions: DefaultEdgeOptions = {
     // color: 'red',
   },
 }
-const initialNodes: IExtensionNode[] = []
-const initialEdges: Edge[] = []
+const initialNodes: ExtensionNode[] = []
+const initialEdges: CustomEdge[] = []
 const nodeTypes: NodeTypes = {
-  extension: ExtensionNode,
+  extension: ExtensionNodeComponent,
 }
 const edgeTypes: EdgeTypes = {
   // animated: true,
@@ -93,9 +94,8 @@ const Flow = () => {
     (state) => state.global.installedExtensions,
   )
   const { screenToFlowPosition } = useReactFlow()
-  const [nodes, setNodes, onNodesChange] =
-    useNodesState<IExtensionNode>(initialNodes)
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
+  const [nodes, setNodes, onNodesChange] = useNodesState<ExtensionNode>(initialNodes)
+  const [edges, setEdges, onEdgesChange] = useEdgesState<CustomEdge>(initialEdges)
 
   useEffect(() => {
     eventManger.on("extentionGroupChanged", handleExtentionGroupChanged)
@@ -134,7 +134,7 @@ const Flow = () => {
     hasInit = true
   }
 
-  const saveFlow = async (nodes: IExtensionNode[], edges: Edge[]) => {
+  const saveFlow = async (nodes: ExtensionNode[], edges: Edge[]) => {
     try {
       dispatch(setSaveStatus("saving"))
       logger.debug("saveFlow", nodes, edges)
@@ -303,11 +303,12 @@ const Flow = () => {
     }
   }
 
-  const onConnect = (params: Connection | Edge) => {
+  const onConnect = (params: Connection) => {
     logger.debug("onConnect", params)
-    if (checkConnectableEdge(params, connectDirection, nodes)) {
+    const customEdge = getConnectableEdge(params, connectDirection, nodes)
+    if (customEdge) {
       setEdges((eds) => {
-        return addEdge(params, eds)
+        return addEdge(customEdge, eds)
       })
     }
   }

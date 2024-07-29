@@ -1,4 +1,4 @@
-import type { Node, BuiltInNode } from "@xyflow/react"
+import type { Node, BuiltInNode, Edge } from "@xyflow/react"
 
 // ------------------ enum  ------------------
 export enum LogLevel {
@@ -16,7 +16,7 @@ export enum ConnectDirection {
 export type DataType = "cmd" | "data" | "img_frame" | "pcm_frame"
 export type NodeStatus = "default" | "disabled" | "enabled"
 export type SaveStatus = "idle" | "saving" | "success" | "failed"
-export type IExtensionNode = Node<
+export type ExtensionNode = Node<
   {
     name: string
     addon: string
@@ -27,7 +27,8 @@ export type IExtensionNode = Node<
   },
   "extension"
 >
-export type CustomNodeType = BuiltInNode | IExtensionNode
+export type CustomNodeType = BuiltInNode | ExtensionNode
+
 
 // ------------------ interface  ------------------
 export interface IExtension {
@@ -47,6 +48,13 @@ export interface IExtension {
   app?: string
   extension_group: string
   property?: any
+}
+
+
+export interface CustomEdge extends Edge {
+  data: {
+    dataType: DataType
+  }
 }
 
 export interface IConnectionData {

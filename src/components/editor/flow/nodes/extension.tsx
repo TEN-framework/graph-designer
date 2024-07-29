@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect, LegacyRef, useMemo } from "react"
 import { Handle, Position, Node, NodeProps } from "@xyflow/react"
 import { eventManger } from "@/manager"
-import { NodeStatus, IExtensionNode } from "@/types"
+import { NodeStatus, ExtensionNode } from "@/types"
 import { Input } from "antd"
 
 import styles from "./extension.module.scss"
@@ -30,7 +30,7 @@ const getNodeColor = (status?: NodeStatus) => {
   return "#E5E7EB"
 }
 
-export default function ExtensionNode(props: NodeProps<IExtensionNode>) {
+export default function ExtensionNode(props: NodeProps<ExtensionNode>) {
   const { data } = props
   const {
     name,

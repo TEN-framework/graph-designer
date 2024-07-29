@@ -5,9 +5,10 @@ import {
   IConnectionData,
   DataType,
   InOutData,
-  IExtensionNode,
+  ExtensionNode,
   ICompatibleConnection,
   ConnectDirection,
+  CustomEdge,
 } from "@/types"
 import { DEFAULT_APP, DEFAULT_EXTENTION_GROUP } from "./constant"
 import { logger } from "./logger"
@@ -49,7 +50,7 @@ export const sleep = async (ms: number) => {
 
 export const extensionsToNodes = (
   extensions: IExtension[],
-): IExtensionNode[] => {
+): ExtensionNode[] => {
   return extensions.map((extension, index) => {
     const position = {
       x: index * 250,
@@ -64,7 +65,7 @@ export const extensionToNode = (
   property: {
     position: XYPosition
   },
-): IExtensionNode => {
+): ExtensionNode => {
   const { position } = property
   const inputs: InOutData[] = []
   const outputs: InOutData[] = []
@@ -132,7 +133,7 @@ export const extensionToNode = (
 
 const connectionToEdges = (
   connection: IConnection,
-  nodes: IExtensionNode[],
+  nodes: ExtensionNode[],
 ): Edge[] => {
   let edges: Edge[] = []
   const { cmd = [], data = [], pcm_frame = [], img_frame = [], extension, extension_group } = connection
@@ -195,7 +196,7 @@ const connectionToEdges = (
   return edges
 }
 
-export const connectionsToEdges = (connections: IConnection[], nodes: IExtensionNode[]): Edge[] => {
+export const connectionsToEdges = (connections: IConnection[], nodes: ExtensionNode[]): CustomEdge[] => {
   const edges: Edge[] = []
   connections.forEach((connection) => {
     const tempEdges = connectionToEdges(connection, nodes)
@@ -223,7 +224,7 @@ export const getDataType = (connection: IConnection): DataType => {
 }
 
 export const nodesToExtensions = (
-  nodes: IExtensionNode[],
+  nodes: ExtensionNode[],
   installedExtensions: IExtension[],
 ): IExtension[] => {
   return nodes.map((node) => {
@@ -241,7 +242,7 @@ export const nodesToExtensions = (
   })
 }
 
-export const edgesToConnections = (edges: Edge[], nodes: IExtensionNode[]): IConnection[] => {
+export const edgesToConnections = (edges: Edge[], nodes: ExtensionNode[]): IConnection[] => {
   let connections: IConnection[] = []
   for (let edge of edges) {
     const { source, sourceHandle, target, targetHandle, data } = edge
@@ -301,7 +302,7 @@ export const edgesToConnections = (edges: Edge[], nodes: IExtensionNode[]): ICon
 }
 
 
-export const setNodesStatusDisabled = (nodes: IExtensionNode[]): IExtensionNode[] => {
+export const setNodesStatusDisabled = (nodes: ExtensionNode[]): ExtensionNode[] => {
   return nodes.map((node) => {
     return {
       ...node,
@@ -326,7 +327,7 @@ export const setNodesStatusDisabled = (nodes: IExtensionNode[]): IExtensionNode[
 }
 
 
-export const highlightNodesWithConnections = (nodes: IExtensionNode[], connections: ICompatibleConnection[]): IExtensionNode[] => {
+export const highlightNodesWithConnections = (nodes: ExtensionNode[], connections: ICompatibleConnection[]): ExtensionNode[] => {
   return nodes.map((node) => {
     const nodeName = node.data.name
     const extensionGroup = node.data.extensionGroup
@@ -369,7 +370,7 @@ export const highlightNodesWithConnections = (nodes: IExtensionNode[], connectio
 }
 
 
-export const checkConnectableEdge = (params: Connection | Edge, connectDirection: ConnectDirection, nodes: IExtensionNode[]): boolean => {
+export const getConnectableEdge = (params: Connection, connectDirection: ConnectDirection, nodes: ExtensionNode[]): CustomEdge | null => {
   const { source, target, sourceHandle, targetHandle } = params
   const targetNodeId = target
   const targetHandleName = targetHandle
@@ -383,10 +384,18 @@ export const checkConnectableEdge = (params: Connection | Edge, connectDirection
         (item) => item.name == targetHandleName && item.status == "enabled"
       )
       if (targetHandler) {
-        return true
+        return {
+          id: editorData.genEdgeId(),
+          source: source,
+          sourceHandle: sourceHandle,
+          target: targetNodeId,
+          targetHandle: targetHandleName,
+          data: {
+            dataType: targetHandler.type
+          }
+        }
       }
     }
   }
-
-  return false
+  return null
 }
