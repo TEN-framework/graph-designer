@@ -15,6 +15,12 @@ export enum ConnectDirection {
 // ------------------ type  ------------------
 export type LayoutDirection = "TB" | "LR"
 export type DataType = "cmd" | "data" | "img_frame" | "pcm_frame"
+export type PropertyType =
+  "string" | "bool" | "buf" | "array" | "object" | "ptr" |
+  "int8" | "int16" | "int32" | "int64" |
+  "Uint8" | "Uint16" | "Uint32" | "Uint64" |
+  "float32" | "float64"
+export type InputType = "string" | "number" | "boolean"
 export type NodeStatus = "default" | "disabled" | "enabled"
 export type SaveStatus = "idle" | "saving" | "success" | "failed"
 export type ExtensionNode = Node<
@@ -24,13 +30,20 @@ export type ExtensionNode = Node<
     status?: NodeStatus
     extensionGroup: string
     inputs: InOutData[]
-    outputs: InOutData[]
+    outputs: InOutData[],
+    property?: IExtensionProperty
   },
   "extension"
 >
 export type CustomNodeType = BuiltInNode | ExtensionNode
 
 // ------------------ interface  ------------------
+export interface IExtensionProperty {
+  [propName: string]: {
+    type: PropertyType
+  }
+}
+
 export interface IExtension {
   name: string
   addon: string
@@ -43,11 +56,11 @@ export interface IExtension {
     pcm_frame_out?: any[]
     img_frame_in?: any[]
     img_frame_out?: any[]
-    [propName: string]: any
+    property?: IExtensionProperty
   }
   app?: string
   extension_group: string
-  property?: any
+
 }
 
 export interface CustomEdge extends Edge {

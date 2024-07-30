@@ -24,7 +24,7 @@ import {
   DefaultEdgeOptions,
 } from "@xyflow/react"
 import type { NodeTypes, EdgeTypes, BuiltInNode } from "@xyflow/react"
-import ExtensionNodeComponent from "./nodes/extension"
+import ExtensionNodeComponent from "./nodes/index"
 import { message } from "antd"
 import {
   useAppSelector,

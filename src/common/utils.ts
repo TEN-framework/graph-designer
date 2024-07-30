@@ -10,6 +10,7 @@ import {
   ConnectDirection,
   CustomEdge,
   LayoutDirection,
+  PropertyType
 } from "@/types"
 import {
   DEFAULT_APP,
@@ -51,6 +52,16 @@ export const camelToSnake = (str: string): string => {
 
 export const sleep = async (ms: number) => {
   return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+export const hasDecimalPoint = (n: number): boolean => {
+  return !Number.isNaN(n) && n % 1 !== 0;
+}
+
+export const isNumberType = (type: PropertyType): boolean => {
+  return type === "int8" || type === "int16" || type === "int32" || type === "int64" ||
+    type === "Uint8" || type === "Uint16" || type === "Uint32" || type === "Uint64" ||
+    type === "float32" || type === "float64"
 }
 
 // ----------------------- graph ---------------------
@@ -121,11 +132,11 @@ export const extensionsToNodes = (
 
 export const extensionToNode = (
   extension: IExtension,
-  property: {
+  options: {
     position: XYPosition
   },
 ): ExtensionNode => {
-  const { position } = property
+  const { position } = options
   const inputs: InOutData[] = []
   const outputs: InOutData[] = []
   const { api, extension_group, name, addon } = extension
@@ -186,6 +197,7 @@ export const extensionToNode = (
       inputs: inputs,
       outputs: outputs,
       extensionGroup: extension_group,
+      property: api?.property,
     },
   }
 }
