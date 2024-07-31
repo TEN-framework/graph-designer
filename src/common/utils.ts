@@ -10,7 +10,8 @@ import {
   ConnectDirection,
   CustomEdge,
   LayoutDirection,
-  PropertyType
+  PropertyType,
+  IExtensionPropertyTypes
 } from "@/types"
 import {
   DEFAULT_APP,
@@ -139,7 +140,8 @@ export const extensionToNode = (
   const { position } = options
   const inputs: InOutData[] = []
   const outputs: InOutData[] = []
-  const { api, extension_group, name, addon } = extension
+  let propertyTypes
+  const { api, extension_group, name, addon, property } = extension
   if (api?.cmd_in) {
     api.cmd_in.forEach((input) => {
       inputs.push({ name: input.name, type: "cmd", status: "default" })
@@ -180,6 +182,9 @@ export const extensionToNode = (
       outputs.push({ name: output.name, type: "img_frame", status: "default" })
     })
   }
+  if (api?.property) {
+    propertyTypes = api.property
+  }
 
   const id = editorData.genNodeId()
   editorData.saveNodeId(extension_group, name, id)
@@ -197,7 +202,8 @@ export const extensionToNode = (
       inputs: inputs,
       outputs: outputs,
       extensionGroup: extension_group,
-      property: api?.property,
+      property: property,
+      propertyTypes: propertyTypes,
     },
   }
 }
@@ -317,7 +323,7 @@ export const nodesToExtensions = (
 ): IExtension[] => {
   return nodes.map((node) => {
     const { data } = node
-    const { extensionGroup, name, addon } = data
+    const { extensionGroup, name, addon, property } = data
     // const
     const extension = installedExtensions.find((i) => i.addon == addon)
     if (!extension) {
@@ -327,6 +333,7 @@ export const nodesToExtensions = (
     }
     return {
       ...extension,
+      property,
       extension_group: extensionGroup,
     }
   })

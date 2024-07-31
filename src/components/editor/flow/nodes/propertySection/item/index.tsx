@@ -10,7 +10,7 @@ type Status = 'error' | 'warning' | undefined
 
 interface PropertyItemProps {
   name: string
-  propertyType: PropertyType
+  propertyType?: PropertyType
   value?: any,
   className?: string
   onUpdate?: (value: any) => void
@@ -74,6 +74,8 @@ const CustomInput = (CustomInputProps: CustomInputProps) => {
     if (checkValue(value, propertyType, inputType)) {
       setValue(value)
       setStatus(undefined)
+      // TODO: if boolean, directly update
+      // when del node =>  del editorData node/edge data/id 
     } else {
       setStatus("error")
     }
@@ -120,11 +122,10 @@ const CustomInput = (CustomInputProps: CustomInputProps) => {
 const PropertyItem = (props: PropertyItemProps) => {
   const { name, propertyType, value, className, onUpdate } = props
 
-  return <div className={`${styles.item} ${className}`}>
+  return propertyType ? <div className={`${styles.item} ${className}`}>
     <div className={styles.text}>{name}:</div>
     <CustomInput name={name} propertyType={propertyType} value={value} onUpdate={onUpdate}></CustomInput>
-  </div>
-
+  </div> : null
 }
 
 

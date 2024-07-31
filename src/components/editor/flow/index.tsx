@@ -108,9 +108,11 @@ const Flow = () => {
 
   useEffect(() => {
     eventManger.on("extentionGroupChanged", handleExtentionGroupChanged)
+    eventManger.on("extentionPropertyChanged", handleExtentionPropertyChanged)
 
     return () => {
       eventManger.off("extentionGroupChanged", handleExtentionGroupChanged)
+      eventManger.off("extentionPropertyChanged", handleExtentionPropertyChanged)
     }
   }, [nodes, edges])
 
@@ -176,23 +178,44 @@ const Flow = () => {
     if (!targetNode) {
       return
     }
-    const { data } = targetNode
-    if (data?.extensionGroup != extensionGroup) {
-      const newNodes = nodes.map((node) => {
-        if (node.data.name === extensionName) {
-          return {
-            ...node,
-            data: {
-              ...node.data,
-              extensionGroup: extensionGroup,
-            },
-          }
+    const newNodes = nodes.map((node) => {
+      if (node.data.name === extensionName) {
+        return {
+          ...node,
+          data: {
+            ...node.data,
+            extensionGroup: extensionGroup,
+          },
         }
-        return node
-      })
-      setNodes(newNodes)
-      await saveFlow(newNodes, edges)
+      }
+      return node
+    })
+    setNodes(newNodes)
+    await saveFlow(newNodes, edges)
+  }
+
+  const handleExtentionPropertyChanged = async (extensionName: string, key: string, value: any) => {
+    const targetNode = nodes.find((item) => item.data.name === extensionName)
+    if (!targetNode) {
+      return
     }
+    const newNodes = nodes.map((node) => {
+      if (node.data.name === extensionName) {
+        return {
+          ...node,
+          data: {
+            ...node.data,
+            property: {
+              ...node.data?.property,
+              [key]: value
+            },
+          },
+        }
+      }
+      return node
+    })
+    setNodes(newNodes)
+    await saveFlow(newNodes, edges)
   }
 
   // reset node/handle default status

@@ -32,13 +32,19 @@ export type ExtensionNode = Node<
     inputs: InOutData[]
     outputs: InOutData[],
     property?: IExtensionProperty
+    propertyTypes?: IExtensionPropertyTypes
   },
   "extension"
 >
 export type CustomNodeType = BuiltInNode | ExtensionNode
 
 // ------------------ interface  ------------------
+
 export interface IExtensionProperty {
+  [propName: string]: any
+}
+
+export interface IExtensionPropertyTypes {
   [propName: string]: {
     type: PropertyType
   }
@@ -56,11 +62,11 @@ export interface IExtension {
     pcm_frame_out?: any[]
     img_frame_in?: any[]
     img_frame_out?: any[]
-    property?: IExtensionProperty
+    property?: IExtensionPropertyTypes
   }
   app?: string
   extension_group: string
-
+  property?: IExtensionProperty
 }
 
 export interface CustomEdge extends Edge {

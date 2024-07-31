@@ -28,13 +28,12 @@ export default function ExtensionNodeComponent(
     outputs = [],
     status = "default",
     property,
+    propertyTypes,
     extensionGroup: propExtensionGroup = "default",
   } = data
 
   const [extensionGroup, setExtensionGroup] = useState(propExtensionGroup)
   const [nodeWidth, setNodeWidth] = useState(DEFAULT_NODE_WIDTH)
-
-
 
   const onHandleWidthChange = (width: number) => {
     setNodeWidth(width)
@@ -47,8 +46,7 @@ export default function ExtensionNodeComponent(
   }
 
   const onUpdateProperty = (key: string, value: string) => {
-    // eventManger.emit("updateProperty", name, key, value)
-    console.log("updateProperty", name, key, value)
+    eventManger.emit("extentionPropertyChanged", name, key, value)
   }
 
   return (
@@ -63,7 +61,7 @@ export default function ExtensionNodeComponent(
         <span className={styles.text}>{name}</span>
       </div>
       {/* property */}
-      <PropertySection property={property} onUpdate={onUpdateProperty}></PropertySection>
+      <PropertySection property={property} propertyTypes={propertyTypes} onUpdate={onUpdateProperty}></PropertySection>
       {/* extensionGroup */}
       <div className={styles.extensionGroup}>
         <div className={styles.title}>extensionGroup</div>
