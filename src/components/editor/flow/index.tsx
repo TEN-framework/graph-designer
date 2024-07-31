@@ -24,7 +24,7 @@ import {
   DefaultEdgeOptions,
 } from "@xyflow/react"
 import type { NodeTypes, EdgeTypes, BuiltInNode } from "@xyflow/react"
-import ExtensionNodeComponent from "./nodes/extension"
+import ExtensionNodeComponent from "./nodes/index"
 import { message } from "antd"
 import {
   useAppSelector,
@@ -45,6 +45,8 @@ import {
   highlightNodesWithConnections,
   getConnectableEdge,
   getLayoutedElements,
+  resetNodesStatus,
+  editorData
 } from "@/common"
 import { eventManger } from "@/manager"
 import {
@@ -76,11 +78,7 @@ const nodeTypes: NodeTypes = {
   extension: ExtensionNodeComponent,
 }
 const edgeTypes: EdgeTypes = {
-  // animated: true,
-  // pathOptions: {
-  //   offset: 30,
-  //   borderRadius: 100
-  // },
+
 }
 
 let connectDirection = ConnectDirection.Positive
@@ -108,9 +106,11 @@ const Flow = () => {
 
   useEffect(() => {
     eventManger.on("extentionGroupChanged", handleExtentionGroupChanged)
+    eventManger.on("extentionPropertyChanged", handleExtentionPropertyChanged)
 
     return () => {
       eventManger.off("extentionGroupChanged", handleExtentionGroupChanged)
+      eventManger.off("extentionPropertyChanged", handleExtentionPropertyChanged)
     }
   }, [nodes, edges])
 
@@ -176,51 +176,47 @@ const Flow = () => {
     if (!targetNode) {
       return
     }
-    const { data } = targetNode
-    if (data?.extensionGroup != extensionGroup) {
-      const newNodes = nodes.map((node) => {
-        if (node.data.name === extensionName) {
-          return {
-            ...node,
-            data: {
-              ...node.data,
-              extensionGroup: extensionGroup,
-            },
-          }
-        }
-        return node
-      })
-      setNodes(newNodes)
-      await saveFlow(newNodes, edges)
-    }
-  }
-
-  // reset node/handle default status
-  const resetNodeStatus = () => {
-    setNodes(
-      nodes.map((node) => {
+    const newNodes = nodes.map((node) => {
+      if (node.data.name === extensionName) {
         return {
           ...node,
           data: {
             ...node.data,
-            status: "default",
-            inputs: node.data.inputs.map((input: any) => {
-              return {
-                ...input,
-                status: "default",
-              }
-            }),
-            outputs: node.data.outputs.map((output: any) => {
-              return {
-                ...output,
-                status: "default",
-              }
-            }),
+            extensionGroup: extensionGroup,
           },
         }
-      }),
-    )
+      }
+      return node
+    })
+    setNodes(newNodes)
+    await saveFlow(newNodes, edges)
   }
+
+  const handleExtentionPropertyChanged = async (extensionName: string, key: string, value: any) => {
+    const targetNode = nodes.find((item) => item.data.name === extensionName)
+    if (!targetNode) {
+      return
+    }
+    const newNodes = nodes.map((node) => {
+      if (node.data.name === extensionName) {
+        return {
+          ...node,
+          data: {
+            ...node.data,
+            property: {
+              ...node.data?.property,
+              [key]: value
+            },
+          },
+        }
+      }
+      return node
+    })
+    setNodes(newNodes)
+    await saveFlow(newNodes, edges)
+  }
+
+
 
   // ----------------- Drag and Drop -----------------
   const onDrop = useCallback(
@@ -236,7 +232,7 @@ const Flow = () => {
         return
       }
 
-      if (nodes.find((item) => extension.name === item.id)) {
+      if (nodes.find((item) => extension.name === item.data.name)) {
         return messageApi.error(
           `Extension ${extension.name} already exists editor`,
         )
@@ -326,16 +322,25 @@ const Flow = () => {
     logger.debug("onConnect", params)
     const customEdge = getConnectableEdge(params, connectDirection, nodes)
     if (customEdge) {
-      setEdges((eds) => {
-        return addEdge(customEdge, eds)
-      })
+      setEdges((eds) => addEdge(customEdge, eds))
     }
   }
 
   const onConnectEnd = () => {
     logger.debug("onConnectEnd")
-    resetNodeStatus()
+    setNodes(resetNodesStatus(nodes))
   }
+
+  // ------------------ Delete ------------------
+  const onDelete = async (elements: { nodes: ExtensionNode[]; edges: CustomEdge[] }) => {
+    const { nodes, edges } = elements
+    logger.debug("onDelete", nodes, edges)
+    nodes.forEach(node => {
+      const { data } = node
+      editorData.delNodeId(data.extensionGroup, data.name)
+    })
+  }
+
 
   return (
     <>
@@ -353,6 +358,7 @@ const Flow = () => {
         onConnectStart={onConnectStart}
         onConnect={onConnect}
         onConnectEnd={onConnectEnd}
+        onDelete={onDelete}
         fitView
         fitViewOptions={{
           padding: 0.2,

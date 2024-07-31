@@ -10,6 +10,8 @@ import {
   ConnectDirection,
   CustomEdge,
   LayoutDirection,
+  PropertyType,
+  IExtensionPropertyTypes
 } from "@/types"
 import {
   DEFAULT_APP,
@@ -51,6 +53,16 @@ export const camelToSnake = (str: string): string => {
 
 export const sleep = async (ms: number) => {
   return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+export const hasDecimalPoint = (n: number): boolean => {
+  return !Number.isNaN(n) && n % 1 !== 0;
+}
+
+export const isNumberType = (type: PropertyType): boolean => {
+  return type === "int8" || type === "int16" || type === "int32" || type === "int64" ||
+    type === "Uint8" || type === "Uint16" || type === "Uint32" || type === "Uint64" ||
+    type === "float32" || type === "float64"
 }
 
 // ----------------------- graph ---------------------
@@ -121,14 +133,15 @@ export const extensionsToNodes = (
 
 export const extensionToNode = (
   extension: IExtension,
-  property: {
+  options: {
     position: XYPosition
   },
 ): ExtensionNode => {
-  const { position } = property
+  const { position } = options
   const inputs: InOutData[] = []
   const outputs: InOutData[] = []
-  const { api, extension_group, name, addon } = extension
+  let propertyTypes
+  const { api, extension_group, name, addon, property } = extension
   if (api?.cmd_in) {
     api.cmd_in.forEach((input) => {
       inputs.push({ name: input.name, type: "cmd", status: "default" })
@@ -169,6 +182,9 @@ export const extensionToNode = (
       outputs.push({ name: output.name, type: "img_frame", status: "default" })
     })
   }
+  if (api?.property) {
+    propertyTypes = api.property
+  }
 
   const id = editorData.genNodeId()
   editorData.saveNodeId(extension_group, name, id)
@@ -186,6 +202,8 @@ export const extensionToNode = (
       inputs: inputs,
       outputs: outputs,
       extensionGroup: extension_group,
+      property: property,
+      propertyTypes: propertyTypes,
     },
   }
 }
@@ -261,6 +279,7 @@ const connectionToEdges = (
         data: {
           dataType,
         },
+        label: dataType,
       }
 
       edges.push(edg)
@@ -305,7 +324,7 @@ export const nodesToExtensions = (
 ): IExtension[] => {
   return nodes.map((node) => {
     const { data } = node
-    const { extensionGroup, name, addon } = data
+    const { extensionGroup, name, addon, property } = data
     // const
     const extension = installedExtensions.find((i) => i.addon == addon)
     if (!extension) {
@@ -315,6 +334,7 @@ export const nodesToExtensions = (
     }
     return {
       ...extension,
+      property,
       extension_group: extensionGroup,
     }
   })
@@ -495,4 +515,29 @@ export const getConnectableEdge = (
     }
   }
   return null
+}
+
+
+export const resetNodesStatus = (nodes: ExtensionNode[]): ExtensionNode[] => {
+  return nodes.map((node) => {
+    return {
+      ...node,
+      data: {
+        ...node.data,
+        status: "default",
+        inputs: node.data.inputs.map((input: any) => {
+          return {
+            ...input,
+            status: "default",
+          }
+        }),
+        outputs: node.data.outputs.map((output: any) => {
+          return {
+            ...output,
+            status: "default",
+          }
+        }),
+      },
+    }
+  })
 }

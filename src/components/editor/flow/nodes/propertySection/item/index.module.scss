@@ -1,0 +1,13 @@
+.item {
+  padding: 2px;
+  box-sizing: border-box;
+
+
+  .text {
+    font-size: 12px;
+  }
+}
+
+.item+.item {
+  margin-top: 2px;
+}
