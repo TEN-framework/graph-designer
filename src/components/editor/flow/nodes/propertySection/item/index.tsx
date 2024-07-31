@@ -5,7 +5,7 @@ import { PropertyType, InputType } from "@/types"
 
 import styles from "./index.module.scss"
 
-type Status = 'error' | 'warning' | undefined
+type Status = 'error' | 'warning' | ""
 
 
 interface PropertyItemProps {
@@ -27,7 +27,7 @@ interface CustomInputProps {
 const checkValue = (value: any, propertyType: PropertyType, inputType: InputType): boolean => {
   if (propertyType == "Uint32") {
     if (value < 0) {
-      message.error(`${propertyType} should be greater than 0`)
+      message.error(`${value} should be greater than 0`)
       return false
     }
   }
@@ -35,7 +35,7 @@ const checkValue = (value: any, propertyType: PropertyType, inputType: InputType
   if (inputType == "number") {
     if (propertyType != "float32" && propertyType != "float64")
       if (hasDecimalPoint(value)) {
-        message.error(`${propertyType} should be an integer`)
+        message.error(`${value} should be an integer`)
         return false
       }
   }
@@ -48,7 +48,7 @@ const checkValue = (value: any, propertyType: PropertyType, inputType: InputType
 const CustomInput = (CustomInputProps: CustomInputProps) => {
   const { propertyType, value: propsValue, onUpdate } = CustomInputProps
   const [value, setValue] = useState(propsValue)
-  const [status, setStatus] = useState<Status>()
+  const [status, setStatus] = useState<Status>("")
 
   const inputType: InputType = useMemo(() => {
     if (propertyType === "string") {
@@ -73,7 +73,7 @@ const CustomInput = (CustomInputProps: CustomInputProps) => {
     }
     if (checkValue(value, propertyType, inputType)) {
       setValue(value)
-      setStatus(undefined)
+      setStatus("")
       if (inputType === "boolean") {
         onUpdate?.(value)
       }
@@ -83,7 +83,9 @@ const CustomInput = (CustomInputProps: CustomInputProps) => {
   }
 
   const onBlur = () => {
-    setStatus(undefined)
+    setTimeout(() => {
+      setStatus("")
+    }, 0)
     if (value !== propsValue) {
       onUpdate?.(value)
     }
