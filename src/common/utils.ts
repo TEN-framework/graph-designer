@@ -515,3 +515,28 @@ export const getConnectableEdge = (
   }
   return null
 }
+
+
+export const resetNodesStatus = (nodes: ExtensionNode[]): ExtensionNode[] => {
+  return nodes.map((node) => {
+    return {
+      ...node,
+      data: {
+        ...node.data,
+        status: "default",
+        inputs: node.data.inputs.map((input: any) => {
+          return {
+            ...input,
+            status: "default",
+          }
+        }),
+        outputs: node.data.outputs.map((output: any) => {
+          return {
+            ...output,
+            status: "default",
+          }
+        }),
+      },
+    }
+  })
+}

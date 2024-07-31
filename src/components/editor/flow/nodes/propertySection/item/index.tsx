@@ -74,8 +74,9 @@ const CustomInput = (CustomInputProps: CustomInputProps) => {
     if (checkValue(value, propertyType, inputType)) {
       setValue(value)
       setStatus(undefined)
-      // TODO: if boolean, directly update
-      // when del node =>  del editorData node/edge data/id 
+      if (inputType === "boolean") {
+        onUpdate?.(value)
+      }
     } else {
       setStatus("error")
     }

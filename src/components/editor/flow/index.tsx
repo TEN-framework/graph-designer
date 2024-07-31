@@ -45,6 +45,8 @@ import {
   highlightNodesWithConnections,
   getConnectableEdge,
   getLayoutedElements,
+  resetNodesStatus,
+  editorData
 } from "@/common"
 import { eventManger } from "@/manager"
 import {
@@ -218,32 +220,7 @@ const Flow = () => {
     await saveFlow(newNodes, edges)
   }
 
-  // reset node/handle default status
-  const resetNodeStatus = () => {
-    setNodes(
-      nodes.map((node) => {
-        return {
-          ...node,
-          data: {
-            ...node.data,
-            status: "default",
-            inputs: node.data.inputs.map((input: any) => {
-              return {
-                ...input,
-                status: "default",
-              }
-            }),
-            outputs: node.data.outputs.map((output: any) => {
-              return {
-                ...output,
-                status: "default",
-              }
-            }),
-          },
-        }
-      }),
-    )
-  }
+
 
   // ----------------- Drag and Drop -----------------
   const onDrop = useCallback(
@@ -259,7 +236,7 @@ const Flow = () => {
         return
       }
 
-      if (nodes.find((item) => extension.name === item.id)) {
+      if (nodes.find((item) => extension.name === item.data.name)) {
         return messageApi.error(
           `Extension ${extension.name} already exists editor`,
         )
@@ -357,8 +334,19 @@ const Flow = () => {
 
   const onConnectEnd = () => {
     logger.debug("onConnectEnd")
-    resetNodeStatus()
+    setNodes(resetNodesStatus(nodes))
   }
+
+  // ------------------ Delete ------------------
+  const onDelete = async (elements: { nodes: ExtensionNode[]; edges: CustomEdge[] }) => {
+    const { nodes, edges } = elements
+    logger.debug("onDelete", nodes, edges)
+    nodes.forEach(node => {
+      const { data } = node
+      editorData.delNodeId(data.extensionGroup, data.name)
+    })
+  }
+
 
   return (
     <>
@@ -376,6 +364,7 @@ const Flow = () => {
         onConnectStart={onConnectStart}
         onConnect={onConnect}
         onConnectEnd={onConnectEnd}
+        onDelete={onDelete}
         fitView
         fitViewOptions={{
           padding: 0.2,
