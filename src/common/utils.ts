@@ -279,6 +279,7 @@ const connectionToEdges = (
         data: {
           dataType,
         },
+        label: dataType,
       }
 
       edges.push(edg)
