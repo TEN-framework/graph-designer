@@ -78,11 +78,7 @@ const nodeTypes: NodeTypes = {
   extension: ExtensionNodeComponent,
 }
 const edgeTypes: EdgeTypes = {
-  // animated: true,
-  // pathOptions: {
-  //   offset: 30,
-  //   borderRadius: 100
-  // },
+
 }
 
 let connectDirection = ConnectDirection.Positive
@@ -326,9 +322,7 @@ const Flow = () => {
     logger.debug("onConnect", params)
     const customEdge = getConnectableEdge(params, connectDirection, nodes)
     if (customEdge) {
-      setEdges((eds) => {
-        return addEdge(customEdge, eds)
-      })
+      setEdges((eds) => addEdge(customEdge, eds))
     }
   }
 
