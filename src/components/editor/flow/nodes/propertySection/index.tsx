@@ -1,7 +1,7 @@
 import { Popover, Input } from 'antd';
 import { IExtensionProperty, IExtensionPropertyTypes } from "@/types"
 import PropertyItem from "./item"
-import { InfoCircleOutlined } from "@ant-design/icons"
+import { EditOutlined } from "@ant-design/icons"
 import styles from "./index.module.scss"
 import { useMemo } from 'react';
 
@@ -35,7 +35,7 @@ const PropertySection = (props: PropertySectionProps) => {
   return property ? <div className={styles.property} >
     <span className={styles.title}>property</span>
     <Popover content={content} rootClassName={styles.propertyPopover}>
-      <InfoCircleOutlined></InfoCircleOutlined>
+      <EditOutlined></EditOutlined>
     </Popover>
   </div > : <></>
 }
