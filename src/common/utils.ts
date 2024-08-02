@@ -395,7 +395,7 @@ export const edgesToConnections = (
 
     if (tarConnection) {
       if (tarConnection[dataType]?.length) {
-        tarConnection[dataType].push(connectionData)
+        tarConnection[dataType]?.push(connectionData)
       } else {
         tarConnection[dataType] = [connectionData]
       }
