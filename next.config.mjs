@@ -2,6 +2,7 @@
 const nextConfig = {
   // basePath: '/ai-agent',
   // output: 'test',
+  output: "standalone",
   reactStrictMode: false,
 }
 
