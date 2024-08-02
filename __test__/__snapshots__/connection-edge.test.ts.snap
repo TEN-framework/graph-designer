@@ -1,0 +1,2113 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`A and B convert each other  edge mutual convert > connections to edges 1`] = `
+[
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "1",
+    "label": "data",
+    "source": "1",
+    "sourceHandle": "text_data",
+    "target": "2",
+    "targetHandle": "text_data",
+  },
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "2",
+    "label": "data",
+    "source": "1",
+    "sourceHandle": "text_data",
+    "target": "3",
+    "targetHandle": "text_data",
+  },
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "3",
+    "label": "data",
+    "source": "1",
+    "sourceHandle": "text_data",
+    "target": "5",
+    "targetHandle": "text_data",
+  },
+  {
+    "data": {
+      "dataType": "cmd",
+    },
+    "id": "4",
+    "label": "cmd",
+    "source": "3",
+    "sourceHandle": "flush",
+    "target": "4",
+    "targetHandle": "flush",
+  },
+  {
+    "data": {
+      "dataType": "cmd",
+    },
+    "id": "5",
+    "label": "cmd",
+    "source": "4",
+    "sourceHandle": "flush",
+    "target": "1",
+    "targetHandle": "flush",
+  },
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "6",
+    "label": "data",
+    "source": "5",
+    "sourceHandle": "data",
+    "target": "1",
+    "targetHandle": "data",
+  },
+  {
+    "data": {
+      "dataType": "cmd",
+    },
+    "id": "7",
+    "label": "cmd",
+    "source": "2",
+    "sourceHandle": "flush",
+    "target": "3",
+    "targetHandle": "flush",
+  },
+]
+`;
+
+exports[`A and B convert each other  edge mutual convert > edges to connections 1`] = `
+[
+  {
+    "app": "localhost",
+    "data": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "interrupt_detector",
+            "extension_group": "default",
+          },
+        ],
+        "name": "text_data",
+      },
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "openai_chatgpt",
+            "extension_group": "chatgpt",
+          },
+        ],
+        "name": "text_data",
+      },
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "chat_transcriber",
+            "extension_group": "transcriber",
+          },
+        ],
+        "name": "text_data",
+      },
+    ],
+    "extension": "agora_rtc",
+    "extension_group": "default",
+  },
+  {
+    "app": "localhost",
+    "cmd": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "azure_tts",
+            "extension_group": "tts",
+          },
+        ],
+        "name": "flush",
+      },
+    ],
+    "extension": "openai_chatgpt",
+    "extension_group": "chatgpt",
+  },
+  {
+    "app": "localhost",
+    "cmd": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "agora_rtc",
+            "extension_group": "default",
+          },
+        ],
+        "name": "flush",
+      },
+    ],
+    "extension": "azure_tts",
+    "extension_group": "tts",
+  },
+  {
+    "app": "localhost",
+    "data": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "agora_rtc",
+            "extension_group": "default",
+          },
+        ],
+        "name": "data",
+      },
+    ],
+    "extension": "chat_transcriber",
+    "extension_group": "transcriber",
+  },
+  {
+    "app": "localhost",
+    "cmd": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "openai_chatgpt",
+            "extension_group": "chatgpt",
+          },
+        ],
+        "name": "flush",
+      },
+    ],
+    "extension": "interrupt_detector",
+    "extension_group": "default",
+  },
+]
+`;
+
+exports[`A and B convert each other connection edge mutual convert > connections to edges 1`] = `
+[
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "1",
+    "label": "data",
+    "source": "1",
+    "sourceHandle": "text_data",
+    "target": "2",
+    "targetHandle": "text_data",
+  },
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "2",
+    "label": "data",
+    "source": "1",
+    "sourceHandle": "text_data",
+    "target": "3",
+    "targetHandle": "text_data",
+  },
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "3",
+    "label": "data",
+    "source": "1",
+    "sourceHandle": "text_data",
+    "target": "5",
+    "targetHandle": "text_data",
+  },
+  {
+    "data": {
+      "dataType": "cmd",
+    },
+    "id": "4",
+    "label": "cmd",
+    "source": "3",
+    "sourceHandle": "flush",
+    "target": "4",
+    "targetHandle": "flush",
+  },
+  {
+    "data": {
+      "dataType": "cmd",
+    },
+    "id": "5",
+    "label": "cmd",
+    "source": "4",
+    "sourceHandle": "flush",
+    "target": "1",
+    "targetHandle": "flush",
+  },
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "6",
+    "label": "data",
+    "source": "5",
+    "sourceHandle": "data",
+    "target": "1",
+    "targetHandle": "data",
+  },
+  {
+    "data": {
+      "dataType": "cmd",
+    },
+    "id": "7",
+    "label": "cmd",
+    "source": "2",
+    "sourceHandle": "flush",
+    "target": "3",
+    "targetHandle": "flush",
+  },
+]
+`;
+
+exports[`A and B convert each other connection edge mutual convert > edges to connections 1`] = `
+[
+  {
+    "app": "localhost",
+    "data": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "interrupt_detector",
+            "extension_group": "default",
+          },
+        ],
+        "name": "text_data",
+      },
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "openai_chatgpt",
+            "extension_group": "chatgpt",
+          },
+        ],
+        "name": "text_data",
+      },
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "chat_transcriber",
+            "extension_group": "transcriber",
+          },
+        ],
+        "name": "text_data",
+      },
+    ],
+    "extension": "agora_rtc",
+    "extension_group": "default",
+  },
+  {
+    "app": "localhost",
+    "cmd": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "azure_tts",
+            "extension_group": "tts",
+          },
+        ],
+        "name": "flush",
+      },
+    ],
+    "extension": "openai_chatgpt",
+    "extension_group": "chatgpt",
+  },
+  {
+    "app": "localhost",
+    "cmd": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "agora_rtc",
+            "extension_group": "default",
+          },
+        ],
+        "name": "flush",
+      },
+    ],
+    "extension": "azure_tts",
+    "extension_group": "tts",
+  },
+  {
+    "app": "localhost",
+    "data": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "agora_rtc",
+            "extension_group": "default",
+          },
+        ],
+        "name": "data",
+      },
+    ],
+    "extension": "chat_transcriber",
+    "extension_group": "transcriber",
+  },
+  {
+    "app": "localhost",
+    "cmd": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "openai_chatgpt",
+            "extension_group": "chatgpt",
+          },
+        ],
+        "name": "flush",
+      },
+    ],
+    "extension": "interrupt_detector",
+    "extension_group": "default",
+  },
+]
+`;
+
+exports[`Connection edge > connections to edges 1`] = `
+[
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "1",
+    "label": "data",
+    "source": "1",
+    "sourceHandle": "text_data",
+    "target": "2",
+    "targetHandle": "text_data",
+  },
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "2",
+    "label": "data",
+    "source": "1",
+    "sourceHandle": "text_data",
+    "target": "3",
+    "targetHandle": "text_data",
+  },
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "3",
+    "label": "data",
+    "source": "1",
+    "sourceHandle": "text_data",
+    "target": "5",
+    "targetHandle": "text_data",
+  },
+  {
+    "data": {
+      "dataType": "cmd",
+    },
+    "id": "4",
+    "label": "cmd",
+    "source": "3",
+    "sourceHandle": "flush",
+    "target": "4",
+    "targetHandle": "flush",
+  },
+  {
+    "data": {
+      "dataType": "cmd",
+    },
+    "id": "5",
+    "label": "cmd",
+    "source": "4",
+    "sourceHandle": "flush",
+    "target": "1",
+    "targetHandle": "flush",
+  },
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "6",
+    "label": "data",
+    "source": "5",
+    "sourceHandle": "data",
+    "target": "1",
+    "targetHandle": "data",
+  },
+  {
+    "data": {
+      "dataType": "cmd",
+    },
+    "id": "7",
+    "label": "cmd",
+    "source": "2",
+    "sourceHandle": "flush",
+    "target": "3",
+    "targetHandle": "flush",
+  },
+]
+`;
+
+exports[`Connection edge > edges to connections 1`] = `
+[
+  {
+    "app": "localhost",
+    "data": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "interrupt_detector",
+            "extension_group": "default",
+          },
+        ],
+        "name": "text_data",
+      },
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "openai_chatgpt",
+            "extension_group": "chatgpt",
+          },
+        ],
+        "name": "text_data",
+      },
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "chat_transcriber",
+            "extension_group": "transcriber",
+          },
+        ],
+        "name": "text_data",
+      },
+    ],
+    "extension": "agora_rtc",
+    "extension_group": "default",
+  },
+  {
+    "app": "localhost",
+    "cmd": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "azure_tts",
+            "extension_group": "tts",
+          },
+        ],
+        "name": "flush",
+      },
+    ],
+    "extension": "openai_chatgpt",
+    "extension_group": "chatgpt",
+  },
+  {
+    "app": "localhost",
+    "cmd": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "agora_rtc",
+            "extension_group": "default",
+          },
+        ],
+        "name": "flush",
+      },
+    ],
+    "extension": "azure_tts",
+    "extension_group": "tts",
+  },
+  {
+    "app": "localhost",
+    "data": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "agora_rtc",
+            "extension_group": "default",
+          },
+        ],
+        "name": "data",
+      },
+    ],
+    "extension": "chat_transcriber",
+    "extension_group": "transcriber",
+  },
+  {
+    "app": "localhost",
+    "cmd": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "openai_chatgpt",
+            "extension_group": "chatgpt",
+          },
+        ],
+        "name": "flush",
+      },
+    ],
+    "extension": "interrupt_detector",
+    "extension_group": "default",
+  },
+]
+`;
+
+exports[`Connection edge mutual conver > connections to edges 1`] = `
+[
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "1",
+    "label": "data",
+    "source": "1",
+    "sourceHandle": "text_data",
+    "target": "2",
+    "targetHandle": "text_data",
+  },
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "2",
+    "label": "data",
+    "source": "1",
+    "sourceHandle": "text_data",
+    "target": "3",
+    "targetHandle": "text_data",
+  },
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "3",
+    "label": "data",
+    "source": "1",
+    "sourceHandle": "text_data",
+    "target": "5",
+    "targetHandle": "text_data",
+  },
+  {
+    "data": {
+      "dataType": "cmd",
+    },
+    "id": "4",
+    "label": "cmd",
+    "source": "3",
+    "sourceHandle": "flush",
+    "target": "4",
+    "targetHandle": "flush",
+  },
+  {
+    "data": {
+      "dataType": "cmd",
+    },
+    "id": "5",
+    "label": "cmd",
+    "source": "4",
+    "sourceHandle": "flush",
+    "target": "1",
+    "targetHandle": "flush",
+  },
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "6",
+    "label": "data",
+    "source": "5",
+    "sourceHandle": "data",
+    "target": "1",
+    "targetHandle": "data",
+  },
+  {
+    "data": {
+      "dataType": "cmd",
+    },
+    "id": "7",
+    "label": "cmd",
+    "source": "2",
+    "sourceHandle": "flush",
+    "target": "3",
+    "targetHandle": "flush",
+  },
+]
+`;
+
+exports[`Connection edge mutual conver > edges to connections 1`] = `
+[
+  {
+    "app": "localhost",
+    "data": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "interrupt_detector",
+            "extension_group": "default",
+          },
+        ],
+        "name": "text_data",
+      },
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "openai_chatgpt",
+            "extension_group": "chatgpt",
+          },
+        ],
+        "name": "text_data",
+      },
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "chat_transcriber",
+            "extension_group": "transcriber",
+          },
+        ],
+        "name": "text_data",
+      },
+    ],
+    "extension": "agora_rtc",
+    "extension_group": "default",
+  },
+  {
+    "app": "localhost",
+    "cmd": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "azure_tts",
+            "extension_group": "tts",
+          },
+        ],
+        "name": "flush",
+      },
+    ],
+    "extension": "openai_chatgpt",
+    "extension_group": "chatgpt",
+  },
+  {
+    "app": "localhost",
+    "cmd": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "agora_rtc",
+            "extension_group": "default",
+          },
+        ],
+        "name": "flush",
+      },
+    ],
+    "extension": "azure_tts",
+    "extension_group": "tts",
+  },
+  {
+    "app": "localhost",
+    "data": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "agora_rtc",
+            "extension_group": "default",
+          },
+        ],
+        "name": "data",
+      },
+    ],
+    "extension": "chat_transcriber",
+    "extension_group": "transcriber",
+  },
+  {
+    "app": "localhost",
+    "cmd": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "openai_chatgpt",
+            "extension_group": "chatgpt",
+          },
+        ],
+        "name": "flush",
+      },
+    ],
+    "extension": "interrupt_detector",
+    "extension_group": "default",
+  },
+]
+`;
+
+exports[`Connection edge mutual convert > connections to edges 1`] = `
+[
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "1",
+    "label": "data",
+    "source": "1",
+    "sourceHandle": "text_data",
+    "target": "2",
+    "targetHandle": "text_data",
+  },
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "2",
+    "label": "data",
+    "source": "1",
+    "sourceHandle": "text_data",
+    "target": "3",
+    "targetHandle": "text_data",
+  },
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "3",
+    "label": "data",
+    "source": "1",
+    "sourceHandle": "text_data",
+    "target": "5",
+    "targetHandle": "text_data",
+  },
+  {
+    "data": {
+      "dataType": "cmd",
+    },
+    "id": "4",
+    "label": "cmd",
+    "source": "3",
+    "sourceHandle": "flush",
+    "target": "4",
+    "targetHandle": "flush",
+  },
+  {
+    "data": {
+      "dataType": "cmd",
+    },
+    "id": "5",
+    "label": "cmd",
+    "source": "4",
+    "sourceHandle": "flush",
+    "target": "1",
+    "targetHandle": "flush",
+  },
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "6",
+    "label": "data",
+    "source": "5",
+    "sourceHandle": "data",
+    "target": "1",
+    "targetHandle": "data",
+  },
+  {
+    "data": {
+      "dataType": "cmd",
+    },
+    "id": "7",
+    "label": "cmd",
+    "source": "2",
+    "sourceHandle": "flush",
+    "target": "3",
+    "targetHandle": "flush",
+  },
+]
+`;
+
+exports[`Connection edge mutual convert > edges to connections 1`] = `
+[
+  {
+    "app": "localhost",
+    "data": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "interrupt_detector",
+            "extension_group": "default",
+          },
+        ],
+        "name": "text_data",
+      },
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "openai_chatgpt",
+            "extension_group": "chatgpt",
+          },
+        ],
+        "name": "text_data",
+      },
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "chat_transcriber",
+            "extension_group": "transcriber",
+          },
+        ],
+        "name": "text_data",
+      },
+    ],
+    "extension": "agora_rtc",
+    "extension_group": "default",
+  },
+  {
+    "app": "localhost",
+    "cmd": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "azure_tts",
+            "extension_group": "tts",
+          },
+        ],
+        "name": "flush",
+      },
+    ],
+    "extension": "openai_chatgpt",
+    "extension_group": "chatgpt",
+  },
+  {
+    "app": "localhost",
+    "cmd": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "agora_rtc",
+            "extension_group": "default",
+          },
+        ],
+        "name": "flush",
+      },
+    ],
+    "extension": "azure_tts",
+    "extension_group": "tts",
+  },
+  {
+    "app": "localhost",
+    "data": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "agora_rtc",
+            "extension_group": "default",
+          },
+        ],
+        "name": "data",
+      },
+    ],
+    "extension": "chat_transcriber",
+    "extension_group": "transcriber",
+  },
+  {
+    "app": "localhost",
+    "cmd": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "openai_chatgpt",
+            "extension_group": "chatgpt",
+          },
+        ],
+        "name": "flush",
+      },
+    ],
+    "extension": "interrupt_detector",
+    "extension_group": "default",
+  },
+]
+`;
+
+exports[`connection and B convert each other  edge mutual convert > connections to edges 1`] = `
+[
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "1",
+    "label": "data",
+    "source": "1",
+    "sourceHandle": "text_data",
+    "target": "2",
+    "targetHandle": "text_data",
+  },
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "2",
+    "label": "data",
+    "source": "1",
+    "sourceHandle": "text_data",
+    "target": "3",
+    "targetHandle": "text_data",
+  },
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "3",
+    "label": "data",
+    "source": "1",
+    "sourceHandle": "text_data",
+    "target": "5",
+    "targetHandle": "text_data",
+  },
+  {
+    "data": {
+      "dataType": "cmd",
+    },
+    "id": "4",
+    "label": "cmd",
+    "source": "3",
+    "sourceHandle": "flush",
+    "target": "4",
+    "targetHandle": "flush",
+  },
+  {
+    "data": {
+      "dataType": "cmd",
+    },
+    "id": "5",
+    "label": "cmd",
+    "source": "4",
+    "sourceHandle": "flush",
+    "target": "1",
+    "targetHandle": "flush",
+  },
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "6",
+    "label": "data",
+    "source": "5",
+    "sourceHandle": "data",
+    "target": "1",
+    "targetHandle": "data",
+  },
+  {
+    "data": {
+      "dataType": "cmd",
+    },
+    "id": "7",
+    "label": "cmd",
+    "source": "2",
+    "sourceHandle": "flush",
+    "target": "3",
+    "targetHandle": "flush",
+  },
+]
+`;
+
+exports[`connection and B convert each other  edge mutual convert > edges to connections 1`] = `
+[
+  {
+    "app": "localhost",
+    "data": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "interrupt_detector",
+            "extension_group": "default",
+          },
+        ],
+        "name": "text_data",
+      },
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "openai_chatgpt",
+            "extension_group": "chatgpt",
+          },
+        ],
+        "name": "text_data",
+      },
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "chat_transcriber",
+            "extension_group": "transcriber",
+          },
+        ],
+        "name": "text_data",
+      },
+    ],
+    "extension": "agora_rtc",
+    "extension_group": "default",
+  },
+  {
+    "app": "localhost",
+    "cmd": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "azure_tts",
+            "extension_group": "tts",
+          },
+        ],
+        "name": "flush",
+      },
+    ],
+    "extension": "openai_chatgpt",
+    "extension_group": "chatgpt",
+  },
+  {
+    "app": "localhost",
+    "cmd": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "agora_rtc",
+            "extension_group": "default",
+          },
+        ],
+        "name": "flush",
+      },
+    ],
+    "extension": "azure_tts",
+    "extension_group": "tts",
+  },
+  {
+    "app": "localhost",
+    "data": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "agora_rtc",
+            "extension_group": "default",
+          },
+        ],
+        "name": "data",
+      },
+    ],
+    "extension": "chat_transcriber",
+    "extension_group": "transcriber",
+  },
+  {
+    "app": "localhost",
+    "cmd": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "openai_chatgpt",
+            "extension_group": "chatgpt",
+          },
+        ],
+        "name": "flush",
+      },
+    ],
+    "extension": "interrupt_detector",
+    "extension_group": "default",
+  },
+]
+`;
+
+exports[`connection and edge convert each other   mutual convert > connections to edges 1`] = `
+[
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "1",
+    "label": "data",
+    "source": "1",
+    "sourceHandle": "text_data",
+    "target": "2",
+    "targetHandle": "text_data",
+  },
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "2",
+    "label": "data",
+    "source": "1",
+    "sourceHandle": "text_data",
+    "target": "3",
+    "targetHandle": "text_data",
+  },
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "3",
+    "label": "data",
+    "source": "1",
+    "sourceHandle": "text_data",
+    "target": "5",
+    "targetHandle": "text_data",
+  },
+  {
+    "data": {
+      "dataType": "cmd",
+    },
+    "id": "4",
+    "label": "cmd",
+    "source": "3",
+    "sourceHandle": "flush",
+    "target": "4",
+    "targetHandle": "flush",
+  },
+  {
+    "data": {
+      "dataType": "cmd",
+    },
+    "id": "5",
+    "label": "cmd",
+    "source": "4",
+    "sourceHandle": "flush",
+    "target": "1",
+    "targetHandle": "flush",
+  },
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "6",
+    "label": "data",
+    "source": "5",
+    "sourceHandle": "data",
+    "target": "1",
+    "targetHandle": "data",
+  },
+  {
+    "data": {
+      "dataType": "cmd",
+    },
+    "id": "7",
+    "label": "cmd",
+    "source": "2",
+    "sourceHandle": "flush",
+    "target": "3",
+    "targetHandle": "flush",
+  },
+]
+`;
+
+exports[`connection and edge convert each other   mutual convert > edges to connections 1`] = `
+[
+  {
+    "app": "localhost",
+    "data": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "interrupt_detector",
+            "extension_group": "default",
+          },
+        ],
+        "name": "text_data",
+      },
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "openai_chatgpt",
+            "extension_group": "chatgpt",
+          },
+        ],
+        "name": "text_data",
+      },
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "chat_transcriber",
+            "extension_group": "transcriber",
+          },
+        ],
+        "name": "text_data",
+      },
+    ],
+    "extension": "agora_rtc",
+    "extension_group": "default",
+  },
+  {
+    "app": "localhost",
+    "cmd": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "azure_tts",
+            "extension_group": "tts",
+          },
+        ],
+        "name": "flush",
+      },
+    ],
+    "extension": "openai_chatgpt",
+    "extension_group": "chatgpt",
+  },
+  {
+    "app": "localhost",
+    "cmd": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "agora_rtc",
+            "extension_group": "default",
+          },
+        ],
+        "name": "flush",
+      },
+    ],
+    "extension": "azure_tts",
+    "extension_group": "tts",
+  },
+  {
+    "app": "localhost",
+    "data": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "agora_rtc",
+            "extension_group": "default",
+          },
+        ],
+        "name": "data",
+      },
+    ],
+    "extension": "chat_transcriber",
+    "extension_group": "transcriber",
+  },
+  {
+    "app": "localhost",
+    "cmd": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "openai_chatgpt",
+            "extension_group": "chatgpt",
+          },
+        ],
+        "name": "flush",
+      },
+    ],
+    "extension": "interrupt_detector",
+    "extension_group": "default",
+  },
+]
+`;
+
+exports[`connection and edge convert each other > connections to edges 1`] = `
+[
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "1",
+    "label": "data",
+    "source": "1",
+    "sourceHandle": "text_data",
+    "target": "2",
+    "targetHandle": "text_data",
+  },
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "2",
+    "label": "data",
+    "source": "1",
+    "sourceHandle": "text_data",
+    "target": "3",
+    "targetHandle": "text_data",
+  },
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "3",
+    "label": "data",
+    "source": "1",
+    "sourceHandle": "text_data",
+    "target": "5",
+    "targetHandle": "text_data",
+  },
+  {
+    "data": {
+      "dataType": "cmd",
+    },
+    "id": "4",
+    "label": "cmd",
+    "source": "3",
+    "sourceHandle": "flush",
+    "target": "4",
+    "targetHandle": "flush",
+  },
+  {
+    "data": {
+      "dataType": "cmd",
+    },
+    "id": "5",
+    "label": "cmd",
+    "source": "4",
+    "sourceHandle": "flush",
+    "target": "1",
+    "targetHandle": "flush",
+  },
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "6",
+    "label": "data",
+    "source": "5",
+    "sourceHandle": "data",
+    "target": "1",
+    "targetHandle": "data",
+  },
+  {
+    "data": {
+      "dataType": "cmd",
+    },
+    "id": "7",
+    "label": "cmd",
+    "source": "2",
+    "sourceHandle": "flush",
+    "target": "3",
+    "targetHandle": "flush",
+  },
+]
+`;
+
+exports[`connection and edge convert each other > edges to connections 1`] = `
+[
+  {
+    "app": "localhost",
+    "data": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "interrupt_detector",
+            "extension_group": "default",
+          },
+        ],
+        "name": "text_data",
+      },
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "openai_chatgpt",
+            "extension_group": "chatgpt",
+          },
+        ],
+        "name": "text_data",
+      },
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "chat_transcriber",
+            "extension_group": "transcriber",
+          },
+        ],
+        "name": "text_data",
+      },
+    ],
+    "extension": "agora_rtc",
+    "extension_group": "default",
+  },
+  {
+    "app": "localhost",
+    "cmd": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "azure_tts",
+            "extension_group": "tts",
+          },
+        ],
+        "name": "flush",
+      },
+    ],
+    "extension": "openai_chatgpt",
+    "extension_group": "chatgpt",
+  },
+  {
+    "app": "localhost",
+    "cmd": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "agora_rtc",
+            "extension_group": "default",
+          },
+        ],
+        "name": "flush",
+      },
+    ],
+    "extension": "azure_tts",
+    "extension_group": "tts",
+  },
+  {
+    "app": "localhost",
+    "data": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "agora_rtc",
+            "extension_group": "default",
+          },
+        ],
+        "name": "data",
+      },
+    ],
+    "extension": "chat_transcriber",
+    "extension_group": "transcriber",
+  },
+  {
+    "app": "localhost",
+    "cmd": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "openai_chatgpt",
+            "extension_group": "chatgpt",
+          },
+        ],
+        "name": "flush",
+      },
+    ],
+    "extension": "interrupt_detector",
+    "extension_group": "default",
+  },
+]
+`;
+
+exports[`connection edge > connections to edges 1`] = `
+[
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "1",
+    "label": "data",
+    "source": "1",
+    "sourceHandle": "text_data",
+    "target": "2",
+    "targetHandle": "text_data",
+  },
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "2",
+    "label": "data",
+    "source": "1",
+    "sourceHandle": "text_data",
+    "target": "3",
+    "targetHandle": "text_data",
+  },
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "3",
+    "label": "data",
+    "source": "1",
+    "sourceHandle": "text_data",
+    "target": "5",
+    "targetHandle": "text_data",
+  },
+  {
+    "data": {
+      "dataType": "cmd",
+    },
+    "id": "4",
+    "label": "cmd",
+    "source": "3",
+    "sourceHandle": "flush",
+    "target": "4",
+    "targetHandle": "flush",
+  },
+  {
+    "data": {
+      "dataType": "cmd",
+    },
+    "id": "5",
+    "label": "cmd",
+    "source": "4",
+    "sourceHandle": "flush",
+    "target": "1",
+    "targetHandle": "flush",
+  },
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "6",
+    "label": "data",
+    "source": "5",
+    "sourceHandle": "data",
+    "target": "1",
+    "targetHandle": "data",
+  },
+  {
+    "data": {
+      "dataType": "cmd",
+    },
+    "id": "7",
+    "label": "cmd",
+    "source": "2",
+    "sourceHandle": "flush",
+    "target": "3",
+    "targetHandle": "flush",
+  },
+]
+`;
+
+exports[`connection edge > edges to connections 1`] = `
+[
+  {
+    "app": "localhost",
+    "data": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "interrupt_detector",
+            "extension_group": "default",
+          },
+        ],
+        "name": "text_data",
+      },
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "openai_chatgpt",
+            "extension_group": "chatgpt",
+          },
+        ],
+        "name": "text_data",
+      },
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "chat_transcriber",
+            "extension_group": "transcriber",
+          },
+        ],
+        "name": "text_data",
+      },
+    ],
+    "extension": "agora_rtc",
+    "extension_group": "default",
+  },
+  {
+    "app": "localhost",
+    "cmd": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "azure_tts",
+            "extension_group": "tts",
+          },
+        ],
+        "name": "flush",
+      },
+    ],
+    "extension": "openai_chatgpt",
+    "extension_group": "chatgpt",
+  },
+  {
+    "app": "localhost",
+    "cmd": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "agora_rtc",
+            "extension_group": "default",
+          },
+        ],
+        "name": "flush",
+      },
+    ],
+    "extension": "azure_tts",
+    "extension_group": "tts",
+  },
+  {
+    "app": "localhost",
+    "data": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "agora_rtc",
+            "extension_group": "default",
+          },
+        ],
+        "name": "data",
+      },
+    ],
+    "extension": "chat_transcriber",
+    "extension_group": "transcriber",
+  },
+  {
+    "app": "localhost",
+    "cmd": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "openai_chatgpt",
+            "extension_group": "chatgpt",
+          },
+        ],
+        "name": "flush",
+      },
+    ],
+    "extension": "interrupt_detector",
+    "extension_group": "default",
+  },
+]
+`;
+
+exports[`connection edge mutual convert > connections to edges 1`] = `
+[
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "1",
+    "label": "data",
+    "source": "1",
+    "sourceHandle": "text_data",
+    "target": "2",
+    "targetHandle": "text_data",
+  },
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "2",
+    "label": "data",
+    "source": "1",
+    "sourceHandle": "text_data",
+    "target": "3",
+    "targetHandle": "text_data",
+  },
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "3",
+    "label": "data",
+    "source": "1",
+    "sourceHandle": "text_data",
+    "target": "5",
+    "targetHandle": "text_data",
+  },
+  {
+    "data": {
+      "dataType": "cmd",
+    },
+    "id": "4",
+    "label": "cmd",
+    "source": "3",
+    "sourceHandle": "flush",
+    "target": "4",
+    "targetHandle": "flush",
+  },
+  {
+    "data": {
+      "dataType": "cmd",
+    },
+    "id": "5",
+    "label": "cmd",
+    "source": "4",
+    "sourceHandle": "flush",
+    "target": "1",
+    "targetHandle": "flush",
+  },
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "6",
+    "label": "data",
+    "source": "5",
+    "sourceHandle": "data",
+    "target": "1",
+    "targetHandle": "data",
+  },
+  {
+    "data": {
+      "dataType": "cmd",
+    },
+    "id": "7",
+    "label": "cmd",
+    "source": "2",
+    "sourceHandle": "flush",
+    "target": "3",
+    "targetHandle": "flush",
+  },
+]
+`;
+
+exports[`connection edge mutual convert > edges to connections 1`] = `
+[
+  {
+    "app": "localhost",
+    "data": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "interrupt_detector",
+            "extension_group": "default",
+          },
+        ],
+        "name": "text_data",
+      },
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "openai_chatgpt",
+            "extension_group": "chatgpt",
+          },
+        ],
+        "name": "text_data",
+      },
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "chat_transcriber",
+            "extension_group": "transcriber",
+          },
+        ],
+        "name": "text_data",
+      },
+    ],
+    "extension": "agora_rtc",
+    "extension_group": "default",
+  },
+  {
+    "app": "localhost",
+    "cmd": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "azure_tts",
+            "extension_group": "tts",
+          },
+        ],
+        "name": "flush",
+      },
+    ],
+    "extension": "openai_chatgpt",
+    "extension_group": "chatgpt",
+  },
+  {
+    "app": "localhost",
+    "cmd": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "agora_rtc",
+            "extension_group": "default",
+          },
+        ],
+        "name": "flush",
+      },
+    ],
+    "extension": "azure_tts",
+    "extension_group": "tts",
+  },
+  {
+    "app": "localhost",
+    "data": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "agora_rtc",
+            "extension_group": "default",
+          },
+        ],
+        "name": "data",
+      },
+    ],
+    "extension": "chat_transcriber",
+    "extension_group": "transcriber",
+  },
+  {
+    "app": "localhost",
+    "cmd": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "openai_chatgpt",
+            "extension_group": "chatgpt",
+          },
+        ],
+        "name": "flush",
+      },
+    ],
+    "extension": "interrupt_detector",
+    "extension_group": "default",
+  },
+]
+`;
+
+exports[`connection-edge > connections to edges 1`] = `
+[
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "1",
+    "label": "data",
+    "source": "1",
+    "sourceHandle": "text_data",
+    "target": "2",
+    "targetHandle": "text_data",
+  },
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "2",
+    "label": "data",
+    "source": "1",
+    "sourceHandle": "text_data",
+    "target": "3",
+    "targetHandle": "text_data",
+  },
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "3",
+    "label": "data",
+    "source": "1",
+    "sourceHandle": "text_data",
+    "target": "5",
+    "targetHandle": "text_data",
+  },
+  {
+    "data": {
+      "dataType": "cmd",
+    },
+    "id": "4",
+    "label": "cmd",
+    "source": "3",
+    "sourceHandle": "flush",
+    "target": "4",
+    "targetHandle": "flush",
+  },
+  {
+    "data": {
+      "dataType": "cmd",
+    },
+    "id": "5",
+    "label": "cmd",
+    "source": "4",
+    "sourceHandle": "flush",
+    "target": "1",
+    "targetHandle": "flush",
+  },
+  {
+    "data": {
+      "dataType": "data",
+    },
+    "id": "6",
+    "label": "data",
+    "source": "5",
+    "sourceHandle": "data",
+    "target": "1",
+    "targetHandle": "data",
+  },
+  {
+    "data": {
+      "dataType": "cmd",
+    },
+    "id": "7",
+    "label": "cmd",
+    "source": "2",
+    "sourceHandle": "flush",
+    "target": "3",
+    "targetHandle": "flush",
+  },
+]
+`;
+
+exports[`connection-edge > edges to connections 1`] = `
+[
+  {
+    "app": "localhost",
+    "data": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "interrupt_detector",
+            "extension_group": "default",
+          },
+        ],
+        "name": "text_data",
+      },
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "openai_chatgpt",
+            "extension_group": "chatgpt",
+          },
+        ],
+        "name": "text_data",
+      },
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "chat_transcriber",
+            "extension_group": "transcriber",
+          },
+        ],
+        "name": "text_data",
+      },
+    ],
+    "extension": "agora_rtc",
+    "extension_group": "default",
+  },
+  {
+    "app": "localhost",
+    "cmd": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "azure_tts",
+            "extension_group": "tts",
+          },
+        ],
+        "name": "flush",
+      },
+    ],
+    "extension": "openai_chatgpt",
+    "extension_group": "chatgpt",
+  },
+  {
+    "app": "localhost",
+    "cmd": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "agora_rtc",
+            "extension_group": "default",
+          },
+        ],
+        "name": "flush",
+      },
+    ],
+    "extension": "azure_tts",
+    "extension_group": "tts",
+  },
+  {
+    "app": "localhost",
+    "data": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "agora_rtc",
+            "extension_group": "default",
+          },
+        ],
+        "name": "data",
+      },
+    ],
+    "extension": "chat_transcriber",
+    "extension_group": "transcriber",
+  },
+  {
+    "app": "localhost",
+    "cmd": [
+      {
+        "dest": [
+          {
+            "app": "localhost",
+            "extension": "openai_chatgpt",
+            "extension_group": "chatgpt",
+          },
+        ],
+        "name": "flush",
+      },
+    ],
+    "extension": "interrupt_detector",
+    "extension_group": "default",
+  },
+]
+`;

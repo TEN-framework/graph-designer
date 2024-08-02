@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint --fix",
-    "prettier": "prettier . --write --ignore-unknown"
+    "prettier": "prettier . --write --ignore-unknown",
+    "test": "vitest",
+    "coverage": "vitest run --coverage"
   },
   "engines": {
     "node": "^18.0.0 || >=20.0.0"
@@ -34,7 +36,8 @@
     "autoprefixer": "^10.4.16",
     "postcss": "^8.4.31",
     "sass": "^1.77.5",
-    "prettier": "^3.2.5"
+    "prettier": "^3.2.5",
+    "vitest": "^2.0.5"
   },
   "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
 }

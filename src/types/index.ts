@@ -60,13 +60,13 @@ export interface IExtension {
     data_out?: any[]
     pcm_frame_in?: any[]
     pcm_frame_out?: any[]
-    img_frame_in?: any[]
-    img_frame_out?: any[]
+    image_frame_in?: any[]
+    image_frame_out?: any[]
     property?: IExtensionPropertyTypes
   }
   app?: string
   extension_group: string
-  property?: IExtensionProperty
+  property?: IExtensionProperty | null
 }
 
 export interface CustomEdge extends Edge {

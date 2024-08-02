@@ -172,13 +172,13 @@ export const extensionToNode = (
       outputs.push({ name: output.name, type: "pcm_frame", status: "default" })
     })
   }
-  if (api?.img_frame_in) {
-    api.img_frame_in.forEach((input) => {
+  if (api?.image_frame_in) {
+    api.image_frame_in.forEach((input) => {
       inputs.push({ name: input.name, type: "img_frame", status: "default" })
     })
   }
-  if (api?.img_frame_out) {
-    api.img_frame_out.forEach((output) => {
+  if (api?.image_frame_out) {
+    api.image_frame_out.forEach((output) => {
       outputs.push({ name: output.name, type: "img_frame", status: "default" })
     })
   }
