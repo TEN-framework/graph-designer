@@ -21,7 +21,7 @@ npm install
 
 ## Config
 
-Change .env.example to .env. and fill in the following parameters correctly
+Change the file name .env.example to .env and fill in the following parameters correctly
 
 ```
 NEXT_PUBLIC_BASE_URL=<YOUR_BASE_URL>
