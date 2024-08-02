@@ -1,14 +1,18 @@
-import { message } from "antd"
-import { camelToSnake } from "./utils"
 import {
   IConnection,
   IExtension,
   ICompatibleConnection,
   IGraphData,
 } from "@/types"
-import { DEFAULT_EXTENTION_GROUP, API_URL } from "./constant"
+import { DEFAULT_EXTENTION_GROUP, API_URL, USE_MOCK } from "./constant"
+import { MOCK_CONNECTIONS, MOCK_EXTENTIONS, MOCK_INSTALLED_EXTENTIONS } from "./mock"
 
 export const apiGetVersion = async () => {
+  if (USE_MOCK) {
+    return {
+      version: "mock"
+    }
+  }
   const res = await fetch(`${API_URL}/version`, {
     method: "GET",
   })
@@ -20,6 +24,9 @@ export const apiGetVersion = async () => {
 }
 
 export const apiGetInstalledExtension = async () => {
+  if (USE_MOCK) {
+    return MOCK_INSTALLED_EXTENTIONS
+  }
   const res = await fetch(`${API_URL}/addons/extensions`, {
     method: "GET",
   })
@@ -41,6 +48,12 @@ export const apiGetInstalledExtension = async () => {
 }
 
 export const apiAllGetGraph = async () => {
+  if (USE_MOCK) {
+    return [{
+      auto_start: true,
+      name: "mock_graph",
+    }]
+  }
   const res = await fetch(`${API_URL}/graphs`, {
     method: "GET",
   })
@@ -54,6 +67,9 @@ export const apiAllGetGraph = async () => {
 export const apiGetGraphExtension = async (
   graphName: string,
 ): Promise<IExtension[]> => {
+  if (USE_MOCK) {
+    return MOCK_EXTENTIONS
+  }
   const res = await fetch(`${API_URL}/graphs/${graphName}/extensions`, {
     method: "GET",
   })
@@ -67,6 +83,9 @@ export const apiGetGraphExtension = async (
 export const apiGetGraphConnection = async (
   graphName: string,
 ): Promise<IConnection[]> => {
+  if (USE_MOCK) {
+    return MOCK_CONNECTIONS
+  }
   const res = await fetch(`${API_URL}/graphs/${graphName}/connections`, {
     method: "GET",
   })

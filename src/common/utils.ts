@@ -202,7 +202,7 @@ export const extensionToNode = (
       inputs: inputs,
       outputs: outputs,
       extensionGroup: extension_group,
-      property: property,
+      property: property ? property : undefined,
       propertyTypes: propertyTypes,
     },
   }

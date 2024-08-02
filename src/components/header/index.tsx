@@ -1,6 +1,3 @@
-"use client"
-
-import { useNodes, useEdges } from "@xyflow/react"
 import { Button, Select, message } from "antd"
 import { use, useEffect, useMemo, useState } from "react"
 import {
@@ -16,20 +13,14 @@ import {
   apiSaveGraph,
 } from "@/common"
 import { setAutoStart, setCurGraphName } from "@/store/reducers/global"
-import { IGraph, IGraphData, ExtensionNode } from "@/types"
+import { IGraph } from "@/types"
 
 import styles from "./index.module.scss"
 
 const Header = () => {
   const [messageApi, contextHolder] = message.useMessage()
   const dispatch = useAppDispatch()
-  const nodes = useNodes()
-  const edges = useEdges()
   const curGraphName = useAppSelector((state) => state.global.curGraphName)
-  const autoStart = useAppSelector((state) => state.global.autoStart)
-  const installedExtensions = useAppSelector(
-    (state) => state.global.installedExtensions,
-  )
   const saveStatus = useAppSelector((state) => state.global.saveStatus)
   const [version, setVersion] = useState("")
   const [graphArr, setGraphArr] = useState<IGraph[]>([])

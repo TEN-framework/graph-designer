@@ -66,7 +66,7 @@ export interface IExtension {
   }
   app?: string
   extension_group: string
-  property?: IExtensionProperty | null
+  property: IExtensionProperty | null
 }
 
 export interface CustomEdge extends Edge {
