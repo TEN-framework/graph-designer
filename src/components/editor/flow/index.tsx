@@ -98,7 +98,7 @@ const Flow = () => {
   const installedExtensions = useAppSelector(
     (state) => state.global.installedExtensions,
   )
-  const { screenToFlowPosition } = useReactFlow()
+  const { screenToFlowPosition, fitView } = useReactFlow()
   const [nodes, setNodes, onNodesChange] =
     useNodesState<ExtensionNode>(layoutedNodes)
   const [edges, setEdges, onEdgesChange] =
@@ -115,7 +115,12 @@ const Flow = () => {
   }, [nodes, edges])
 
   useEffect(() => {
+    fitView();
+  }, [nodes.length, curGraphName]);
+
+  useEffect(() => {
     if (curGraphName) {
+      editorData.clear()
       getData()
     }
   }, [curGraphName])
@@ -127,25 +132,30 @@ const Flow = () => {
   }, [nodes.length, edges.length])
 
   const getData = async () => {
-    const extensions = await apiGetGraphExtension(curGraphName)
-    logger.debug("graph extensions", extensions)
-    const nodes = extensionsToNodes(extensions)
-    logger.debug("graph nodes", nodes)
-    const connections = await apiGetGraphConnection(curGraphName)
-    logger.debug("graph connections", connections)
-    const edges = connectionsToEdges(connections, nodes)
-    logger.debug("graph edges", edges)
+    try {
+      const extensions = await apiGetGraphExtension(curGraphName)
+      logger.debug("graph extensions", extensions)
+      const nodes = extensionsToNodes(extensions)
+      logger.debug("graph nodes", nodes)
+      const connections = await apiGetGraphConnection(curGraphName)
+      logger.debug("graph connections", connections)
+      const edges = connectionsToEdges(connections, nodes)
+      logger.debug("graph edges", edges)
 
-    const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
-      nodes,
-      edges,
-      "LR",
-    )
+      const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
+        nodes,
+        edges,
+        "LR",
+      )
 
-    setNodes(layoutedNodes)
-    setEdges(layoutedEdges)
+      setNodes(layoutedNodes)
+      setEdges(layoutedEdges)
 
-    hasInit = true
+      hasInit = true
+    } catch (err: any) {
+      messageApi.error(err.message)
+      throw err
+    }
   }
 
   const saveFlow = async (nodes: ExtensionNode[], edges: Edge[]) => {
@@ -337,7 +347,7 @@ const Flow = () => {
     logger.debug("onDelete", nodes, edges)
     nodes.forEach(node => {
       const { data } = node
-      editorData.delNodeId(data.extensionGroup, data.name)
+      editorData.delNode(data.extensionGroup, data.name)
     })
   }
 

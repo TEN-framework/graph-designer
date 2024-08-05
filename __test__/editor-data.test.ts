@@ -20,9 +20,9 @@ describe('editorData', () => {
   test('getNodeId', () => {
     expect(testEditorData.getNodeId('group1', 'ext1')).toBe('node1')
   })
-  test('delNodeId', () => {
-    testEditorData.delNodeId('group1', 'ext1')
+  test('delNode', () => {
+    testEditorData.delNode('group1', 'ext1')
     expect(testEditorData.nodeMap.get('group1')?.ext1).toBe(undefined)
   })
-  
+
 })

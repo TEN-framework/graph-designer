@@ -23,8 +23,7 @@ import { logger } from "./logger"
 import { editorData } from "./data"
 import dagre from "@dagrejs/dagre"
 
-const dagreGraph = new dagre.graphlib.Graph()
-dagreGraph.setDefaultEdgeLabel(() => ({}))
+
 
 function _pad(num: number) {
   return num.toString().padStart(2, "0")
@@ -77,8 +76,10 @@ export const getLayoutedElements = (
   edges: CustomEdge[]
 } => {
   const nodeWidth = DEFAULT_NODE_WIDTH
-  const nodeHeight = 100
+  const nodeHeight = 50
   const isHorizontal = direction === "LR"
+  const dagreGraph = new dagre.graphlib.Graph()
+  dagreGraph.setDefaultEdgeLabel(() => ({}))
   dagreGraph.setGraph({
     rankdir: direction,
     nodesep: 200,
@@ -86,15 +87,20 @@ export const getLayoutedElements = (
     ranksep: 120,
   })
 
+  let tempNodeMap = new Map()
+
   nodes.forEach((node) => {
     let { data } = node
     const { inputs = [], outputs = [] } = data
-    const finalHeight =
-      Math.max(inputs.length, outputs.length) * DEFAULT_HANDLE_HEIGHT +
-      nodeHeight
+    const finNodeWidth = nodeWidth
+    const finNodeHeight = nodeHeight + Math.max(inputs.length, outputs.length) * DEFAULT_HANDLE_HEIGHT
     dagreGraph.setNode(node.id, {
-      width: DEFAULT_NODE_WIDTH,
-      height: finalHeight,
+      width: finNodeWidth,
+      height: finNodeHeight,
+    })
+    tempNodeMap.set(node.id, {
+      width: finNodeWidth,
+      height: finNodeHeight,
     })
   })
 
@@ -106,13 +112,14 @@ export const getLayoutedElements = (
 
   const newNodes = nodes.map((node) => {
     const nodeWithPosition = dagreGraph.node(node.id)
+    const { width, height } = tempNodeMap.get(node.id)
     const newNode: ExtensionNode = {
       ...node,
       targetPosition: isHorizontal ? Position.Left : Position.Top,
       sourcePosition: isHorizontal ? Position.Right : Position.Bottom,
       position: {
-        x: nodeWithPosition.x - nodeWidth / 2,
-        y: nodeWithPosition.y - nodeHeight / 2,
+        x: nodeWithPosition.x - width / 2,
+        y: nodeWithPosition.y - height / 2,
       },
     }
 

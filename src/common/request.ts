@@ -18,7 +18,7 @@ export const apiGetVersion = async () => {
   })
   const data = await res.json()
   if (data.status != "ok") {
-    throw new Error("Failed to get version")
+    throw new Error(data.message)
   }
   return data?.data ?? {}
 }
@@ -32,7 +32,7 @@ export const apiGetInstalledExtension = async () => {
   })
   const data = await res.json()
   if (data.status != "ok") {
-    throw new Error("Failed to get installed extensions")
+    throw new Error(data.message)
   }
   let arr = data?.data ?? []
 
@@ -59,7 +59,7 @@ export const apiAllGetGraph = async () => {
   })
   const data = await res.json()
   if (data.status != "ok") {
-    throw new Error("Failed to get all graphs")
+    throw new Error(data.message)
   }
   return data?.data ?? []
 }
@@ -75,7 +75,7 @@ export const apiGetGraphExtension = async (
   })
   const data = await res.json()
   if (data.status != "ok") {
-    throw new Error("Failed to get graph extensions")
+    throw new Error(data.message)
   }
   return (data?.data ?? []) as IExtension[]
 }
@@ -91,7 +91,7 @@ export const apiGetGraphConnection = async (
   })
   const data = await res.json()
   if (data.status != "ok") {
-    throw new Error("Failed to get graph connections")
+    throw new Error(data.message)
   }
   return (data?.data ?? []) as IConnection[]
 }
@@ -127,7 +127,7 @@ export const apiUpdateGraph = async (
   })
   const data = await res.json()
   if (data.status != "ok") {
-    throw new Error("Failed to update graph")
+    throw new Error(data.message)
   }
   return data
 }
@@ -141,7 +141,7 @@ export const apiSaveGraph = async () => {
   })
   const data = await res.json()
   if (data.status != "ok") {
-    throw new Error("Failed to save graph")
+    throw new Error(data.message)
   }
   return data
 }

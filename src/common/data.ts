@@ -6,7 +6,7 @@ export class EditorData {
   nodeId: number = 1
   edgeId: number = 1
 
-  constructor() {}
+  constructor() { }
 
   genEdgeId() {
     return `${this.edgeId++}`
@@ -31,7 +31,7 @@ export class EditorData {
     )
   }
 
-  delNodeId(extensionGroup: string, extensionname: string) {
+  delNode(extensionGroup: string, extensionname: string) {
     let data = this.nodeMap.get(extensionGroup)
     if (data) {
       delete data[extensionname]
@@ -46,9 +46,15 @@ export class EditorData {
     }
     data[extensionname] = nodeId
   }
+
+  clear() {
+    this.nodeMap.clear()
+    this.nodeId = 1
+    this.edgeId = 1
+  }
 }
 
-// TODO: just for test
+
 export const editorData = new EditorData()
 
 if (process.env.NODE_ENV === "development") {

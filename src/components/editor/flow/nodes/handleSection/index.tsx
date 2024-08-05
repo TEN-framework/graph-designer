@@ -49,12 +49,6 @@ const HandleSection = (props: HandleSectionProps) => {
     }
 
     if (width > DEFAULT_NODE_WIDTH) {
-
-    }
-
-
-
-    if (width > DEFAULT_NODE_WIDTH) {
       width += DEFAULT_HANDLE_GAP
       onHandleWidthChange?.(width)
     }
@@ -68,62 +62,69 @@ const HandleSection = (props: HandleSectionProps) => {
   ])
 
 
-  return <div
-    className={styles.extensionHandleWrapper}
+  return maxLen ? <div
+    className={
+      styles.extensionHandleWrapper
+    }
     style={{
       height: DEFAULT_HANDLE_HEIGHT * maxLen,
     }}
   >
-    {inputs.map((input, index) => (
-      <div
-        key={index}
-        className={`${styles.extensionHandleItem} ${styles.leftItem}`}
-        style={{
-          top: index * DEFAULT_HANDLE_HEIGHT,
-          height: DEFAULT_HANDLE_HEIGHT,
-        }}
-        ref={(el) => {
-          leftHandleListRef.current[index] = el!
-        }}
-      >
-        <Handle
-          type="target"
-          className={styles.handle}
-          position={Position.Left}
-          id={input.name}
+    {
+      inputs.map((input, index) => (
+        <div
+          key={index}
+          className={`${styles.extensionHandleItem} ${styles.leftItem}`}
           style={{
-            borderColor: getHandlerColor(input.status),
+            top: index * DEFAULT_HANDLE_HEIGHT,
+            height: DEFAULT_HANDLE_HEIGHT,
           }}
-        ></Handle>
-        <span className={styles.text}>{input.name}</span>
-      </div>
-    ))}
-    {outputs.map((output, index) => (
-      <div
-        key={index}
-        className={`${styles.extensionHandleItem} ${styles.rightItem}`}
-        style={{
-          top: index * DEFAULT_HANDLE_HEIGHT,
-          height: DEFAULT_HANDLE_HEIGHT,
-        }}
-        ref={(el) => {
-          rightHandleListRef.current[index] = el!
-        }}
-      >
-        <Handle
-          className={styles.handle}
-          type="source"
-          position={Position.Right}
-          id={output.name}
+          ref={(el) => {
+            leftHandleListRef.current[index] = el!
+          }}
+        >
+          <Handle
+            type="target"
+            className={styles.handle}
+            position={Position.Left}
+            id={input.name}
+            style={{
+              borderColor: getHandlerColor(input.status),
+            }}
+          ></Handle>
+          <span className={styles.text}>{input.name}</span>
+        </div>
+      ))
+    }
+    {
+      outputs.map((output, index) => (
+        <div
+          key={index}
+          className={`${styles.extensionHandleItem} ${styles.rightItem}`}
           style={{
-            borderColor: getHandlerColor(output.status),
+            top: index * DEFAULT_HANDLE_HEIGHT,
+            height: DEFAULT_HANDLE_HEIGHT,
           }}
-        ></Handle>
-        <span className={styles.text}>{output.name}</span>
-      </div>
-    ))}
-  </div>
+          ref={(el) => {
+            rightHandleListRef.current[index] = el!
+          }}
+        >
+          <Handle
+            className={styles.handle}
+            type="source"
+            position={Position.Right}
+            id={output.name}
+            style={{
+              borderColor: getHandlerColor(output.status),
+            }}
+          ></Handle>
+          <span className={styles.text}>{output.name}</span>
+        </div>
+      ))
+    }
+  </div > : null
 }
+
 
 
 export default HandleSection
