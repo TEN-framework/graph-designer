@@ -68,26 +68,26 @@ const Header = () => {
     }
   }
 
-  const SaveIcon = useMemo(() => {
-    if (saveStatus == "saving") {
-      return <LoadingOutlined className={styles.saveIcon}></LoadingOutlined>
-    } else if (saveStatus == "success") {
-      return <CheckOutlined className={styles.saveIcon}></CheckOutlined>
-    } else if (saveStatus == "failed") {
-      return <CloseOutlined className={styles.saveIcon}></CloseOutlined>
-    }
-  }, [saveStatus])
+  // const SaveIcon = useMemo(() => {
+  //   if (saveStatus == "saving") {
+  //     return <LoadingOutlined className={styles.saveIcon}></LoadingOutlined>
+  //   } else if (saveStatus == "success") {
+  //     return <CheckOutlined className={styles.saveIcon}></CheckOutlined>
+  //   } else if (saveStatus == "failed") {
+  //     return <CloseOutlined className={styles.saveIcon}></CloseOutlined>
+  //   }
+  // }, [saveStatus])
 
-  const SaveText = useMemo(() => {
-    if (saveStatus == "saving") {
-      return "Saving..."
-    } else if (saveStatus == "success") {
-      return "Saved"
-    } else if (saveStatus == "failed") {
-      return "Save Failed"
-    }
-    return null
-  }, [saveStatus])
+  // const SaveText = useMemo(() => {
+  //   if (saveStatus == "saving") {
+  //     return "Saving..."
+  //   } else if (saveStatus == "success") {
+  //     return "Saved"
+  //   } else if (saveStatus == "failed") {
+  //     return "Save Failed"
+  //   }
+  //   return null
+  // }, [saveStatus])
 
   return (
     <>
@@ -101,10 +101,10 @@ const Header = () => {
             options={options}
             onChange={onGraphChange}
           ></Select>
-          <span className={styles.saveContent}>
+          {/* <span className={styles.saveContent}>
             {SaveIcon}
             {SaveText}
-          </span>
+          </span> */}
         </span>
         <Button
           className={styles.saveBtn}
