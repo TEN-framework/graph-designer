@@ -331,16 +331,19 @@ export const nodesToExtensions = (
 ): IExtension[] => {
   return nodes.map((node) => {
     const { data } = node
-    const { extensionGroup, name, addon, property } = data
-    // const
+    const { extensionGroup, name, addon, property = null } = data
     const extension = installedExtensions.find((i) => i.addon == addon)
     if (!extension) {
       throw new Error(
         `Invalid extension: ${name}, not found in installed extensions`,
       )
     }
+    const { api } = extension
     return {
-      ...extension,
+      app: DEFAULT_APP,
+      api,
+      addon,
+      name,
       property,
       extension_group: extensionGroup,
     }

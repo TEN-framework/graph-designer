@@ -64,7 +64,7 @@ export interface IExtension {
     image_frame_out?: any[]
     property?: IExtensionPropertyTypes
   }
-  app?: string
+  app: string
   extension_group: string
   property: IExtensionProperty | null
 }

@@ -39,7 +39,7 @@ export const apiGetInstalledExtension = async () => {
   return arr.map((item: IExtension) => {
     return {
       ...item,
-      addon: item.name,
+      addon: item.name, // addon like class name
       app: "localhost",
       extension_group: DEFAULT_EXTENTION_GROUP,
       property: null,
