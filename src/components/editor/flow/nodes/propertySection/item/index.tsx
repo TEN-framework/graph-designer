@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react"
 import { Input, Switch, InputNumber, message } from "antd"
-import { hasDecimalPoint, isNumberType } from "@/common"
+import { getZeroValue, hasDecimalPoint, isNumberType } from "@/common"
 import { PropertyType, InputType } from "@/types"
 
 import styles from "./index.module.scss"
@@ -64,14 +64,15 @@ const CustomInput = (CustomInputProps: CustomInputProps) => {
 
   const onChange = (v: any) => {
     let value
-    if (typeof v === "object") {
-      if (v.target.value) {
-        value = v.target.value
-      }
+    if (v != null && typeof v === "object") {
+      value = v?.target?.value
     } else {
       value = v
     }
     if (checkValue(value, propertyType, inputType)) {
+      if (value === null || value === undefined) {
+        value = getZeroValue(inputType)
+      }
       setValue(value)
       setStatus("")
       if (inputType === "boolean") {

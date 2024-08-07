@@ -11,7 +11,7 @@ import {
   CustomEdge,
   LayoutDirection,
   PropertyType,
-  IExtensionPropertyTypes,
+  InputType,
 } from "@/types"
 import {
   DEFAULT_APP,
@@ -62,6 +62,15 @@ export const isNumberType = (type: PropertyType): boolean => {
   return type === "int8" || type === "int16" || type === "int32" || type === "int64" ||
     type === "Uint8" || type === "Uint16" || type === "Uint32" || type === "Uint64" ||
     type === "float32" || type === "float64"
+}
+
+export const getZeroValue = (type: InputType) => {
+  if (type === "number") {
+    return 0
+  } else if (type === "boolean") {
+    return false
+  }
+  return ""
 }
 
 // ----------------------- graph ---------------------
@@ -327,18 +336,7 @@ export const connectionsToEdges = (
   return edges
 }
 
-// export const getDataType = (connection: IConnection): DataType => {
-//   if (connection.cmd) {
-//     return "cmd"
-//   } else if (connection.data) {
-//     return "data"
-//   } else if (connection.pcm_frame) {
-//     return "pcm_frame"
-//   } else if (connection.img_frame) {
-//     return "img_frame"
-//   }
-//   throw new Error(`Invalid connection: ${connection} in getDataType`)
-// }
+
 
 export const nodesToExtensions = (
   nodes: ExtensionNode[],
