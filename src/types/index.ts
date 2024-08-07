@@ -31,7 +31,7 @@ export type ExtensionNode = Node<
     extensionGroup: string
     inputs: InOutData[]
     outputs: InOutData[],
-    property?: IExtensionProperty
+    property: IExtensionProperty | null
     propertyTypes?: IExtensionPropertyTypes
   },
   "extension"
