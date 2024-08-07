@@ -11,7 +11,7 @@ import {
   CustomEdge,
   LayoutDirection,
   PropertyType,
-  IExtensionPropertyTypes
+  IExtensionPropertyTypes,
 } from "@/types"
 import {
   DEFAULT_APP,
@@ -221,77 +221,92 @@ const connectionToEdges = (
 ): CustomEdge[] => {
   let edges: CustomEdge[] = []
   const {
-    cmd = [],
-    data = [],
-    pcm_frame = [],
-    img_frame = [],
+    cmd,
+    data,
+    pcm_frame,
+    img_frame,
     extension,
     extension_group,
   } = connection
   const sourceNodeId = editorData.getNodeId(extension_group, extension)
-  const dataType = getDataType(connection)
-  let finalData: IConnectionData[] = []
-  if (dataType == "cmd") {
-    finalData = cmd
-  } else if (dataType == "data") {
-    finalData = data
-  } else if (dataType == "pcm_frame") {
-    finalData = pcm_frame
-  } else if (dataType == "img_frame") {
-    finalData = img_frame
+  const sourceNode = nodes.find((i) => i.id == sourceNodeId)
+  if (!sourceNode) {
+    logger.warn(`Invalid source node: ${sourceNodeId}`)
+    return edges
   }
-  finalData.forEach((i) => {
-    const { dest = [], name } = i
-    dest.forEach((d) => {
-      const sourceHandleId = `${name}`
-      const targetNodeId = editorData.getNodeId(d.extension_group, d.extension)
-      const targetHandleId = `${name}`
+  let finalData: {
+    [key in DataType]?: IConnectionData[]
+  } = {}
+  if (cmd?.length) {
+    finalData["cmd"] = cmd
+  }
+  if (data?.length) {
+    finalData["data"] = data
+  }
+  if (pcm_frame?.length) {
+    finalData["pcm_frame"] = pcm_frame
+  }
+  if (img_frame?.length) {
+    finalData["img_frame"] = img_frame
+  }
+  const keys = Object.keys(finalData) as Array<keyof {
+    [key in DataType]?: IConnectionData[]
+  }>
+  keys.forEach((key) => {
+    let data = finalData[key]
+    let dataType = key
+    data?.forEach((d) => {
+      const { dest = [], name } = d
+      dest.forEach((destItem) => {
+        const targetNodeId = editorData.getNodeId(destItem.extension_group, destItem.extension)
+        const targetHandleId = `${name}`
 
-      const sourceNode = nodes.find((i) => i.id == sourceNodeId)
-      if (!sourceNode) {
-        logger.warn(`Invalid source node: ${sourceNodeId}`)
-        return
-      }
-      let hasOutputHandle = sourceNode.data.outputs.some(
-        (output) => output.name == name,
-      )
-      if (!hasOutputHandle) {
-        logger.warn(
-          `Invalid output handle: ${name} in source node: ${sourceNode.data.name}`,
+        const sourceHandleId = `${name}`
+        let hasOutputHandle = sourceNode.data.outputs.some(
+          (output) => output.name == name,
         )
-        return
-      }
+        if (!hasOutputHandle) {
+          logger.warn(
+            `Invalid output handle: ${name} in source node: ${sourceNode.data.name}`,
+          )
+          return
+        }
 
-      const targetNode = nodes.find((i) => i.id == targetNodeId)
-      if (!targetNode) {
-        logger.warn(`Invalid target node: ${targetNodeId}`)
-        return
-      }
-      let hasInputHandle = targetNode.data.inputs.some(
-        (input) => input.name == name,
-      )
-      if (!hasInputHandle) {
-        logger.warn(
-          `Invalid input handle: ${name} in target node: ${targetNode.data.name}`,
+        const targetNode = nodes.find((i) => i.id == targetNodeId)
+        if (!targetNode) {
+          logger.warn(`Invalid target node: ${targetNodeId}`)
+          return
+        }
+        let hasInputHandle = targetNode.data.inputs.some(
+          (input) => input.name == name,
         )
-        return
-      }
+        if (!hasInputHandle) {
+          logger.warn(
+            `Invalid input handle: ${name} in target node: ${targetNode.data.name}`,
+          )
+          return
+        }
 
-      let edg = {
-        id: editorData.genEdgeId(),
-        source: sourceNodeId,
-        sourceHandle: sourceHandleId,
-        target: targetNodeId,
-        targetHandle: targetHandleId,
-        data: {
-          dataType,
-        },
-        label: dataType,
-      }
+        let edg = {
+          id: editorData.genEdgeId(),
+          source: sourceNodeId,
+          sourceHandle: sourceHandleId,
+          target: targetNodeId,
+          targetHandle: targetHandleId,
+          data: {
+            dataType,
+          },
+          label: dataType,
+        }
 
-      edges.push(edg)
+        edges.push(edg)
+      })
+
+
     })
   })
+
+
 
   return edges
 }
@@ -312,18 +327,18 @@ export const connectionsToEdges = (
   return edges
 }
 
-export const getDataType = (connection: IConnection): DataType => {
-  if (connection.cmd) {
-    return "cmd"
-  } else if (connection.data) {
-    return "data"
-  } else if (connection.pcm_frame) {
-    return "pcm_frame"
-  } else if (connection.img_frame) {
-    return "img_frame"
-  }
-  throw new Error(`Invalid connection: ${connection} in getDataType`)
-}
+// export const getDataType = (connection: IConnection): DataType => {
+//   if (connection.cmd) {
+//     return "cmd"
+//   } else if (connection.data) {
+//     return "data"
+//   } else if (connection.pcm_frame) {
+//     return "pcm_frame"
+//   } else if (connection.img_frame) {
+//     return "img_frame"
+//   }
+//   throw new Error(`Invalid connection: ${connection} in getDataType`)
+// }
 
 export const nodesToExtensions = (
   nodes: ExtensionNode[],

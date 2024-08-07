@@ -97,7 +97,7 @@ export interface IGraph {
 
 export interface IGraphData {
   auto_start: boolean
-  extensions: IExtension[]
+  nodes: IExtension[]
   connections: IConnection[]
 }
 

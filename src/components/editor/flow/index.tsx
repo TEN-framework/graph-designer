@@ -115,13 +115,10 @@ const Flow = () => {
   }, [nodes, edges])
 
   useEffect(() => {
-    fitView();
-  }, [nodes.length, curGraphName]);
-
-  useEffect(() => {
     if (curGraphName) {
       editorData.clear()
       getData()
+      fitView();
     }
   }, [curGraphName])
 
@@ -133,6 +130,7 @@ const Flow = () => {
 
   const getData = async () => {
     try {
+      logger.debug("-------------- getData start --------------")
       const extensions = await apiGetGraphExtension(curGraphName)
       logger.debug("graph extensions", extensions)
       const nodes = extensionsToNodes(extensions)
@@ -141,6 +139,7 @@ const Flow = () => {
       logger.debug("graph connections", connections)
       const edges = connectionsToEdges(connections, nodes)
       logger.debug("graph edges", edges)
+      logger.debug("-------------- getData end --------------")
 
       const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
         nodes,
@@ -160,18 +159,21 @@ const Flow = () => {
 
   const saveFlow = async (nodes: ExtensionNode[], edges: Edge[]) => {
     try {
+      logger.debug("------------------- saveFlow start -------------------")
       dispatch(setSaveStatus("saving"))
-      logger.debug("saveFlow", nodes, edges)
+      logger.debug("saveFlow nodes:", nodes)
+      logger.debug("saveFlow edges:", edges)
       const extensions = nodesToExtensions(nodes, installedExtensions)
       const connections = edgesToConnections(edges, nodes)
-      logger.debug("saveFlow extensions", extensions)
-      logger.debug("saveFlow connections", connections)
+      logger.debug("saveFlow extensions:", extensions)
+      logger.debug("saveFlow connections:", connections)
       await apiUpdateGraph(curGraphName, {
         auto_start: autoStart,
-        extensions: extensions,
+        nodes: extensions,
         connections: connections,
       })
       dispatch(setSaveStatus("success"))
+      logger.debug("------------------- saveFlow end -------------------")
     } catch (e: any) {
       messageApi.error(e.message)
       dispatch(setSaveStatus("failed"))

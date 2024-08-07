@@ -70,7 +70,7 @@ export const apiGetGraphExtension = async (
   if (USE_MOCK) {
     return MOCK_EXTENTIONS
   }
-  const res = await fetch(`${API_URL}/graphs/${graphName}/extensions`, {
+  const res = await fetch(`${API_URL}/graphs/${graphName}/nodes`, {
     method: "GET",
   })
   const data = await res.json()
@@ -133,7 +133,7 @@ export const apiUpdateGraph = async (
 }
 
 export const apiSaveGraph = async () => {
-  const res = await fetch(`${API_URL}/manifest`, {
+  const res = await fetch(`${API_URL}/property`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
