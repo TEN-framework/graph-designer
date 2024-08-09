@@ -7,7 +7,7 @@ import { useMemo } from 'react';
 
 
 interface PropertySectionProps {
-  property?: IExtensionProperty
+  property?: IExtensionProperty | null
   propertyTypes?: IExtensionPropertyTypes
   onUpdate?: (key: string, value: any) => void
 }
