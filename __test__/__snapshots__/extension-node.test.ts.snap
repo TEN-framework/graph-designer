@@ -25,7 +25,7 @@ exports[`extension and node convert each other > extensions to nods 1`] = `
         {
           "name": "image_frame",
           "status": "default",
-          "type": "img_frame",
+          "type": "image_frame",
         },
       ],
       "name": "agora_rtc",
@@ -58,7 +58,7 @@ exports[`extension and node convert each other > extensions to nods 1`] = `
         {
           "name": "image_frame",
           "status": "default",
-          "type": "img_frame",
+          "type": "image_frame",
         },
       ],
       "property": {

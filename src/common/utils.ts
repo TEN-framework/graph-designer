@@ -190,12 +190,12 @@ export const extensionToNode = (
   }
   if (api?.image_frame_in) {
     api.image_frame_in.forEach((input) => {
-      inputs.push({ name: input.name, type: "img_frame", status: "default" })
+      inputs.push({ name: input.name, type: "image_frame", status: "default" })
     })
   }
   if (api?.image_frame_out) {
     api.image_frame_out.forEach((output) => {
-      outputs.push({ name: output.name, type: "img_frame", status: "default" })
+      outputs.push({ name: output.name, type: "image_frame", status: "default" })
     })
   }
   if (api?.property) {
@@ -233,7 +233,7 @@ const connectionToEdges = (
     cmd,
     data,
     pcm_frame,
-    img_frame,
+    image_frame,
     extension,
     extension_group,
   } = connection
@@ -255,8 +255,8 @@ const connectionToEdges = (
   if (pcm_frame?.length) {
     finalData["pcm_frame"] = pcm_frame
   }
-  if (img_frame?.length) {
-    finalData["img_frame"] = img_frame
+  if (image_frame?.length) {
+    finalData["image_frame"] = image_frame
   }
   const keys = Object.keys(finalData) as Array<keyof {
     [key in DataType]?: IConnectionData[]

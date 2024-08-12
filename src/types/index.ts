@@ -14,7 +14,7 @@ export enum ConnectDirection {
 
 // ------------------ type  ------------------
 export type LayoutDirection = "TB" | "LR"
-export type DataType = "cmd" | "data" | "img_frame" | "pcm_frame"
+export type DataType = "cmd" | "data" | "image_frame" | "pcm_frame"
 export type PropertyType =
   "string" | "bool" | "buf" | "array" | "object" | "ptr" |
   "int8" | "int16" | "int32" | "int64" |
@@ -85,7 +85,7 @@ export interface IConnection {
   data?: IConnectionData[]
   cmd?: IConnectionData[]
   pcm_frame?: IConnectionData[]
-  img_frame?: IConnectionData[]
+  image_frame?: IConnectionData[]
   extension: string
   extension_group: string
 }
