@@ -58,10 +58,10 @@ export interface IExtension {
     cmd_out?: any[]
     data_in?: any[]
     data_out?: any[]
-    pcm_frame_in?: any[]
-    pcm_frame_out?: any[]
-    image_frame_in?: any[]
-    image_frame_out?: any[]
+    audio_frame_in?: any[]
+    audio_frame_out?: any[]
+    video_frame_in?: any[]
+    video_frame_out?: any[]
     property?: IExtensionPropertyTypes
   }
   app: string

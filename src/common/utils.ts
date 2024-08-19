@@ -178,23 +178,23 @@ export const extensionToNode = (
       outputs.push({ name: output.name, type: "data", status: "default" })
     })
   }
-  if (api?.pcm_frame_in) {
-    api.pcm_frame_in.forEach((input) => {
+  if (api?.audio_frame_in) {
+    api.audio_frame_in.forEach((input) => {
       inputs.push({ name: input.name, type: "pcm_frame", status: "default" })
     })
   }
-  if (api?.pcm_frame_out) {
-    api.pcm_frame_out.forEach((output) => {
+  if (api?.audio_frame_out) {
+    api.audio_frame_out.forEach((output) => {
       outputs.push({ name: output.name, type: "pcm_frame", status: "default" })
     })
   }
-  if (api?.image_frame_in) {
-    api.image_frame_in.forEach((input) => {
+  if (api?.video_frame_in) {
+    api.video_frame_in.forEach((input) => {
       inputs.push({ name: input.name, type: "image_frame", status: "default" })
     })
   }
-  if (api?.image_frame_out) {
-    api.image_frame_out.forEach((output) => {
+  if (api?.video_frame_out) {
+    api.video_frame_out.forEach((output) => {
       outputs.push({ name: output.name, type: "image_frame", status: "default" })
     })
   }
