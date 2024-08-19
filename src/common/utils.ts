@@ -180,22 +180,22 @@ export const extensionToNode = (
   }
   if (api?.audio_frame_in) {
     api.audio_frame_in.forEach((input) => {
-      inputs.push({ name: input.name, type: "pcm_frame", status: "default" })
+      inputs.push({ name: input.name, type: "audio_frame", status: "default" })
     })
   }
   if (api?.audio_frame_out) {
     api.audio_frame_out.forEach((output) => {
-      outputs.push({ name: output.name, type: "pcm_frame", status: "default" })
+      outputs.push({ name: output.name, type: "audio_frame", status: "default" })
     })
   }
   if (api?.video_frame_in) {
     api.video_frame_in.forEach((input) => {
-      inputs.push({ name: input.name, type: "image_frame", status: "default" })
+      inputs.push({ name: input.name, type: "video_frame", status: "default" })
     })
   }
   if (api?.video_frame_out) {
     api.video_frame_out.forEach((output) => {
-      outputs.push({ name: output.name, type: "image_frame", status: "default" })
+      outputs.push({ name: output.name, type: "video_frame", status: "default" })
     })
   }
   if (api?.property) {
@@ -232,8 +232,8 @@ const connectionToEdges = (
   const {
     cmd,
     data,
-    pcm_frame,
-    image_frame,
+    audio_frame,
+    video_frame,
     extension,
     extension_group,
   } = connection
@@ -252,11 +252,11 @@ const connectionToEdges = (
   if (data?.length) {
     finalData["data"] = data
   }
-  if (pcm_frame?.length) {
-    finalData["pcm_frame"] = pcm_frame
+  if (audio_frame?.length) {
+    finalData["audio_frame"] = audio_frame
   }
-  if (image_frame?.length) {
-    finalData["image_frame"] = image_frame
+  if (video_frame?.length) {
+    finalData["video_frame"] = video_frame
   }
   const keys = Object.keys(finalData) as Array<keyof {
     [key in DataType]?: IConnectionData[]

@@ -18,14 +18,14 @@ exports[`extension and node convert each other > extensions to nods 1`] = `
           "type": "data",
         },
         {
-          "name": "pcm_frame",
+          "name": "audio_frame",
           "status": "default",
-          "type": "pcm_frame",
+          "type": "audio_frame",
         },
         {
-          "name": "image_frame",
+          "name": "video_frame",
           "status": "default",
-          "type": "image_frame",
+          "type": "video_frame",
         },
       ],
       "name": "agora_rtc",
@@ -51,14 +51,14 @@ exports[`extension and node convert each other > extensions to nods 1`] = `
           "type": "data",
         },
         {
-          "name": "pcm_frame",
+          "name": "audio_frame",
           "status": "default",
-          "type": "pcm_frame",
+          "type": "audio_frame",
         },
         {
-          "name": "image_frame",
+          "name": "video_frame",
           "status": "default",
-          "type": "image_frame",
+          "type": "video_frame",
         },
       ],
       "property": {
@@ -304,9 +304,9 @@ exports[`extension and node convert each other > extensions to nods 1`] = `
           "type": "cmd",
         },
         {
-          "name": "pcm_frame",
+          "name": "audio_frame",
           "status": "default",
-          "type": "pcm_frame",
+          "type": "audio_frame",
         },
       ],
       "property": {
@@ -502,12 +502,12 @@ exports[`extension and node convert each other > nodes to extensions 1`] = `
       ],
       "video_frame_in": [
         {
-          "name": "image_frame",
+          "name": "video_frame",
         },
       ],
       "video_frame_out": [
         {
-          "name": "image_frame",
+          "name": "video_frame",
           "property": [
             {
               "attributes": {
@@ -526,12 +526,12 @@ exports[`extension and node convert each other > nodes to extensions 1`] = `
       ],
       "audio_frame_in": [
         {
-          "name": "pcm_frame",
+          "name": "audio_frame",
         },
       ],
       "audio_frame_out": [
         {
-          "name": "pcm_frame",
+          "name": "audio_frame",
           "property": [
             {
               "attributes": {
@@ -806,7 +806,7 @@ exports[`extension and node convert each other > nodes to extensions 1`] = `
       ],
       "audio_frame_out": [
         {
-          "name": "pcm_frame",
+          "name": "audio_frame",
         },
       ],
       "property": {

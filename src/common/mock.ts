@@ -216,12 +216,12 @@ export const MOCK_EXTENTIONS: IExtension[] = [
       ],
       "audio_frame_in": [
         {
-          "name": "pcm_frame"
+          "name": "audio_frame"
         }
       ],
       "audio_frame_out": [
         {
-          "name": "pcm_frame",
+          "name": "audio_frame",
           "property": [
             {
               "name": "channel",
@@ -240,12 +240,12 @@ export const MOCK_EXTENTIONS: IExtension[] = [
       ],
       "video_frame_in": [
         {
-          "name": "image_frame"
+          "name": "video_frame"
         }
       ],
       "video_frame_out": [
         {
-          "name": "image_frame",
+          "name": "video_frame",
           "property": [
             {
               "name": "channel",
@@ -448,7 +448,7 @@ export const MOCK_EXTENTIONS: IExtension[] = [
       ],
       "audio_frame_out": [
         {
-          "name": "pcm_frame"
+          "name": "audio_frame"
         }
       ]
     },
@@ -829,12 +829,12 @@ export const MOCK_INSTALLED_EXTENTIONS: IExtension[] = [
       ],
       "audio_frame_in": [
         {
-          "name": "pcm_frame"
+          "name": "audio_frame"
         }
       ],
       "audio_frame_out": [
         {
-          "name": "pcm_frame",
+          "name": "audio_frame",
           "property": [
             {
               "name": "channel",
@@ -853,12 +853,12 @@ export const MOCK_INSTALLED_EXTENTIONS: IExtension[] = [
       ],
       "video_frame_in": [
         {
-          "name": "image_frame"
+          "name": "video_frame"
         }
       ],
       "video_frame_out": [
         {
-          "name": "image_frame",
+          "name": "video_frame",
           "property": [
             {
               "name": "channel",
@@ -1021,7 +1021,7 @@ export const MOCK_INSTALLED_EXTENTIONS: IExtension[] = [
       ],
       "audio_frame_out": [
         {
-          "name": "pcm_frame"
+          "name": "audio_frame"
         }
       ]
     },
@@ -1087,7 +1087,7 @@ export const MOCK_INSTALLED_EXTENTIONS: IExtension[] = [
       ],
       "audio_frame_out": [
         {
-          "name": "pcm_frame"
+          "name": "audio_frame"
         }
       ]
     },
@@ -1437,7 +1437,7 @@ export const MOCK_INSTALLED_EXTENTIONS: IExtension[] = [
       ],
       "audio_frame_out": [
         {
-          "name": "pcm_frame"
+          "name": "audio_frame"
         }
       ]
     },
@@ -1488,7 +1488,7 @@ export const MOCK_INSTALLED_EXTENTIONS: IExtension[] = [
       ],
       "audio_frame_out": [
         {
-          "name": "pcm_frame"
+          "name": "audio_frame"
         }
       ]
     },
