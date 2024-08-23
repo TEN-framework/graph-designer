@@ -1,0 +1,65 @@
+.extensionHandleWrapper {
+  margin-top: 2px;
+  margin-bottom: 2px;
+  position: relative;
+  background-color: #fff;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  border-top: 1px solid rgb(229, 231, 235);
+  box-sizing: border-box;
+
+  .extensionHandleItem {
+    position: absolute;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    border-radius: 0.5rem;
+
+    :global(.react-flow__handle) {
+      width: 10px;
+      height: 10px;
+      border-color: #31a3cc;
+      border-radius: 50%;
+      border-width: 2px;
+      background-color: #fff;
+      box-sizing: border-box;
+    }
+
+    .text {
+      color: rgb(15, 23, 42);
+    }
+  }
+
+  .leftItem {
+    .text {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    :global(.react-flow__handle-left) {
+      position: absolute;
+      left: -5px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+
+  .rightItem {
+    .text {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    :global(.react-flow__handle-right) {
+      position: absolute;
+      right: -5px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+}

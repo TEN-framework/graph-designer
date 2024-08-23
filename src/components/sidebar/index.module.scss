@@ -1,0 +1,23 @@
+.sidebar {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  background-color: #93bee6;
+  width: 200px;
+  flex: 0 0 200px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+
+  .item {
+    padding: 4px;
+    width: 90%;
+    line-height: 20px;
+    background: #fff2be;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    word-wrap: break-word;
+    box-sizing: border-box;
+  }
+}

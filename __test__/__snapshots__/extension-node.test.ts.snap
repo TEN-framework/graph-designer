@@ -1,0 +1,879 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`extension and node convert each other > extensions to nods 1`] = `
+[
+  {
+    "data": {
+      "addon": "agora_rtc",
+      "extensionGroup": "default",
+      "inputs": [
+        {
+          "name": "flush",
+          "status": "default",
+          "type": "cmd",
+        },
+        {
+          "name": "data",
+          "status": "default",
+          "type": "data",
+        },
+        {
+          "name": "audio_frame",
+          "status": "default",
+          "type": "audio_frame",
+        },
+        {
+          "name": "video_frame",
+          "status": "default",
+          "type": "video_frame",
+        },
+      ],
+      "name": "agora_rtc",
+      "outputs": [
+        {
+          "name": "on_user_joined",
+          "status": "default",
+          "type": "cmd",
+        },
+        {
+          "name": "on_user_left",
+          "status": "default",
+          "type": "cmd",
+        },
+        {
+          "name": "on_connection_failure",
+          "status": "default",
+          "type": "cmd",
+        },
+        {
+          "name": "text_data",
+          "status": "default",
+          "type": "data",
+        },
+        {
+          "name": "audio_frame",
+          "status": "default",
+          "type": "audio_frame",
+        },
+        {
+          "name": "video_frame",
+          "status": "default",
+          "type": "video_frame",
+        },
+      ],
+      "property": {
+        "agora_asr_language": "en-US",
+        "agora_asr_session_control_file_path": "session_control.conf",
+        "agora_asr_vendor_key": "<azure_stt_key>",
+        "agora_asr_vendor_name": "microsoft",
+        "agora_asr_vendor_region": "<azure_stt_region>",
+        "app_id": "<agora_appid>",
+        "channel": "astra_agents_test",
+        "enable_agora_asr": true,
+        "publish_audio": true,
+        "publish_data": true,
+        "remote_stream_id": 123,
+        "stream_id": 1234,
+        "subscribe_audio": true,
+        "token": "<agora_token>",
+      },
+      "propertyTypes": {
+        "agora_asr_language": {
+          "type": "string",
+        },
+        "agora_asr_session_control_file_path": {
+          "type": "string",
+        },
+        "agora_asr_vendor_key": {
+          "type": "string",
+        },
+        "agora_asr_vendor_name": {
+          "type": "string",
+        },
+        "agora_asr_vendor_region": {
+          "type": "string",
+        },
+        "app_id": {
+          "type": "string",
+        },
+        "area_code": {
+          "type": "int32",
+        },
+        "channel": {
+          "type": "string",
+        },
+        "enable_agora_asr": {
+          "type": "bool",
+        },
+        "encryption_key": {
+          "type": "string",
+        },
+        "encryption_mode": {
+          "type": "int32",
+        },
+        "encryption_salt": {
+          "type": "string",
+        },
+        "publish_audio": {
+          "type": "bool",
+        },
+        "publish_data": {
+          "type": "bool",
+        },
+        "publish_video": {
+          "type": "bool",
+        },
+        "publish_video_frame_rate": {
+          "type": "int32",
+        },
+        "publish_video_height": {
+          "type": "int32",
+        },
+        "publish_video_width": {
+          "type": "int32",
+        },
+        "remote_stream_id": {
+          "type": "Uint32",
+        },
+        "sdk_log_file_path": {
+          "type": "string",
+        },
+        "stream_id": {
+          "type": "Uint32",
+        },
+        "subscribe_audio": {
+          "type": "bool",
+        },
+        "subscribe_audio_num_of_channels": {
+          "type": "int32",
+        },
+        "subscribe_audio_sample_rate": {
+          "type": "int32",
+        },
+        "subscribe_video": {
+          "type": "bool",
+        },
+        "subscribe_video_pix_fmt": {
+          "type": "int32",
+        },
+        "token": {
+          "type": "string",
+        },
+      },
+      "status": "default",
+    },
+    "id": "1",
+    "position": {
+      "x": 0,
+      "y": 0,
+    },
+    "sourcePosition": "right",
+    "targetPosition": "left",
+    "type": "extension",
+  },
+  {
+    "data": {
+      "addon": "interrupt_detector",
+      "extensionGroup": "default",
+      "inputs": [
+        {
+          "name": "text_data",
+          "status": "default",
+          "type": "data",
+        },
+      ],
+      "name": "interrupt_detector",
+      "outputs": [
+        {
+          "name": "flush",
+          "status": "default",
+          "type": "cmd",
+        },
+      ],
+      "property": null,
+      "propertyTypes": undefined,
+      "status": "default",
+    },
+    "id": "2",
+    "position": {
+      "x": 0,
+      "y": 0,
+    },
+    "sourcePosition": "right",
+    "targetPosition": "left",
+    "type": "extension",
+  },
+  {
+    "data": {
+      "addon": "openai_chatgpt",
+      "extensionGroup": "chatgpt",
+      "inputs": [
+        {
+          "name": "flush",
+          "status": "default",
+          "type": "cmd",
+        },
+        {
+          "name": "text_data",
+          "status": "default",
+          "type": "data",
+        },
+      ],
+      "name": "openai_chatgpt",
+      "outputs": [
+        {
+          "name": "flush",
+          "status": "default",
+          "type": "cmd",
+        },
+        {
+          "name": "text_data",
+          "status": "default",
+          "type": "data",
+        },
+      ],
+      "property": {
+        "api_key": "<openai_api_key>",
+        "base_url": "",
+        "frequency_penalty": 0.9,
+        "greeting": "ASTRA agent connected. How can i help you today?",
+        "max_memory_length": 10,
+        "max_tokens": 512,
+        "model": "gpt-3.5-turbo",
+        "prompt": "",
+        "proxy_url": "",
+      },
+      "propertyTypes": {
+        "api_key": {
+          "type": "string",
+        },
+        "frequency_penalty": {
+          "type": "float64",
+        },
+        "greeting": {
+          "type": "string",
+        },
+        "max_memory_length": {
+          "type": "int64",
+        },
+        "max_tokens": {
+          "type": "int64",
+        },
+        "model": {
+          "type": "string",
+        },
+        "presence_penalty": {
+          "type": "float64",
+        },
+        "prompt": {
+          "type": "string",
+        },
+      },
+      "status": "default",
+    },
+    "id": "3",
+    "position": {
+      "x": 0,
+      "y": 0,
+    },
+    "sourcePosition": "right",
+    "targetPosition": "left",
+    "type": "extension",
+  },
+  {
+    "data": {
+      "addon": "azure_tts",
+      "extensionGroup": "tts",
+      "inputs": [
+        {
+          "name": "flush",
+          "status": "default",
+          "type": "cmd",
+        },
+        {
+          "name": "text_data",
+          "status": "default",
+          "type": "data",
+        },
+      ],
+      "name": "azure_tts",
+      "outputs": [
+        {
+          "name": "flush",
+          "status": "default",
+          "type": "cmd",
+        },
+        {
+          "name": "audio_frame",
+          "status": "default",
+          "type": "audio_frame",
+        },
+      ],
+      "property": {
+        "azure_subscription_key": "<azure_tts_key>",
+        "azure_subscription_region": "<azure_tts_region>",
+        "azure_synthesis_voice_name": "en-US-JaneNeural",
+      },
+      "propertyTypes": {
+        "azure_subscription_key": {
+          "type": "string",
+        },
+        "azure_subscription_region": {
+          "type": "string",
+        },
+        "azure_synthesis_voice_name": {
+          "type": "string",
+        },
+      },
+      "status": "default",
+    },
+    "id": "4",
+    "position": {
+      "x": 0,
+      "y": 0,
+    },
+    "sourcePosition": "right",
+    "targetPosition": "left",
+    "type": "extension",
+  },
+  {
+    "data": {
+      "addon": "chat_transcriber",
+      "extensionGroup": "transcriber",
+      "inputs": [
+        {
+          "name": "text_data",
+          "status": "default",
+          "type": "data",
+        },
+      ],
+      "name": "chat_transcriber",
+      "outputs": [
+        {
+          "name": "data",
+          "status": "default",
+          "type": "data",
+        },
+      ],
+      "property": null,
+      "propertyTypes": undefined,
+      "status": "default",
+    },
+    "id": "5",
+    "position": {
+      "x": 0,
+      "y": 0,
+    },
+    "sourcePosition": "right",
+    "targetPosition": "left",
+    "type": "extension",
+  },
+]
+`;
+
+exports[`extension and node convert each other > nodes to extensions 1`] = `
+[
+  {
+    "addon": "agora_rtc",
+    "api": {
+      "cmd_in": [
+        {
+          "name": "flush",
+        },
+      ],
+      "cmd_out": [
+        {
+          "name": "on_user_joined",
+          "property": [
+            {
+              "attributes": {
+                "type": "string",
+              },
+              "name": "channel",
+            },
+            {
+              "attributes": {
+                "type": "string",
+              },
+              "name": "user_id",
+            },
+            {
+              "attributes": {
+                "type": "string",
+              },
+              "name": "remote_user_id",
+            },
+          ],
+        },
+        {
+          "name": "on_user_left",
+          "property": [
+            {
+              "attributes": {
+                "type": "string",
+              },
+              "name": "channel",
+            },
+            {
+              "attributes": {
+                "type": "string",
+              },
+              "name": "user_id",
+            },
+            {
+              "attributes": {
+                "type": "string",
+              },
+              "name": "remote_user_id",
+            },
+          ],
+        },
+        {
+          "name": "on_connection_failure",
+          "property": [
+            {
+              "attributes": {
+                "type": "string",
+              },
+              "name": "channel",
+            },
+            {
+              "attributes": {
+                "type": "string",
+              },
+              "name": "user_id",
+            },
+          ],
+        },
+      ],
+      "data_in": [
+        {
+          "name": "data",
+        },
+      ],
+      "data_out": [
+        {
+          "name": "text_data",
+          "property": [
+            {
+              "attributes": {
+                "type": "int64",
+              },
+              "name": "time",
+            },
+            {
+              "attributes": {
+                "type": "int64",
+              },
+              "name": "duration_ms",
+            },
+            {
+              "attributes": {
+                "type": "string",
+              },
+              "name": "language",
+            },
+            {
+              "attributes": {
+                "type": "string",
+              },
+              "name": "text",
+            },
+            {
+              "attributes": {
+                "type": "bool",
+              },
+              "name": "is_final",
+            },
+            {
+              "attributes": {
+                "type": "Uint32",
+              },
+              "name": "stream_id",
+            },
+            {
+              "attributes": {
+                "type": "bool",
+              },
+              "name": "end_of_segment",
+            },
+          ],
+        },
+      ],
+      "video_frame_in": [
+        {
+          "name": "video_frame",
+        },
+      ],
+      "video_frame_out": [
+        {
+          "name": "video_frame",
+          "property": [
+            {
+              "attributes": {
+                "type": "string",
+              },
+              "name": "channel",
+            },
+            {
+              "attributes": {
+                "type": "Uint32",
+              },
+              "name": "stream_id",
+            },
+          ],
+        },
+      ],
+      "audio_frame_in": [
+        {
+          "name": "audio_frame",
+        },
+      ],
+      "audio_frame_out": [
+        {
+          "name": "audio_frame",
+          "property": [
+            {
+              "attributes": {
+                "type": "string",
+              },
+              "name": "channel",
+            },
+            {
+              "attributes": {
+                "type": "Uint32",
+              },
+              "name": "stream_id",
+            },
+          ],
+        },
+      ],
+      "property": {
+        "agora_asr_language": {
+          "type": "string",
+        },
+        "agora_asr_session_control_file_path": {
+          "type": "string",
+        },
+        "agora_asr_vendor_key": {
+          "type": "string",
+        },
+        "agora_asr_vendor_name": {
+          "type": "string",
+        },
+        "agora_asr_vendor_region": {
+          "type": "string",
+        },
+        "app_id": {
+          "type": "string",
+        },
+        "area_code": {
+          "type": "int32",
+        },
+        "channel": {
+          "type": "string",
+        },
+        "enable_agora_asr": {
+          "type": "bool",
+        },
+        "encryption_key": {
+          "type": "string",
+        },
+        "encryption_mode": {
+          "type": "int32",
+        },
+        "encryption_salt": {
+          "type": "string",
+        },
+        "publish_audio": {
+          "type": "bool",
+        },
+        "publish_data": {
+          "type": "bool",
+        },
+        "publish_video": {
+          "type": "bool",
+        },
+        "publish_video_frame_rate": {
+          "type": "int32",
+        },
+        "publish_video_height": {
+          "type": "int32",
+        },
+        "publish_video_width": {
+          "type": "int32",
+        },
+        "remote_stream_id": {
+          "type": "Uint32",
+        },
+        "sdk_log_file_path": {
+          "type": "string",
+        },
+        "stream_id": {
+          "type": "Uint32",
+        },
+        "subscribe_audio": {
+          "type": "bool",
+        },
+        "subscribe_audio_num_of_channels": {
+          "type": "int32",
+        },
+        "subscribe_audio_sample_rate": {
+          "type": "int32",
+        },
+        "subscribe_video": {
+          "type": "bool",
+        },
+        "subscribe_video_pix_fmt": {
+          "type": "int32",
+        },
+        "token": {
+          "type": "string",
+        },
+      },
+    },
+    "app": "localhost",
+    "extension_group": "default",
+    "name": "agora_rtc",
+    "property": {
+      "agora_asr_language": "en-US",
+      "agora_asr_session_control_file_path": "session_control.conf",
+      "agora_asr_vendor_key": "<azure_stt_key>",
+      "agora_asr_vendor_name": "microsoft",
+      "agora_asr_vendor_region": "<azure_stt_region>",
+      "app_id": "<agora_appid>",
+      "channel": "astra_agents_test",
+      "enable_agora_asr": true,
+      "publish_audio": true,
+      "publish_data": true,
+      "remote_stream_id": 123,
+      "stream_id": 1234,
+      "subscribe_audio": true,
+      "token": "<agora_token>",
+    },
+  },
+  {
+    "addon": "interrupt_detector",
+    "api": {
+      "cmd_out": [
+        {
+          "name": "flush",
+        },
+      ],
+      "data_in": [
+        {
+          "name": "text_data",
+          "property": [
+            {
+              "attributes": {
+                "type": "string",
+              },
+              "name": "text",
+            },
+            {
+              "attributes": {
+                "type": "bool",
+              },
+              "name": "is_final",
+            },
+          ],
+        },
+      ],
+    },
+    "app": "localhost",
+    "extension_group": "default",
+    "name": "interrupt_detector",
+    "property": null,
+  },
+  {
+    "addon": "openai_chatgpt",
+    "api": {
+      "cmd_in": [
+        {
+          "name": "flush",
+        },
+      ],
+      "cmd_out": [
+        {
+          "name": "flush",
+        },
+      ],
+      "data_in": [
+        {
+          "name": "text_data",
+          "property": [
+            {
+              "attributes": {
+                "type": "string",
+              },
+              "name": "text",
+            },
+            {
+              "attributes": {
+                "type": "bool",
+              },
+              "name": "is_final",
+            },
+          ],
+        },
+      ],
+      "data_out": [
+        {
+          "name": "text_data",
+          "property": [
+            {
+              "attributes": {
+                "type": "string",
+              },
+              "name": "text",
+            },
+            {
+              "attributes": {
+                "type": "bool",
+              },
+              "name": "end_of_segment",
+            },
+          ],
+        },
+      ],
+      "property": {
+        "api_key": {
+          "type": "string",
+        },
+        "frequency_penalty": {
+          "type": "float64",
+        },
+        "greeting": {
+          "type": "string",
+        },
+        "max_memory_length": {
+          "type": "int64",
+        },
+        "max_tokens": {
+          "type": "int64",
+        },
+        "model": {
+          "type": "string",
+        },
+        "presence_penalty": {
+          "type": "float64",
+        },
+        "prompt": {
+          "type": "string",
+        },
+      },
+    },
+    "app": "localhost",
+    "extension_group": "chatgpt",
+    "name": "openai_chatgpt",
+    "property": {
+      "api_key": "<openai_api_key>",
+      "base_url": "",
+      "frequency_penalty": 0.9,
+      "greeting": "ASTRA agent connected. How can i help you today?",
+      "max_memory_length": 10,
+      "max_tokens": 512,
+      "model": "gpt-3.5-turbo",
+      "prompt": "",
+      "proxy_url": "",
+    },
+  },
+  {
+    "addon": "azure_tts",
+    "api": {
+      "cmd_in": [
+        {
+          "name": "flush",
+        },
+      ],
+      "cmd_out": [
+        {
+          "name": "flush",
+        },
+      ],
+      "data_in": [
+        {
+          "name": "text_data",
+          "property": [
+            {
+              "attributes": {
+                "type": "string",
+              },
+              "name": "text",
+            },
+          ],
+        },
+      ],
+      "audio_frame_out": [
+        {
+          "name": "audio_frame",
+        },
+      ],
+      "property": {
+        "azure_subscription_key": {
+          "type": "string",
+        },
+        "azure_subscription_region": {
+          "type": "string",
+        },
+        "azure_synthesis_voice_name": {
+          "type": "string",
+        },
+      },
+    },
+    "app": "localhost",
+    "extension_group": "tts",
+    "name": "azure_tts",
+    "property": {
+      "azure_subscription_key": "<azure_tts_key>",
+      "azure_subscription_region": "<azure_tts_region>",
+      "azure_synthesis_voice_name": "en-US-JaneNeural",
+    },
+  },
+  {
+    "addon": "chat_transcriber",
+    "api": {
+      "data_in": [
+        {
+          "name": "text_data",
+          "property": [
+            {
+              "attributes": {
+                "type": "string",
+              },
+              "name": "text",
+            },
+            {
+              "attributes": {
+                "type": "bool",
+              },
+              "name": "is_final",
+            },
+            {
+              "attributes": {
+                "type": "Uint32",
+              },
+              "name": "stream_id",
+            },
+            {
+              "attributes": {
+                "type": "bool",
+              },
+              "name": "end_of_segment",
+            },
+          ],
+        },
+      ],
+      "data_out": [
+        {
+          "name": "data",
+        },
+      ],
+    },
+    "app": "localhost",
+    "extension_group": "transcriber",
+    "name": "chat_transcriber",
+    "property": null,
+  },
+]
+`;

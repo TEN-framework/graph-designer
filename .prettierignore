@@ -1,0 +1,4 @@
+*.md
+bin
+dist
+node_modules

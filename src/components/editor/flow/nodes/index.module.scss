@@ -1,0 +1,39 @@
+.extensionNode {
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  box-sizing: border-box;
+  background-color: #fff;
+
+  .extensionName {
+    padding: 0.5rem;
+    border-bottom: 1px solid #e5e7eb;
+    background-color: rgb(248, 250, 252);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+
+    .text {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: rgb(15, 23, 42);
+      line-height: 24px;
+      height: 24px;
+      font-weight: 500;
+    }
+  }
+
+  .extensionGroup {
+    padding: 0.5rem;
+
+    .title {
+      color: rgb(15, 23, 42);
+      line-height: 20px;
+      height: 20px;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+  }
+
+
+}
