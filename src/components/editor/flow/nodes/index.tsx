@@ -35,6 +35,10 @@ export default function ExtensionNodeComponent(
   const [extensionGroup, setExtensionGroup] = useState(propExtensionGroup)
   const [nodeWidth, setNodeWidth] = useState(DEFAULT_NODE_WIDTH)
 
+  useEffect(() => {
+    setExtensionGroup(propExtensionGroup)
+  }, [propExtensionGroup])
+
   const onHandleWidthChange = (width: number) => {
     setNodeWidth(width)
   }
