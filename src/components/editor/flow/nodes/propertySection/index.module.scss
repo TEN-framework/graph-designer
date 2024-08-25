@@ -12,9 +12,13 @@
 
 }
 
+.menuItem {
+  margin: 5px !important;
+}
+
 .contentSection {
-  width: 220px;
   max-height: 300px;
+  padding: 10px 20px;
   overflow-y: auto;
   overflow-x: hidden;
 

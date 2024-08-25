@@ -64,7 +64,25 @@ export const isNumberType = (type: PropertyType): boolean => {
     type === "float32" || type === "float64"
 }
 
-export const getZeroValue = (type: InputType) => {
+export const getInputTypeByPropertyType = (type: PropertyType): InputType => {
+  if (type === "string") {
+    return "string"
+  } else if (isNumberType(type)) {
+    return "number"
+  } else if (type === "bool") {
+    return "boolean"
+  }
+
+  return "string"
+}
+
+export const getDefaultValueByPropertyType = (type: PropertyType) => {
+  let inputType = getInputTypeByPropertyType(type)
+  return getDefaultValueByInputType(inputType)
+}
+
+
+export const getDefaultValueByInputType = (type: InputType) => {
   if (type === "number") {
     return 0
   } else if (type === "boolean") {
@@ -431,6 +449,63 @@ export const edgesToConnections = (
       })
     }
   }
+
+  // merge dests
+  connections = connections.map((connection) => {
+    const { cmd, data, audio_frame, video_frame } = connection
+    const finalConnection: IConnection = {
+      ...connection,
+    }
+    if (cmd?.length) {
+      finalConnection.cmd = cmd.reduce((acc, curr) => {
+        const { name, dest } = curr
+        const temp = acc.find((i) => i.name == name)
+        if (temp) {
+          temp.dest.push(...dest)
+        } else {
+          acc.push(curr)
+        }
+        return acc
+      }, [] as IConnectionData[])
+    }
+    if (data?.length) {
+      finalConnection.data = data.reduce((acc, curr) => {
+        const { name, dest } = curr
+        const temp = acc.find((i) => i.name == name)
+        if (temp) {
+          temp.dest.push(...dest)
+        } else {
+          acc.push(curr)
+        }
+        return acc
+      }, [] as IConnectionData[])
+    }
+    if (audio_frame?.length) {
+      finalConnection.audio_frame = audio_frame.reduce((acc, curr) => {
+        const { name, dest } = curr
+        const temp = acc.find((i) => i.name == name)
+        if (temp) {
+          temp.dest.push(...dest)
+        } else {
+          acc.push(curr)
+        }
+        return acc
+      }, [] as IConnectionData[])
+    }
+    if (video_frame?.length) {
+      finalConnection.video_frame = video_frame.reduce((acc, curr) => {
+        const { name, dest } = curr
+        const temp = acc.find((i) => i.name == name)
+        if (temp) {
+          temp.dest.push(...dest)
+        } else {
+          acc.push(curr)
+        }
+        return acc
+      }, [] as IConnectionData[])
+    }
+    return finalConnection
+  })
 
   return connections
 }
