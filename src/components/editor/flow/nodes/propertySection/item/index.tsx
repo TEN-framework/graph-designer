@@ -101,19 +101,6 @@ const CustomInput = (CustomInputProps: CustomInputProps) => {
       onChange={onChange}
       onBlur={onBlur}
     ></Input>
-    // return <Form.Item
-    //   label={name}
-    //   name={name}
-    //   initialValue={value}
-    //   style={{marginBottom: 0}}
-    // >
-    //   <Input
-    //       allowClear
-    //       status={status}
-    //       onChange={onChange}
-    //       onBlur={onBlur}
-    //   />
-    // </Form.Item>
   } else if (inputType === "number") {
     return <InputNumber
       value={value}
@@ -122,36 +109,10 @@ const CustomInput = (CustomInputProps: CustomInputProps) => {
       onChange={onChange}
       onBlur={onBlur}
     ></InputNumber>
-    // return (
-    //   <Form.Item 
-    //     label={name}
-    //     initialValue={value}
-    //     style={{marginBottom: 0}}
-    //   >
-    //     <InputNumber
-    //       type='number'
-    //       status={status}
-    //       onChange={onChange}
-    //       onBlur={onBlur}
-    //     />
-    //   </Form.Item>
-    // )
   } else if (inputType === "boolean") {
     return <Switch
       value={value}
       onChange={onChange}></Switch>
-    // return (
-    //   <Form.Item 
-    //     label={name}
-    //     initialValue={value}
-    //     valuePropName="checked"
-    //     style={{marginBottom: 0}}
-    //   >
-    //     <Switch
-    //       onChange={onChange}>
-    //     </Switch>
-    //   </Form.Item>
-    // )
   }
 
 }
