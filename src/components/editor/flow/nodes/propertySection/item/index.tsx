@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react"
-import { Input, Switch, InputNumber, message } from "antd"
-import { getZeroValue, hasDecimalPoint, isNumberType } from "@/common"
+import { Input, Switch, InputNumber, message, Form } from "antd"
+import { getDefaultValueByInputType, hasDecimalPoint, isNumberType } from "@/common"
 import { PropertyType, InputType } from "@/types"
 
 import styles from "./index.module.scss"
@@ -46,7 +46,7 @@ const checkValue = (value: any, propertyType: PropertyType, inputType: InputType
 
 
 const CustomInput = (CustomInputProps: CustomInputProps) => {
-  const { propertyType, value: propsValue, onUpdate } = CustomInputProps
+  const { propertyType, value: propsValue, onUpdate, name } = CustomInputProps
   const [value, setValue] = useState(propsValue)
   const [status, setStatus] = useState<Status>("")
 
@@ -71,7 +71,7 @@ const CustomInput = (CustomInputProps: CustomInputProps) => {
     }
     if (checkValue(value, propertyType, inputType)) {
       if (value === null || value === undefined) {
-        value = getZeroValue(inputType)
+        value = getDefaultValueByInputType(inputType)
       }
       setValue(value)
       setStatus("")
@@ -95,28 +95,63 @@ const CustomInput = (CustomInputProps: CustomInputProps) => {
 
   if (inputType === "string") {
     return <Input
-      size="small"
       value={value}
       allowClear
       status={status}
       onChange={onChange}
       onBlur={onBlur}
     ></Input>
+    // return <Form.Item
+    //   label={name}
+    //   name={name}
+    //   initialValue={value}
+    //   style={{marginBottom: 0}}
+    // >
+    //   <Input
+    //       allowClear
+    //       status={status}
+    //       onChange={onChange}
+    //       onBlur={onBlur}
+    //   />
+    // </Form.Item>
   } else if (inputType === "number") {
     return <InputNumber
-      size="small"
       value={value}
       type='number'
       status={status}
       onChange={onChange}
       onBlur={onBlur}
-      style={{ width: "100%" }}
     ></InputNumber>
+    // return (
+    //   <Form.Item 
+    //     label={name}
+    //     initialValue={value}
+    //     style={{marginBottom: 0}}
+    //   >
+    //     <InputNumber
+    //       type='number'
+    //       status={status}
+    //       onChange={onChange}
+    //       onBlur={onBlur}
+    //     />
+    //   </Form.Item>
+    // )
   } else if (inputType === "boolean") {
     return <Switch
-      size="small"
       value={value}
       onChange={onChange}></Switch>
+    // return (
+    //   <Form.Item 
+    //     label={name}
+    //     initialValue={value}
+    //     valuePropName="checked"
+    //     style={{marginBottom: 0}}
+    //   >
+    //     <Switch
+    //       onChange={onChange}>
+    //     </Switch>
+    //   </Form.Item>
+    // )
   }
 
 }

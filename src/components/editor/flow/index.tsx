@@ -164,6 +164,7 @@ const Flow = () => {
       logger.debug("saveFlow nodes:", nodes)
       logger.debug("saveFlow edges:", edges)
       const extensions = nodesToExtensions(nodes, installedExtensions)
+      // const extensionGroups = 
       const connections = edgesToConnections(edges, nodes)
       logger.debug("saveFlow extensions:", extensions)
       logger.debug("saveFlow connections:", connections)
