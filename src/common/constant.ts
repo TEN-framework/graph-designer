@@ -1,4 +1,4 @@
-const PREFIX = "/api/dev-server/v1"
+const PREFIX = "/apix/dev-server/v1"
 
 export const USE_MOCK = process.env.NEXT_PUBLIC_USE_MOCK === "true"
 export const DEFAULT_APP = "localhost"
