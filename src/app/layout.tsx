@@ -5,8 +5,8 @@ import "@/css/reset.css"
 import "@/css/global.css"
 
 export const metadata: Metadata = {
-  title: "Ten Graph Designer",
-  description: "Ten Graph Designer",
+  title: "TEN Graph Designer",
+  description: "TEN Graph Designer"
 }
 
 export default function RootLayout({
