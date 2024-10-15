@@ -6,7 +6,7 @@ import "@/css/global.css"
 
 export const metadata: Metadata = {
   title: "TEN Graph Designer",
-  description: "TEN Graph Designer | A drag and drop node connector for your workflow",
+  description: "TEN Graph Designer"
 }
 
 export default function RootLayout({
